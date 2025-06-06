@@ -30,5 +30,6 @@ Este repositório contém o frontend do projeto **BI Portal**, uma plataforma we
 ## 📦 Instalação
 
 ```bash
+
 npm install
 npm run dev
