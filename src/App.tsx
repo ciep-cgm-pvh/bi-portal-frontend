@@ -1,17 +1,22 @@
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import NotFound from './pages/NotFound';
+import Home from './pages/Home';
+import Dashboard from './pages/Dashboard';
+import Reports from './pages/Reports';
+import DataSource from './pages/DataSource';
+
 function App() {
   return (
-    <>
-      <div className="bg-white py-24 sm:py-32">
-      <div className="mx-auto max-w-7xl px-6 lg:px-8">
-        <h1 className="text-center text-9xl font-semibold text-midnight">
-          Hello World!
-        </h1>
-        <p className="mt-6 text-center text-4xl leading-8 text-gray-600">
-          This is a simple  <span className='text-cyan-500'>React app</span> styled with <span className='text-cyan-500'>Tailwind CSS</span>.
-        </p>
-        </div>
-      </div>
-    </>
+    <Router>
+      <Routes>
+        <Route path="/home" element={<Home />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/datasource" element={<DataSource />} />
+        <Route path="/reports" element={<Reports />} />
+        {/* Leva o usuário a página not found caso a rota não exista */}
+        <Route path="/*" element={<NotFound />} />
+      </Routes>
+    </Router>
   )
 }
 

@@ -3,8 +3,11 @@
 
 /* Tailwind custom colors */
 @theme {
+  --breakpoint-2xs: 20rem;
+  --breakpoint-xs: 30rem;
   --color-midnight: #121063;
   --color-tahiti: #3ab7bf;
   --color-bermuda: #78dcca;
 }
+
 /*  ---------- global CSS section ----------  */
