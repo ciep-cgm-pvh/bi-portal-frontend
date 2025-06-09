@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import NavBarMobile from "../components/navbar/NavBarMobile";
+import SideBar from "../components/SideBar/Sidebar";
 
 export default function Home() {
   const navigate = useNavigate();
@@ -15,7 +15,7 @@ export default function Home() {
   return (
     <div className="">
       {/* ⬅️ Passe isOpen e setIsOpen como props */}
-      <NavBarMobile open={isOpen} setOpen={setIsOpen} />
+      <SideBar open={isOpen} setOpen={setIsOpen} />
 
       <div className="flex flex-col gap-3 mx-auto max-w-7xl px-6 lg:px-8">
         <h1 className="text-center text-9xl font-semibold text-midnight">
