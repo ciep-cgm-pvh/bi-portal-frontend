@@ -1,6 +1,7 @@
 // routes/Router.tsx
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import getNavLinks from "../data/NavLinksData";
+import LayoutBase from '../layouts/LayoutBase';
 import Home from "../pages/Home";
 import NotFound from "../pages/NotFound";
 
@@ -8,18 +9,18 @@ function Router() {
   const navLinks = getNavLinks();
 
   return (
-    <BrowserRouter>
       <Routes>
         <Route path="/" element={<Navigate to="/home" />} />
         <Route path="/home" element={<Home />} />
 
-        {navLinks.map(({ path, element }) => (
-          <Route key={path} path={path} element={element} />
-        ))}
+        <Route element={<LayoutBase />}>
+          {navLinks.map(({ path, element }) => (
+            <Route key={path} path={path} element={element} />
+          ))}
+        </Route>
 
         <Route path="/*" element={<NotFound />} />
       </Routes>
-    </BrowserRouter>
   );
 }
 
