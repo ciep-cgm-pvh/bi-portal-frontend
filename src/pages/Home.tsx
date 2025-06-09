@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 export default function Home() {
   const navigate = useNavigate();
@@ -21,6 +21,10 @@ export default function Home() {
           className='mt-5 bg-cyan-500 hover:bg-cyan-700 rounded text-white self-center w-fit px-3 py-1 cursor-pointer'>
             Go to Not Found page
         </button>
+        <Link 
+          to="/dashboard"
+          className=' bg-cyan-500 hover:bg-cyan-700 rounded text-white self-center w-fit px-3 py-1 cursor-pointer'
+        >Go to Dashboard</Link>
       </div>
     </div>
   )
