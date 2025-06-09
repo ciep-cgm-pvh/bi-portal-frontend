@@ -1,18 +1,20 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import NotFound from './pages/NotFound';
 import Home from './pages/Home';
-import Dashboard from './pages/Dashboard';
-import Reports from './pages/Reports';
-import DataSource from './pages/DataSource';
+import getNavLinks from './data/NavLinksData';
 
 function App() {
+  const navLinks = getNavLinks();
   return (
     <Router>
       <Routes>
+        <Route path="/" element={<Navigate to="/home" />} />
         <Route path="/home" element={<Home />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/datasource" element={<DataSource />} />
-        <Route path="/reports" element={<Reports />} />
+
+        {/* Rotas geradas dinamicamente */}
+        {navLinks.map(({ path, element }) => (
+          <Route key={path} path={path} element={element} />
+        ))}
         {/* Leva o usuário a página not found caso a rota não exista */}
         <Route path="/*" element={<NotFound />} />
       </Routes>

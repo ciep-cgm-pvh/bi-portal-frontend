@@ -4,4 +4,5 @@ export interface NavLinkInterface {
   title: string;
   path: string;
   icon: ReactNode;
+  element?: ReactNode;
 }
