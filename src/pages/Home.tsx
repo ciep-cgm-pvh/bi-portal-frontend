@@ -7,6 +7,7 @@ export default function Home() {
     navigate('/notFound');
   };
   return(
+    
     <div className="bg-white py-24 sm:py-32">
       <div className="flex flex-col gap-3 mx-auto max-w-7xl px-6 lg:px-8">
         <h1 className="text-center text-9xl font-semibold text-midnight">
