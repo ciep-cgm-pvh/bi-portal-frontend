@@ -1,14 +1,18 @@
 import { Link } from 'react-router-dom';
 import { navLinks } from './../data/NavLinksData';
+import { BiError } from "react-icons/bi";
 
 const dashboardLink = navLinks.find((link) => link.title === "Dashboard");
 
 export default function notFound() {
   return(
     <div className='bg-zinc-100 flex w-full h-dvh justify-center items-center'>
-      <section className='flex flex-col justify-center items-center gap-3 bg-white px-4 2xs:w-[350px] xs:w-[420px] sm:w-full h-full  max-w-[600px] max-h-[300px] shadow-md rounded-xl mx-4'>
+      <section className='flex flex-col justify-center items-center gap-2 bg-white px-4 2xs:w-[350px] xs:w-[420px] sm:w-full h-full  max-w-[600px] max-h-[300px] shadow-md rounded-xl mx-4'>
+        <div className='flex flex-col items-center'>
+          <BiError className='size-16 text-red-700' />
           <h1 className='self-center text-2xl sm:text-3xl md:text-4xl font-bold text-center'>Página não encontrada!</h1>
-        <p className='text-center sm:text-lg md:text-xl'>A página que você está tentando acessar não existe.</p>
+        </div>
+        <p className='text-center sm:text-lg md:text-xl'>A página que você está procurando pode ter sido removida, teve seu nome alterado ou está temporariamente fora do ar.</p>
         {dashboardLink && (
           <Link to="/home" className='flex items-center gap-2 bg-sky-500 hover:bg-sky-600 cursor-pointer text-sm xs:text-base text-white mt-5 px-3 py-1 rounded-md'>
             {dashboardLink.icon}
