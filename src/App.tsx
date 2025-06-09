@@ -7,13 +7,11 @@ import {
 import NotFound from "./pages/NotFound";
 import Home from "./pages/Home";
 import getNavLinks from "./data/NavLinksData";
-import Topbar from "./components/TopBar/TopBar";
 
 function App() {
   const navLinks = getNavLinks();
   return (
     <>
-      <Topbar />
       <Router>
         <Routes>
           <Route path="/" element={<Navigate to="/home" />} />
