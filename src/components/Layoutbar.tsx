@@ -3,7 +3,7 @@ import SideBar from "./SideBar/Sidebar";
 import { Outlet } from "react-router-dom";
 import NavBarMobile from "./navbar/NavBarMobile";
 
-export default function Layout() {
+export default function Layoutbar() {
   const [open, setOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 

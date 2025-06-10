@@ -1,20 +1,28 @@
-import { Outlet } from 'react-router-dom';
-import NavBarMobile from '../../components/navbar/NavBarMobile';
-import useIsMobile from '../../hooks/useIsMobile';
-
+import { Outlet } from "react-router-dom";
+import NavBarMobile from "../../components/navbar/NavBarMobile";
+import useIsMobile from "../../hooks/useIsMobile";
+import { useState } from "react";
 export default function Layout() {
   const isMobile = useIsMobile();
+  const [open, setOpen] = useState(false);
 
-  return(
-    <div 
-    className={`flex ${isMobile ? 'flex-col' : 'flex-row'} w-full h-dvh`}>
-      {!isMobile ? <SidebarTeste /> : <NavBarMobile />}
+  return (
+    <div className={`flex ${isMobile ? "flex-col" : "flex-row"} w-full h-dvh`}>
+      {!isMobile ? (
+        <SidebarTeste />
+      ) : (
+        <NavBarMobile open={open} setOpen={setOpen} />
+      )}
 
-      <section className={`flex-1 px-10 py-5 overflow-auto ${isMobile ? 'w-full' : ''}`}>
+      <section
+        className={`flex-1 px-10 py-5 overflow-auto ${
+          isMobile ? "w-full" : ""
+        }`}
+      >
         <Outlet />
       </section>
     </div>
-  )
+  );
 }
 
 const SidebarTeste = () => {
@@ -29,6 +37,3 @@ const SidebarTeste = () => {
     </aside>
   );
 };
-
-
-

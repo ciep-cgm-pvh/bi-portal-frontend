@@ -1,14 +1,14 @@
 import { Menu, X } from "lucide-react";
-import { useState } from 'react';
 import { NavLink } from "react-router-dom";
 import getNavLinks from "../../data/NavLinksData";
 import type { NavLinkInterface } from "../../interfaces/navLinksInterface";
 
-export default function NavBarMobile() {
-
-  const [open, setOpen] = useState(false);
-
-  const links: NavLinkInterface[] = getNavLinks(); // ✅ agora links existe
+type Props = {
+  open: boolean;
+  setOpen: (open: boolean) => void;
+};
+export default function NavBarMobile({ open, setOpen }: Props) {
+  const links: NavLinkInterface[] = getNavLinks();
 
   return (
     <nav className="bg-official-blue text-white p-3 w-full bottom-0 left-0 z-50 shadow-lg">
@@ -17,12 +17,12 @@ export default function NavBarMobile() {
         <h1 className="text-2xl font-bold">Menu</h1>
         <button onClick={() => setOpen(!open)} className="text-2xl">
           {open ? <X /> : <Menu />}{" "}
-
         </button>
       </div>
 
       {/* Menu suspenso */}
-      <div className={`transition-all overflow-hidden ${
+      <div
+        className={`transition-all overflow-hidden ${
           open ? "max-h-screen" : "max-h-0"
         }`}
       >
