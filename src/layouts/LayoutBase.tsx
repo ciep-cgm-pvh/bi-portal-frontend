@@ -9,7 +9,7 @@ export default function Layout() {
     <div className='flex flex-col w-full h-dvh'>
       {!isMobile ? <SidebarTeste /> : <NavBarMobile />}
       
-      <section className='px-10 py-5 -z-10 h-full'>
+      <section className='px-10 py-5 h-full'>
         <Outlet />
       </section>
     </div>
