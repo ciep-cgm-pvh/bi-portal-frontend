@@ -4,6 +4,8 @@ import type { NavLinkInterface } from "../interfaces/navLinksInterface";
 import Dashboard from '../pages/Dashboard/Dashboard';
 import DataSource from '../pages/DataSource/DataSource';
 import Reports from '../pages/Reports/Reports';
+import Home from '../pages/Home/Home';
+
 export const navLinks: NavLinkInterface[] = [
   {
     title: "Dashboard",
@@ -22,6 +24,12 @@ export const navLinks: NavLinkInterface[] = [
     path: "/reports",
     icon: <FileText size={18} />,
     element: <Reports />,
+  },
+  {
+    title: "Home",
+    path: "/home",
+    icon: <FileText size={18} />,
+    element: <Home />,
   },
 ];
 export default function getNavLinks() {
