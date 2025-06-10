@@ -1,4 +1,4 @@
-import { Menu } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { NavLink } from "react-router-dom";
 import type { NavLinkInterface } from "../../interfaces/navLinksInterface";
 import getNavLinks from "../../data/NavLinksData";
@@ -14,13 +14,15 @@ export default function NavBarMobile({ open, setOpen }: Props) {
   const links: NavLinkInterface[] = getNavLinks(); // ✅ agora links existe
 
   return (
-    <nav className={"bg-blue-500 text-white p-3  bottom-0 left-0 shadow-lg"}>
+    <nav
+      className={"bg-official-blue text-white p-3  bottom-0 left-0 shadow-lg"}
+    >
       {/* Topo com título e botão */}
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-bold">Menu</h1>
         <button onClick={() => setIsOpen(!isOpen)} className="text-2xl">
           {" "}
-          {isOpen ? <Menu /> : <Menu />}{" "}
+          {isOpen ? <X /> : <Menu />}{" "}
         </button>
       </div>
 
@@ -39,7 +41,7 @@ export default function NavBarMobile({ open, setOpen }: Props) {
                   `flex items-center gap-2 px-4 py-2 transition duration-250 ease-in-out rounded
                   ${
                     isActive
-                      ? "bg-official-blue text-white font-bold"
+                      ? "bg-official-blue-active text-white font-bold"
                       : "hover:bg-official-yellow hover:text-black font-bold"
                   }`
                 }

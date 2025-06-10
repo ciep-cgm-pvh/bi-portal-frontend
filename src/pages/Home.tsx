@@ -23,7 +23,7 @@ export default function Home() {
         </p>
         <button
           onClick={handleGoToNotFound}
-          className="mt-10  bg-cyan-500 hover:bg-cyan-700 rounded text-white self-center w-fit px-3 py-1 cursor-pointer"
+          className="mt-10 bg-cyan-500 hover:bg-cyan-700 rounded text-white self-center w-fit px-3 py-1 cursor-pointer"
         >
           Go to Not Found page
         </button>
