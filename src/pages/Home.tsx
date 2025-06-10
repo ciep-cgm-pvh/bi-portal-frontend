@@ -1,23 +1,19 @@
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import SideBar from "../components/SideBar/Sidebar";
 
 export default function Home() {
   const navigate = useNavigate();
 
   // ⬇️ Adicione o estado para controlar o menu
-  const [isOpen, setIsOpen] = useState(false);
 
   const handleGoToNotFound = () => {
     navigate("/notFound");
   };
 
   return (
-    <div className="">
+    <div className="p-25">
       {/* ⬅️ Passe isOpen e setIsOpen como props */}
-      <SideBar open={isOpen} setOpen={setIsOpen} />
 
-      <div className="flex flex-col gap-3 mx-auto max-w-7xl px-6 lg:px-8">
+      <div className="text-center pt-10">
         <h1 className="text-center text-9xl font-semibold text-midnight">
           Hello World!
         </h1>
@@ -27,7 +23,7 @@ export default function Home() {
         </p>
         <button
           onClick={handleGoToNotFound}
-          className="mt-5 bg-cyan-500 hover:bg-cyan-700 rounded text-white self-center w-fit px-3 py-1 cursor-pointer"
+          className="mt-10  bg-cyan-500 hover:bg-cyan-700 rounded text-white self-center w-fit px-3 py-1 cursor-pointer"
         >
           Go to Not Found page
         </button>
