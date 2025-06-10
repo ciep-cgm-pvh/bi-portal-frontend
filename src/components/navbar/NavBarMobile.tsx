@@ -1,35 +1,29 @@
 import { Menu, X } from "lucide-react";
+import { useState } from 'react';
 import { NavLink } from "react-router-dom";
-import type { NavLinkInterface } from "../../interfaces/navLinksInterface";
 import getNavLinks from "../../data/NavLinksData";
+import type { NavLinkInterface } from "../../interfaces/navLinksInterface";
 
-type Props = {
-  open: boolean;
-  setOpen: (open: boolean) => void;
-};
+export default function NavBarMobile() {
 
-export default function NavBarMobile({ open, setOpen }: Props) {
-  const isOpen = open;
-  const setIsOpen = setOpen;
+  const [open, setOpen] = useState(false);
+
   const links: NavLinkInterface[] = getNavLinks(); // ✅ agora links existe
 
   return (
-    <nav
-      className={"bg-official-blue text-white p-3  bottom-0 left-0 shadow-lg"}
-    >
+    <nav className="bg-official-blue text-white p-3 w-full bottom-0 left-0 z-50 shadow-lg">
       {/* Topo com título e botão */}
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-bold">Menu</h1>
-        <button onClick={() => setIsOpen(!isOpen)} className="text-2xl">
-          {" "}
-          {isOpen ? <X /> : <Menu />}{" "}
+        <button onClick={() => setOpen(!open)} className="text-2xl">
+          {open ? <X /> : <Menu />}{" "}
+
         </button>
       </div>
 
       {/* Menu suspenso */}
-      <div
-        className={`transition-all overflow-hidden ${
-          isOpen ? "max-h-screen" : "max-h-0"
+      <div className={`transition-all overflow-hidden ${
+          open ? "max-h-screen" : "max-h-0"
         }`}
       >
         <ul className="mt-4 space-y-2">

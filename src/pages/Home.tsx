@@ -1,19 +1,15 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from 'react-router-dom';
 
 export default function Home() {
   const navigate = useNavigate();
-
-  // ⬇️ Adicione o estado para controlar o menu
 
   const handleGoToNotFound = () => {
     navigate("/notFound");
   };
 
-  return (
-    <div className="p-25">
-      {/* ⬅️ Passe isOpen e setIsOpen como props */}
-
-      <div className="text-center pt-10">
+  return(
+    <div className="bg-white py-24 sm:py-32">
+      <div className="flex flex-col gap-3 mx-auto max-w-7xl px-6 lg:px-8">
         <h1 className="text-center text-9xl font-semibold text-midnight">
           Hello World!
         </h1>
@@ -27,6 +23,10 @@ export default function Home() {
         >
           Go to Not Found page
         </button>
+        <Link 
+          to="/dashboard"
+          className=' bg-cyan-500 hover:bg-cyan-700 rounded text-white self-center w-fit px-3 py-1 cursor-pointer'
+        >Go to Dashboard</Link>
       </div>
     </div>
   );
