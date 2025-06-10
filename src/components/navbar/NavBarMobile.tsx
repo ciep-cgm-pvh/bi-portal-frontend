@@ -11,12 +11,13 @@ export default function NavBarMobile() {
   const links: NavLinkInterface[] = getNavLinks(); // ✅ agora links existe
 
   return (
-    <nav className="bg-bermuda text-white p-3 w-full bottom-0 left-0 z-50 shadow-lg">
+    <nav className="bg-official-blue text-white p-3 w-full bottom-0 left-0 z-50 shadow-lg">
       {/* Topo com título e botão */}
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-bold">Menu</h1>
         <button onClick={() => setOpen(!open)} className="text-2xl">
           {open ? <X /> : <Menu />}{" "}
+
         </button>
       </div>
 
@@ -32,11 +33,11 @@ export default function NavBarMobile() {
                 to={link.path}
                 className={({ isActive }) =>
                   `flex items-center gap-2 px-4 py-2 transition duration-250 ease-in-out rounded
-                ${
-                  isActive
-                    ? "bg-official-blue-active text-white font-bold"
-                    : "hover:bg-official-yellow-active hover:text-black font-bold"
-                }`
+                  ${
+                    isActive
+                      ? "bg-official-blue-active text-white font-bold"
+                      : "hover:bg-official-yellow hover:text-black font-bold"
+                  }`
                 }
               >
                 {link.icon}
