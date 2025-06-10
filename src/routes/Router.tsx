@@ -11,9 +11,10 @@ function Router() {
   return (
       <Routes>
         <Route path="/" element={<Navigate to="/home" />} />
-        <Route path="/home" element={<Home />} />
+        
 
         <Route element={<LayoutBase />}>
+          <Route path="/home" element={<Home />} />
           {navLinks.map(({ path, element }) => (
             <Route key={path} path={path} element={element} />
           ))}
