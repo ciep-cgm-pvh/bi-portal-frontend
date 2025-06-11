@@ -1,10 +1,10 @@
 // src/data/navLinks.tsx
 import { BarChart2, Database, FileText } from "lucide-react";
 import type { NavLinkInterface } from "../interfaces/navLinksInterface";
-import Dashboard from '../pages/Dashboard/Dashboard';
-import DataSource from '../pages/DataSource/DataSource';
-import Reports from '../pages/Reports/Reports';
-import Home from '../pages/Home/Home';
+import Dashboard from "../pages/Dashboard/Sections/Dashboard";
+import DataSource from "../pages/DataSource/DataSource";
+import Reports from "../pages/Reports/Reports";
+import Home from "../pages/Home/Home";
 
 export const navLinks: NavLinkInterface[] = [
   {
