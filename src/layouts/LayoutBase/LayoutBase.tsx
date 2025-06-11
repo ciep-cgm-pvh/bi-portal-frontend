@@ -22,7 +22,7 @@ export default function LayoutBase() {
       )}
       <main
         className={`flex flex-col mt-4 transition-all duration-500 ease-in-out flex-grow ${
-          isMobile ? "mt-4" : isOpen ? "ml-[314px]" : "ml-24"
+          isMobile ? "mt-4" : isOpen ? "ml-[314px] mr-10" : "ml-24 mr-14"
         }`}
       >
         <Outlet />
