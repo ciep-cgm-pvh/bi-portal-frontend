@@ -12,9 +12,13 @@ export default function LayoutBase() {
   }
 
   const isMobile =  useIsMobile()
+  
+
+  const screenMode = ['bg-slate-900', 'bg-white'];
+
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className={`flex flex-col min-h-screen ${screenMode[0]}`}>
       {isMobile ? (
         <NavBarMobile isOpen={isOpen} setIsOpen={externalSetIsOpen} />
       ) : (
@@ -22,10 +26,10 @@ export default function LayoutBase() {
       )}
       <main
         className={`flex flex-col mt-4 transition-all duration-500 ease-in-out flex-grow ${
-          isMobile ? "mt-4" : isOpen ? "ml-[314px] mr-10" : "ml-24 mr-14"
+          isMobile ? "mt-4 mx-5 mb-8" : isOpen ? "ml-[314px] mr-10" : "ml-24 mr-14"
         }`}
       >
-        <Outlet />
+        <Outlet context={isMobile as boolean}/>
       </main>
     </div>
   );

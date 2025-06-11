@@ -12,14 +12,14 @@ export default function NavBarMobile({isOpen, setIsOpen}: {isOpen: boolean, setI
       {/* Topo com título e botão */}
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-bold">Menu</h1>
-        <button onClick={() => setIsOpen(!isOpen)} className="text-2xl">
+        <button onClick={() => setIsOpen(!isOpen)} className="text-2xl transition-all duration-500 ease-in-out">
           {isOpen ? <X /> : <Menu />}{" "}
 
         </button>
       </div>
 
       {/* Menu suspenso */}
-      <div className={`transition-all overflow-hidden ${
+      <div className={`transition-all duration-500 ease-in-out overflow-hidden ${
           isOpen ? "max-h-screen" : "max-h-0"
         }`}
       >
@@ -29,7 +29,7 @@ export default function NavBarMobile({isOpen, setIsOpen}: {isOpen: boolean, setI
               <NavLink
                 to={link.path}
                 className={({ isActive }) =>
-                  `flex items-center gap-2 px-4 py-2 transition duration-250 ease-in-out rounded
+                  `flex items-center gap-2 px-4 py-2 transition duration-500 ease-in-out rounded
                   ${
                     isActive
                       ? "bg-official-blue-active text-white font-bold"
