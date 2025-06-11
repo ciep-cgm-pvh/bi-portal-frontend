@@ -9,15 +9,16 @@ type DataItem = {
 };
 
 type PieChartProps = {
-  title: string
+  title: string;
   data: DataItem[];
   colors?: readonly string[];
   sizeLegend?: number;
   sizeTitle?: number,
   showLegend?: boolean;
   donut?: boolean;
-  height: number
-  width: number
+  height: number;
+  width: number;
+  className?: string;
 };;
 
 export const PieChartRecharts = ({
@@ -30,11 +31,12 @@ export const PieChartRecharts = ({
   sizeTitle = 16,
   showLegend = true,
   donut = false,
+  className,
 }: PieChartProps) => {
 
   return (
     <div
-      className={`flex flex-col items-center justify-center px-2 py-3`}
+      className={`flex flex-col items-center justify-center px-2 py-3 ${className}`}
       style={{ width: width + 50, height: height + 50 }}
     >
       <p

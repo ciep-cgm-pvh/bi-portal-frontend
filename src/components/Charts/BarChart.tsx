@@ -7,15 +7,16 @@ type DataItem = {
 };
 
 type BarChartProps = {
-  title: string
+  title: string;
   data: DataItem[];
   keys?: string[];
   colors: readonly string[];
   sizeLegend?: number;
   sizeTitle?: number,
   showLegend?: boolean;
-  height: number
-  width: number
+  height: number;
+  width: number;
+  className?: string;
 };;
 
 export const BarChartRecharts = ({
@@ -27,13 +28,14 @@ export const BarChartRecharts = ({
   sizeLegend,
   sizeTitle,
   colors,
-  showLegend
+  showLegend,
+  className
 }: BarChartProps) => {
   const dataKeys = keys ?? Object.keys(data[ 0 ] ?? {}).filter(k => k !== 'label');
 
   return (
     <div
-      className={`flex flex-col w-fit items-center justify-center py-3`}
+      className={`flex flex-col w-fit items-center justify-center py-3 ${className}`}
       style={{ width, height: height + 10 }}
     >
       <p
