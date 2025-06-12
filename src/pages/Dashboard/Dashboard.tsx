@@ -8,15 +8,24 @@ export default function Dashboard() {
   const isMobile = useOutletContext<boolean>();
   console.log('Dashboard received isMobile:', isMobile);
   const render = true
+  const showQuemFez = false
   return(
    <>
     {/* Sections as sub-components */}
-    <h1 className='bg-red-500 rounded-md my-5 p-2 justify-center font-bold'>Seção desevolvida por Jhonatan</h1>
+    {QuemFez('Jhonatan', showQuemFez)}
     <OverView isMobile={isMobile}/>
-    <h1 className='bg-red-500 rounded-md my-5 p-2 justify-center font-bold'>Seção desevolvida por Filipe Farias</h1>
+    {QuemFez('Filipe Farias', showQuemFez)}
     {!render?'':<CustosDetalhados/>}
-    <h1 className='bg-red-500 rounded-md my-5 p-2 justify-center font-bold'>Seção desevolvida por Jhonatan</h1>
+    {QuemFez('Jhonatan', showQuemFez)}
     {!render?'':<FleetSection isMobile={isMobile} className={''}/>}
    </>
+  )
+}
+
+const QuemFez = (text: string, show: boolean) => {
+  return (
+    <>
+      {show? <h1 className='bg-red-500 rounded-md my-5 p-2 justify-center font-bold'>{`Seção desevolvida por ${text}`}</h1> : ''}
+    </>
   )
 }
