@@ -12,7 +12,7 @@ export default function LayoutBase() {
   }
 
   const isMobile =  useIsMobile()
-  
+
 
   const screenMode = ['bg-slate-900', 'bg-white'];
 

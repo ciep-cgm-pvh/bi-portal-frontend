@@ -1,9 +1,6 @@
 // pages/NotFound.tsx
 import { BiError } from "react-icons/bi";
 import { Link } from "react-router-dom";
-import { navLinks } from "../../data/NavLinksData";
-
-const dashboardLink = navLinks.find((link) => link.title === "Dashboard");
 
 export default function NotFound() {
   return (

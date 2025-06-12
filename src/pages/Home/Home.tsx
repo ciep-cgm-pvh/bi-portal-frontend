@@ -23,8 +23,9 @@ export default function Home() {
         </p>
 
         <p className="text-lg md:text-xl font-medium text-center">
-          Construído com <span className="text-midnight font-semibold">React</span> e{" "}
-          <span className="text-midnight font-semibold">Tailwind CSS</span>, integrado a um backend de dados estruturado.
+          Construído com Vite, TypeScript, <span className="text-midnight font-semibold">React</span> e{" "}
+          <span className="text-midnight font-semibold">Tailwind CSS</span>
+          {/* , integrado a um backend de dados estruturado. */}
         </p>
 
         <div className="flex flex-col md:flex-row gap-4 mt-4 w-full justify-center">
