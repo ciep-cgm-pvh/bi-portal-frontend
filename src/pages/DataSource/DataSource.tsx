@@ -1,5 +1,10 @@
+import { InDevelopment } from '../InDevelopment/Indevelopment';
+
 export default function DataSource() {
+  // Página em construção
   return (
-    <div>DataSource</div>
+    <>
+      <InDevelopment isMobile={false}/>
+    </>
   )
 }

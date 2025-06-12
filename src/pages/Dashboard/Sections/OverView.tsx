@@ -42,7 +42,7 @@ const OverViewKpiCards = ({className, isMobile}:{className:string, isMobile:bool
         <div key={index} className={`rounded-lg ${className} ${isMobile?'p-4':'p-8'}  shadow-md flex flex-col items-ce`}>
           <p className="text-md font-medium">{card.title}</p>
           <p className="text-3xl font-semibold ">{card.value}</p>
-          <span className={`text-md font-medium text-${card.color}`}>{card.change}</span>
+          <span className={`text-md font-medium w-fit rounded-md p-1 bg-emerald-500 text-emerald-950`}>{card.change}</span>
         </div>
       ))}
     </div>
@@ -79,8 +79,8 @@ const OverViewTimeLine = ({className}:{className:string}) => {
     ]
   return (
     <>
-      <h2 className='text-xl font-semibold mb-4 bg-lime-500 rounded-md p-2'>Linha do Tempo</h2>
-      <div className={`${className} p-4 rounded-lg shadow-md max-h-96 h-full overflow-y-auto flex items-center justify-center`}>
+      <h2 className='text-xl font-semibold bg-lime-500 rounded-t-md p-2 text-center'>Linha do Tempo</h2>
+      <div className={`${className} p-4 rounded-b-lg shadow-md max-h-96 h-full overflow-y-auto flex items-center justify-center`}>
         <LineChartRecharts
           data={sampleDataLineChart}
           title=""
@@ -106,8 +106,8 @@ const OverViewPizzaDistribution = ({className, isMobile}:{className:string, isMo
   
   return (
     <>
-    <h2 className='text-xl font-semibold mb-4 bg-lime-500 rounded-md p-2'>Proporção por Tipo de OS</h2>
-<div className={`${className} p-4 rounded-lg shadow-md ${isMobile? 'max-h-72':'max-h-96'} h-full overflow-y-auto flex items-center justify-center`}>
+    <h2 className='text-xl font-semibold bg-lime-500 rounded-t-md p-2 text-center'>Proporção por Tipo de OS</h2>
+<div className={`${className} p-4 rounded-b-lg shadow-md ${isMobile? 'max-h-72':'max-h-96'} h-full overflow-y-auto flex items-center justify-center`}>
       <PieChartRecharts
         data={sampleDataPieChart}
         donut={true}

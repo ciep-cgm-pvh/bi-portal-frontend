@@ -1,4 +1,6 @@
-import { useNavigate, Link } from "react-router-dom";
+// pages/Home.tsx
+import { AlertTriangle, HomeIcon } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function Home() {
   const navigate = useNavigate();
@@ -8,29 +10,43 @@ export default function Home() {
   };
 
   return (
-    <div className="bg-white py-24 sm:py-32">
-      <div className="flex flex-col gap-3 mx-auto max-w-7xl px-6 lg:px-8">
-        <h1 className="text-center text-9xl font-semibold text-midnight">
-          Hello World!
-        </h1>
-        <p className="mt-6 text-center text-4xl leading-8 text-gray-600">
-          This is a simple <span className="text-cyan-500">React app</span>{" "}
-          styled with <span className="text-cyan-500">Tailwind CSS</span>.
+    <div className="min-h-screen w-full flex items-center justify-center text-white">
+      <div className="bg-white text-slate-900 rounded-2xl shadow-lg p-8 md:p-12 max-w-3xl w-full flex flex-col items-center gap-6">
+        <HomeIcon size={48} className="text-slate-900" />
+        <h1 className="text-4xl md:text-5xl font-bold text-center">Bem-vindo!</h1>
+        
+        {/* Descrição do projeto */}
+        <p className="text-base md:text-lg text-center text-slate-800 bg-cyan-100 rounded-md p-4 shadow-inner">
+          Este projeto tem como objetivo centralizar, simplificar e dar transparência à análise de dados públicos relacionados à
+          manutenção de frota municipal. A plataforma oferece visualizações interativas, filtros customizados e indicadores-chave
+          de desempenho para facilitar a tomada de decisões e o acompanhamento de gastos públicos.
         </p>
-        <button
-          onClick={handleGoToNotFound}
-          className="mt-10 bg-cyan-500 hover:bg-cyan-700 rounded text-white 
-          self-center w-fit px-3 py-1 cursor-pointer"
-        >
-          Go to Not Found page
-        </button>
-        <Link
-          to="/dashboard"
-          className=" bg-cyan-500 hover:bg-cyan-700 rounded text-white 
-          self-center w-fit px-3 py-1 cursor-pointer"
-        >
-          Go to Dashboard
-        </Link>
+
+        <p className="text-lg md:text-xl font-medium text-center">
+          Construído com <span className="text-midnight font-semibold">React</span> e{" "}
+          <span className="text-midnight font-semibold">Tailwind CSS</span>, integrado a um backend de dados estruturado.
+        </p>
+
+        <div className="flex flex-col md:flex-row gap-4 mt-4 w-full justify-center">
+          <button
+            onClick={handleGoToNotFound}
+            className="flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-medium px-4 py-2 rounded-lg shadow "
+          >
+            <AlertTriangle size={18} /> Página Não Encontrada
+          </button>
+          <Link
+            to="/dashboard"
+            className="bg-official-blue hover:bg-official-blue-active text-white font-medium px-4 py-2 rounded-lg shadow text-center transition-all ease-in-out duration-500"
+          >
+            Acessar o Dashboard
+          </Link>
+          <Link
+            to="/datasource"
+            className="bg-lime-500 hover:bg-lime-900 text-black hover:text-white font-medium px-4 py-2 rounded-lg shadow text-center transition-all ease-in-out duration-500"
+          >
+            Acessar os relatórios
+          </Link>
+        </div>
       </div>
     </div>
   );

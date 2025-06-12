@@ -6,7 +6,7 @@ import useIsMobile from '../../hooks/useIsMobile';
 
 
 export default function LayoutBase() {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
   const externalSetIsOpen = (state = !isOpen) => {
     setIsOpen(state);
   }
