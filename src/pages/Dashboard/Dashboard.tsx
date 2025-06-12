@@ -1,5 +1,6 @@
 import { useOutletContext } from 'react-router-dom';
 import { OverView } from './Sections/OverView';
+import CustosDetalhados from './Sections/CustosDetalhados';
 
 export default function Dashboard() {
 
@@ -10,6 +11,7 @@ export default function Dashboard() {
    <>
     {/* Sections as sub-components */}
     <OverView isMobile={isMobile}/>
+    <CustosDetalhados/>
    </>
   )
 }

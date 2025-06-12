@@ -50,7 +50,7 @@ const OverViewKpiCards = ({className, isMobile}:{className:string, isMobile:bool
   )
 }
 
-const OverViewTimeLine = ({className, isMobile}:{className:string, isMobile:boolean}) => {
+const OverViewTimeLine = ({className}:{className:string}) => {
   const sampleDataLineChart = [
       {
         "label": "2022",
