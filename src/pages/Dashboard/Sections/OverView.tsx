@@ -16,7 +16,7 @@ export const OverView = ({isMobile}:{isMobile:boolean}) => {
           <OverViewPizzaDistribution className={screenMode[x]} isMobile={isMobile} />
         </div>
         <div className={isMobile ? '' : 'col-span-3'}>
-          <OverViewTimeLine className={screenMode[x]} isMobile={isMobile} />
+          <OverViewTimeLine className={screenMode[x]} />
         </div>
       </div>
     </>
