@@ -1,4 +1,4 @@
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link } from "react-router-dom";
 
 export default function Home() {
   const navigate = useNavigate();
@@ -7,7 +7,7 @@ export default function Home() {
     navigate("/notFound");
   };
 
-  return(
+  return (
     <div className="bg-white py-24 sm:py-32">
       <div className="flex flex-col gap-3 mx-auto max-w-7xl px-6 lg:px-8">
         <h1 className="text-center text-9xl font-semibold text-midnight">
@@ -19,14 +19,18 @@ export default function Home() {
         </p>
         <button
           onClick={handleGoToNotFound}
-          className="mt-10 bg-cyan-500 hover:bg-cyan-700 rounded text-white self-center w-fit px-3 py-1 cursor-pointer"
+          className="mt-10 bg-cyan-500 hover:bg-cyan-700 rounded text-white 
+          self-center w-fit px-3 py-1 cursor-pointer"
         >
           Go to Not Found page
         </button>
-        <Link 
+        <Link
           to="/dashboard"
-          className=' bg-cyan-500 hover:bg-cyan-700 rounded text-white self-center w-fit px-3 py-1 cursor-pointer'
-        >Go to Dashboard</Link>
+          className=" bg-cyan-500 hover:bg-cyan-700 rounded text-white 
+          self-center w-fit px-3 py-1 cursor-pointer"
+        >
+          Go to Dashboard
+        </Link>
       </div>
     </div>
   );

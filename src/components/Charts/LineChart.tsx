@@ -8,32 +8,31 @@ type DataItem = {
 
 type LineChartProps = {
   title: string
-  data: DataItem[];
-  keys?: string[];
-  colors: readonly string[];
-  sizeLegend?: number;
-  sizeTitle?: number,
-  showLegend?: boolean;
-  height: number
-  width: number
+  data: DataItem[]
+  keys?: string[]
+  colors: readonly string[]
+  sizeLegend?: number
+  sizeTitle?: number
+  showLegend?: boolean
+  height?: number
+  width?: number
+  className?: string
 };;
 
 export const LineChartRecharts = ({
   title,
   data,
-  height,
   keys,
-  width,
   sizeLegend,
   sizeTitle,
   colors,
-  showLegend
+  showLegend,
+  className = ''
 }: LineChartProps) => {
   const dataKeys = keys ?? Object.keys(data[ 0 ] ?? {}).filter(k => k !== 'label');
   return (
     <div
-      className={`flex flex-col w-fit items-center justify-center py-3`}
-      style={{ width, height: height + 20 }}
+      className={`flex flex-col items-center justify-center py-3 ${className}`}
     >
       <p
         className='font-semibold pb-2'
