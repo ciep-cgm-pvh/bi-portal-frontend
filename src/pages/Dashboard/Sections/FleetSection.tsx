@@ -1,7 +1,8 @@
-import { useState } from 'react'
 import { BarChartRecharts } from '../../../components/Charts/BarChart'
 import { LineChartRecharts } from '../../../components/Charts/LineChart'
 import { PieChartRecharts } from '../../../components/Charts/PieChart'
+import GenericTable from '../../../components/Table/GenericTable'
+
 
 const FleetSection = ({isMobile, className}:{isMobile:boolean, className:string}) => {
   return (
@@ -9,19 +10,19 @@ const FleetSection = ({isMobile, className}:{isMobile:boolean, className:string}
     <h1 
       className={`text-2xl font-bold bg-official-yellow rounded-md p-2 mb-4 text-left ${className}` }
       >VEÍCULOS E FROTA</h1>
-      <h2 className='text-xl font-semibold bg-lime-500 rounded-t-md p-2 text-center'>Veículos x Custo x Ordem de Serviço (OS)</h2>
+      <h2 className='text-xl font-semibold bg-chart-title rounded-t-md p-2 text-center'>Veículos x Custo x Ordem de Serviço (OS)</h2>
       <FleetTable isMobile={isMobile} className=''/>
       <div className={`mb-4 grid gap-4 ${isMobile ? 'grid-cols-1' : 'grid-cols-3'}`}>
         <div className={isMobile ? '' : 'col-span-1'}>
-        <h2 className='text-xl font-semibold bg-lime-500 rounded-t-md p-2 text-center'>Custo médio por marca/modelo/ano</h2>
+        <h2 className='text-xl font-semibold bg-chart-title rounded-t-md p-2 text-center'>Custo médio por marca/modelo/ano</h2>
           <FleetBars isMobile={isMobile} className='bg-white'/>
         </div>
         <div className={isMobile ? '' : 'col-span-1'}>
-        <h2 className='text-xl font-semibold bg-lime-500 rounded-t-md p-2 text-center'>Intervalos entre OS por placa</h2>
+        <h2 className='text-xl font-semibold bg-chart-title rounded-t-md p-2 text-center'>Intervalos entre OS por placa</h2>
           <FleetLines isMobile={isMobile} className='bg-white'/>
         </div>
         <div className={isMobile ? '' : 'col-span-1'}>
-        <h2 className='text-xl font-semibold bg-lime-500 rounded-t-md p-2 text-center'>Proporção por tipo de frota</h2>
+        <h2 className='text-xl font-semibold bg-chart-title rounded-t-md p-2 text-center'>Proporção por tipo de frota</h2>
           <FleetPie isMobile={isMobile} className='bg-white'/>
         </div>
       </div>
@@ -159,121 +160,5 @@ const FleetPie = ({isMobile, className}:{isMobile:boolean, className:string}) =>
     </>
   )
 }
-
-type FilterConfig = {
-  field: string;
-  label?: string;
-  type?: 'text' | 'number' | 'select' | 'range';
-  options?: (string | number)[];
-};
-
-const GenericTableFilters = ({
-  filters,
-  setFilters,
-  filterConfig,
-}: {
-  filters: never;
-  setFilters: (val: never) => void;
-  filterConfig: FilterConfig[];
-}) => {
-  return (
-    <div className="flex flex-wrap gap-3  justify-center bg-white p-2 shadow-md">
-      {filterConfig.map(({ field, label, type = 'text', options }) => {
-        const value = filters[field] ?? '';
-
-        if (type === 'select') {
-          return (
-            <div key={field}>
-              <label className="block text-sm">{label || field}</label>
-              <select
-                className="border px-2 py-1 rounded"
-                value={value}
-                onChange={(e) => setFilters({ ...filters, [field]: e.target.value })}
-              >
-                <option value="">Todos</option>
-                {options?.map((opt) => (
-                  <option key={opt} value={opt}>
-                    {opt}
-                  </option>
-                ))}
-              </select>
-            </div>
-          );
-        }
-
-        return (
-          <div key={field}>
-            <label className="block text-sm">{label || field}</label>
-            <input
-              type={type}
-              className="border px-2 py-1 rounded"
-              placeholder={label || field}
-              value={value}
-              onChange={(e) => setFilters({ ...filters, [field]: e.target.value })}
-            />
-          </div>
-        );
-      })}
-    </div>
-  );
-};
-
-const GenericTable = ({
-  data,
-  columns,
-  filtersConfig,
-  isMobile,
-  className,
-}: {
-  data: never[];
-  columns: { field: string; label?: string }[];
-  filtersConfig: never[];
-  isMobile: boolean;
-  className?: string;
-}) => {
-  const [filters, setFilters] = useState({});
-
-  const filteredData = data.filter((item) => {
-    return filtersConfig.every(({ field, type }) => {
-      const val = filters[field];
-      if (!val) return true;
-      const itemVal = item[field];
-
-      if (type === 'number') return Number(itemVal) === Number(val);
-      return String(itemVal).toLowerCase().includes(String(val).toLowerCase());
-    });
-  });
-
-  return (
-    <div className={`overflow-x-auto ${isMobile ? 'text-sm' : 'text-base'} mb-6 ${className}`}>
-      <GenericTableFilters filters={filters} setFilters={setFilters} filterConfig={filtersConfig} />
-      <table className="min-w-full border border-gray-300 text-left rounded-b-xl overflow-hidden">
-        <thead className="bg-cyan-500 text-gray-50">
-          <tr>
-            {columns.map((col) => (
-              <th key={col.field} className="border px-4 py-2">
-                {col.label || col.field}
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {filteredData.map((row, i) => (
-            <tr key={i} className="odd:bg-white even:bg-gray-50">
-              {columns.map((col) => (
-                <td key={col.field} className="border px-4 py-2">
-                  {typeof row[col.field] === 'number' && col.field === 'custo'
-                    ? `R$ ${row[col.field].toLocaleString()}`
-                    : row[col.field]}
-                </td>
-              ))}
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  );
-};
-
 
 export default FleetSection;

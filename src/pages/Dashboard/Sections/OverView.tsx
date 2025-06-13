@@ -11,9 +11,9 @@ export const OverView = ({isMobile}:{isMobile:boolean}) => {
       className='text-2xl font-bold bg-official-yellow rounded-md p-2 mb-4 text-left'
       >VISÃO GERAL</h1>
       <OverViewKpiCards className={screenMode[x]==='bg-white'? 'bg-white text-black': 'bg-slate-800 text-white'} isMobile={isMobile}/>
-      <div className={`mb-4 grid gap-4 ${isMobile ? 'grid-cols-1' : 'grid-cols-4'}`}>
-        <div className={isMobile ? '' : 'col-span-1'}>
-          <OverViewPizzaDistribution className={screenMode[x]} isMobile={isMobile} />
+      <div className={`mb-4 grid gap-4 ${isMobile ? 'grid-cols-1' : 'grid-cols-5'}`}>
+        <div className={isMobile ? '' : 'col-span-2'}>
+          <OverViewPizzaDistribution className={screenMode[x]+" min-w-fit"} isMobile={isMobile} />
         </div>
         <div className={isMobile ? '' : 'col-span-3'}>
           <OverViewTimeLine className={screenMode[x]} />
@@ -79,7 +79,7 @@ const OverViewTimeLine = ({className}:{className:string}) => {
     ]
   return (
     <>
-      <h2 className='text-xl font-semibold bg-lime-500 rounded-t-md p-2 text-center'>Linha do Tempo</h2>
+      <h2 className='text-xl font-semibold bg-chart-title rounded-t-md p-2 text-center'>Linha do Tempo</h2>
       <div className={`${className} p-4 rounded-b-lg shadow-md max-h-96 h-full overflow-y-auto flex items-center justify-center`}>
         <LineChartRecharts
           data={sampleDataLineChart}
@@ -106,7 +106,7 @@ const OverViewPizzaDistribution = ({className, isMobile}:{className:string, isMo
   
   return (
     <>
-    <h2 className='text-xl font-semibold bg-lime-500 rounded-t-md p-2 text-center'>Proporção por Tipo de OS</h2>
+    <h2 className='text-xl font-semibold bg-chart-title rounded-t-md p-2 text-center'>Proporção por Tipo de OS</h2>
 <div className={`${className} p-4 rounded-b-lg shadow-md ${isMobile? 'max-h-72':'max-h-96'} h-full overflow-y-auto flex items-center justify-center`}>
       <PieChartRecharts
         data={sampleDataPieChart}

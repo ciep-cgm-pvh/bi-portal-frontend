@@ -2,6 +2,7 @@ import { useOutletContext } from 'react-router-dom';
 import CustosDetalhados from './Sections/CustosDetalhados';
 import FleetSection from './Sections/FleetSection';
 import { OverView } from './Sections/OverView';
+import SuppliersSection from './Sections/Supplierssection';
 
 export default function Dashboard() {
 
@@ -11,6 +12,7 @@ export default function Dashboard() {
   const showQuemFez = false
   return(
    <>
+    
     {/* Sections as sub-components */}
     {QuemFez('Jhonatan', showQuemFez)}
     <OverView isMobile={isMobile}/>
@@ -18,6 +20,8 @@ export default function Dashboard() {
     {!render?'':<CustosDetalhados/>}
     {QuemFez('Jhonatan', showQuemFez)}
     {!render?'':<FleetSection isMobile={isMobile} className={''}/>}
+    {QuemFez('Jhonatan', showQuemFez)}
+    {!render?'':<SuppliersSection isMobile={isMobile} className={''}/>}
    </>
   )
 }
