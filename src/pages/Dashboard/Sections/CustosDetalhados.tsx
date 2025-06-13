@@ -6,9 +6,7 @@ import HeatMap from "../../../components/Chars/HeatMap";
 
 export default function CustosDetalhados() {
   return (
-    <div className="p-8 space-y-10">
-      <h1 className="text-2xl font-bold">Custos Detalhados</h1>
-
+    <div className="mt-4 mb-4 space-y-10">
       {/* Barras verticais */}
       <div>
         <VerticalBar />

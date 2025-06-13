@@ -45,15 +45,14 @@ const COLORS = ["#34d399", "#f87171"];
 
 export default function InvoicesSection() {
   return (
-    <section className="w-full space-y-6">
-      <h2 className="text-xl font-semibold mb-4 bg-lime-500 rounded-md p-2">
-        Descontos e Notas Fiscais
+    <section className="w-full">
+      <h2 className="text-xl font-semibold  bg-lime-500 rounded-t-md p-2">
+        Total Bruto x Total com Desconto
       </h2>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid ">
         {/* Gráfico de Barras */}
-        <div className="bg-white p-4 rounded-2xl shadow-md">
-          <h3 className="font-medium mb-2">Total Bruto x Total com Desconto</h3>
+        <div className="bg-white p-4 rounded-b-md shadow-md mb-4">
           <ResponsiveContainer width="100%" height={250}>
             <BarChart data={groupedBarData}>
               <XAxis dataKey="mes" />
@@ -67,9 +66,14 @@ export default function InvoicesSection() {
         </div>
 
         {/* Gráfico de Pizza */}
-        <section className="w-full space-y-6">
-          <div className="bg-white p-4 rounded-2xl shadow-md">
-            <h3 className="font-medium mb-2">% de OS com e sem desconto</h3>
+        <h2 className="text-xl font-semibold bg-lime-500 rounded-t-md p-2">
+          % de OS com e sem desconto
+        </h2>
+        <section className="w-full ">
+          <div
+            className="bg-white rounded-b-md shadow-md mb-4
+          "
+          >
             <ResponsiveContainer width="100%" height={250}>
               <PieChart>
                 <Pie
@@ -96,8 +100,10 @@ export default function InvoicesSection() {
       </div>
 
       {/* Tabela de OS sem nota fiscal */}
-      <div className="bg-white p-4 rounded-2xl shadow-md overflow-auto mb-4">
-        <h3 className="font-medium mb-2">OS sem Nota Fiscal (Peças ou MDO)</h3>
+      <h1 className="text-xl font-semibold bg-lime-500 rounded-t-md p-2">
+        OS sem Nota Fiscal (Peças ou MDO)
+      </h1>
+      <div className="bg-white p-4 rounded-b-md shadow-md overflow-auto mb-4">
         <table className="w-full text-sm border">
           <thead>
             <tr className="bg-gray-100 text-left">
