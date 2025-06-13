@@ -1,3 +1,5 @@
+
+import InvoicesSection from "./Sections/InvoicesSection";
 import { useOutletContext } from 'react-router-dom';
 import CustosDetalhados from './Sections/CustosDetalhados';
 import FleetSection from './Sections/FleetSection';
@@ -5,8 +7,8 @@ import { OverView } from './Sections/OverView';
 import SuppliersSection from './Sections/Supplierssection';
 
 export default function Dashboard() {
-
   const isMobile = useOutletContext<boolean>();
+
   console.log('Dashboard received isMobile:', isMobile);
   const render = true
   const showQuemFez = false
@@ -18,6 +20,8 @@ export default function Dashboard() {
     <OverView isMobile={isMobile}/>
     {QuemFez('Filipe Farias', showQuemFez)}
     {!render?'':<CustosDetalhados/>}
+    {QuemFez('Filipe Farias', showQuemFez)}
+    {!render?'':<InvoicesSection/>}
     {QuemFez('Jhonatan', showQuemFez)}
     {!render?'':<FleetSection isMobile={isMobile} className={''}/>}
     {QuemFez('Jhonatan', showQuemFez)}
@@ -33,3 +37,4 @@ const QuemFez = (text: string, show: boolean) => {
     </>
   )
 }
+

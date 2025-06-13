@@ -1,10 +1,9 @@
-import { LineChartRecharts } from '../../../components/Charts/LineChart';
-import { PieChartRecharts } from '../../../components/Charts/PieChart';
+import { LineChartRecharts } from "../../../components/Charts/LineChart";
+import { PieChartRecharts } from "../../../components/Charts/PieChart";
 
-export const OverView = ({isMobile}:{isMobile:boolean}) => {
-
-  const screenMode = ['bg-slate-800', 'bg-white'];
-  const x = 1
+export const OverView = ({ isMobile }: { isMobile: boolean }) => {
+  const screenMode = ["bg-slate-800", "bg-white"];
+  const x = 1;
   return (
     <>
       <h1 
@@ -20,20 +19,45 @@ export const OverView = ({isMobile}:{isMobile:boolean}) => {
         </div>
       </div>
     </>
-  )
-}
+  );
+};
 
-const OverViewKpiCards = ({className, isMobile}:{className:string, isMobile:boolean}) => {
-
+const OverViewKpiCards = ({
+  className,
+  isMobile,
+}: {
+  className: string;
+  isMobile: boolean;
+}) => {
   // Sample data for KPI cards
   const kpiCardsData = [
-    { title: "Total de OS", value: "24.5K", change: "+12.3%", color: "emerald-500" },
-    { title: "Valor Total", value: "1.2K", change: "+8.1%", color: "emerald-500" },
-    { title: "Custo Médio por OS", value: "$15.4K", change: "+10.5%", color: "emerald-500" },
-    { title: "Total de Veículos distintos", value: "3.2K", change: "+5.0%", color: "emerald-500" }
-  ]
-  console.log('isMobile:', isMobile);
-  
+    {
+      title: "Total de OS",
+      value: "24.5K",
+      change: "+12.3%",
+      color: "emerald-500",
+    },
+    {
+      title: "Valor Total",
+      value: "1.2K",
+      change: "+8.1%",
+      color: "emerald-500",
+    },
+    {
+      title: "Custo Médio por OS",
+      value: "$15.4K",
+      change: "+10.5%",
+      color: "emerald-500",
+    },
+    {
+      title: "Total de Veículos distintos",
+      value: "3.2K",
+      change: "+5.0%",
+      color: "emerald-500",
+    },
+  ];
+  console.log("isMobile:", isMobile);
+
   return (
     <>
     <div className={`mb-4 grid ${isMobile? `grid-cols-2 gap-2` : `grid-cols-4 gap-4`}`}>
@@ -47,36 +71,36 @@ const OverViewKpiCards = ({className, isMobile}:{className:string, isMobile:bool
       ))}
     </div>
     </>
-  )
-}
+  );
+};
 
 const OverViewTimeLine = ({className}:{className:string}) => {
   const sampleDataLineChart = [
-      {
-        "label": "2022",
-        "uv": 4000,
-        "pv": 2400,
-        "amt": 2400
-      },
-      {
-        "label": "2023",
-        "uv": 3000,
-        "pv": 1398,
-        "amt": 2210
-      },
-      {
-        "label": "2024",
-        "uv": 2000,
-        "pv": 9800,
-        "amt": 2290
-      },
-      {
-        "label": "2025",
-        "uv": 2780,
-        "pv": 3908,
-        "amt": 2000
-      },
-    ]
+    {
+      label: "2022",
+      uv: 4000,
+      pv: 2400,
+      amt: 2400,
+    },
+    {
+      label: "2023",
+      uv: 3000,
+      pv: 1398,
+      amt: 2210,
+    },
+    {
+      label: "2024",
+      uv: 2000,
+      pv: 9800,
+      amt: 2290,
+    },
+    {
+      label: "2025",
+      uv: 2780,
+      pv: 3908,
+      amt: 2000,
+    },
+  ];
   return (
     <>
       <h2 className='text-xl font-semibold bg-chart-title rounded-t-md p-2 text-center'>Linha do Tempo</h2>
@@ -89,21 +113,27 @@ const OverViewTimeLine = ({className}:{className:string}) => {
           sizeTitle={20}
           height={300}
           width={1250}
-          colors={[ "#8884d8", "#82ca9d", "#FFBB28" ]}
-          className='text-white w-full h-full'
+          colors={["#8884d8", "#82ca9d", "#FFBB28"]}
+          className="text-white w-full h-full"
         />
       </div>
     </>
-  )
-}
-const OverViewPizzaDistribution = ({className, isMobile}:{className:string, isMobile:boolean}) => {
+  );
+};
+const OverViewPizzaDistribution = ({
+  className,
+  isMobile,
+}: {
+  className: string;
+  isMobile: boolean;
+}) => {
   const sampleDataPieChart = [
-  { label: 'React', value: 40 },
-  { label: 'Vue', value: 30 },
-  { label: 'Angular', value: 20 },
-  { label: 'Svelte', value: 10 },
+    { label: "React", value: 40 },
+    { label: "Vue", value: 30 },
+    { label: "Angular", value: 20 },
+    { label: "Svelte", value: 10 },
   ];
-  
+
   return (
     <>
     <h2 className='text-xl font-semibold bg-chart-title rounded-t-md p-2 text-center'>Proporção por Tipo de OS</h2>
@@ -122,5 +152,5 @@ const OverViewPizzaDistribution = ({className, isMobile}:{className:string, isMo
       />
     </div>
     </>
-  )
-}
+  );
+};
