@@ -1,25 +1,26 @@
+// pages/NotFound.tsx
 import { BiError } from "react-icons/bi";
-import { Link } from 'react-router-dom';
-import { navLinks } from '../../data/NavLinksData';
+import { Link } from "react-router-dom";
 
-const dashboardLink = navLinks.find((link) => link.title === "Dashboard");
+export default function NotFound() {
+  return (
+    <div className="min-h-screen bg-slate-900 flex items-center justify-center px-4">
+      <section className="bg-white text-slate-800 p-8 rounded-2xl shadow-lg w-full max-w-xl flex flex-col items-center gap-6 border border-slate-300">
+        <BiError className="text-red-600" size={60} />
+        <h1 className="text-3xl md:text-4xl font-bold text-center">
+          Opa! Página não encontrada
+        </h1>
+        <p className="text-center text-base md:text-lg text-slate-600">
+          A página que você está tentando acessar não existe, foi movida ou está temporariamente indisponível.
+        </p>
 
-export default function notFound() {
-  return(
-    <div className='bg-zinc-800 flex w-full h-dvh justify-center items-center '>
-      <section className='flex flex-col justify-center items-center gap-2 bg-white px-4 2xs:w-[350px] xs:w-[420px] sm:w-full h-full  max-w-[600px] max-h-[300px] shadow-md rounded-xl mx-4 border-2 border-zinc-500'>
-        <div className='flex flex-col items-center'>
-          <BiError className='size-16 text-red-700' />
-          <h1 className='self-center text-2xl sm:text-3xl md:text-4xl font-bold text-center'>Página não encontrada!</h1>
-        </div>
-        <p className='text-center sm:text-lg md:text-xl'>A página que você está procurando pode ter sido removida, teve seu nome alterado ou está temporariamente fora do ar.</p>
-        {dashboardLink && (
-          <Link to="/home" className='flex items-center gap-2 bg-sky-500 hover:bg-sky-600 cursor-pointer text-sm xs:text-base text-white mt-5 px-3 py-1 rounded-md'>
-            {dashboardLink.icon}
-            Voltar para Página Inicial
+          <Link
+            to="/home"
+            className="bg-official-blue hover:bg-official-blue-active text-white font-medium px-4 py-2 rounded-lg shadow text-center transition-all ease-in-out duration-500"
+          >
+            Voltar para a Página Inicial
           </Link>
-        )}
       </section>
     </div>
-  )
+  );
 }
