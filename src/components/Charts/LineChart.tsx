@@ -1,23 +1,32 @@
 // exemplo de uso no final do componente
-import { CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
+import {
+  CartesianGrid,
+  Legend,
+  Line,
+  LineChart,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from "recharts";
 
 type DataItem = {
   label: string;
-  [ key: string ]: string | number;
+  [key: string]: string | number;
 };
 
 type LineChartProps = {
-  title: string
-  data: DataItem[]
-  keys?: string[]
-  colors: readonly string[]
-  sizeLegend?: number
-  sizeTitle?: number
-  showLegend?: boolean
-  height?: number
-  width?: number
-  className?: string
-};;
+  title: string;
+  data: DataItem[];
+  keys?: string[];
+  colors: readonly string[];
+  sizeLegend?: number;
+  sizeTitle?: number;
+  showLegend?: boolean;
+  height?: number;
+  width?: number;
+  className?: string;
+};
 
 export const LineChartRecharts = ({
   title,
@@ -27,17 +36,17 @@ export const LineChartRecharts = ({
   sizeTitle,
   colors,
   showLegend,
-  className = ''
+  className = "",
 }: LineChartProps) => {
-  const dataKeys = keys ?? Object.keys(data[ 0 ] ?? {}).filter(k => k !== 'label');
+  const dataKeys =
+    keys ?? Object.keys(data[0] ?? {}).filter((k) => k !== "label");
   return (
     <div
       className={`flex flex-col items-center justify-center py-3 ${className}`}
     >
-      <p
-        className='font-semibold pb-2'
-        style={{ fontSize: sizeTitle }}
-      >{title}</p>
+      <p className="font-semibold pb-2" style={{ fontSize: sizeTitle }}>
+        {title}
+      </p>
 
       <ResponsiveContainer width="100%" height="100%">
         <LineChart
@@ -60,7 +69,7 @@ export const LineChartRecharts = ({
               key={key}
               type="monotone"
               dataKey={key}
-              stroke={colors[ i % colors.length ]}
+              stroke={colors[i % colors.length]}
               name={key}
               strokeWidth={2}
             />
@@ -68,8 +77,8 @@ export const LineChartRecharts = ({
         </LineChart>
       </ResponsiveContainer>
     </div>
-  )
-}
+  );
+};
 
 // Exemplo do componente e sua database
 
@@ -100,7 +109,8 @@ export const LineChartRecharts = ({
 //   },
 // ]
 
-{/* <LineChartRecharts
+{
+  /* <LineChartRecharts
   data={sampleDataLineChart}
   title="Gráfico de Linhas"
   showLegend={true}
@@ -109,4 +119,5 @@ export const LineChartRecharts = ({
   height={300}
   width={400}
   colors={[ "#8884d8", "#82ca9d", "#FFBB28" ]}
-/> */}
+/> */
+}
