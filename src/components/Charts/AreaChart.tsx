@@ -25,6 +25,7 @@ type AreaChartProps = {
   showLegend?: boolean;
   height: number;
   width: number;
+  className?: string;
 };
 
 export const AreaChartRecharts = ({
@@ -36,13 +37,14 @@ export const AreaChartRecharts = ({
   sizeTitle,
   showLegend,
   height,
-  width
+  width,
+  className
 }: AreaChartProps) => {
   const dataKeys = keys ?? Object.keys(data[ 0 ] ?? {}).filter(k => k !== 'label');
 
   return (
     <div
-      className="flex flex-col items-center justify-center py-3"
+      className={`flex flex-col items-center justify-center py-3 ${className}`}
       style={{ width, height: height + 10 }}
     >
       <p className="font-semibold pb-2" style={{ fontSize: sizeTitle }}>

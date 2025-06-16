@@ -24,6 +24,7 @@ type RadarChartProps = {
   showLegend?: boolean;
   height: number;
   width: number;
+  className?: string;
 };
 
 export const RadarChartRecharts = ({
@@ -36,11 +37,12 @@ export const RadarChartRecharts = ({
   showLegend,
   height,
   width,
+  className
 }: RadarChartProps) => {
   const dataKeys = keys ?? Object.keys(data[ 0 ] ?? {}).filter(k => k !== 'label');
 
   return (
-    <div className="flex flex-col items-center justify-center py-3" style={{ width, height }}>
+    <div className={`flex flex-col items-center justify-center py-3 ${className}`} style={{ width, height }}>
       <p className="font-semibold pb-2" style={{ fontSize: sizeTitle }}>
         {title}
       </p>

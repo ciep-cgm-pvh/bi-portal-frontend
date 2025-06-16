@@ -45,6 +45,7 @@ type ScatterChartProps = {
   yData?: [ number, number ];
   xTickMargin?: number;
   yTickMargin?: number;
+  className?: string;
 };
 
 export const ScatterChartRecharts = ({
@@ -70,6 +71,7 @@ export const ScatterChartRecharts = ({
   yData,
   xTickMargin = 5,
   yTickMargin = 5,
+  className
 }: ScatterChartProps) => {
   const generateTicks = (min: number, max: number, interval: number): number[] => {
     const ticks = [];
@@ -96,7 +98,7 @@ export const ScatterChartRecharts = ({
 
   return (
     <div
-      className="flex flex-col items-center justify-center"
+      className={`flex flex-col items-center justify-center ${className}`}
       style={{ width, height }}
     >
       <p className="font-semibold pt-2" style={{ fontSize: sizeTitle }}>

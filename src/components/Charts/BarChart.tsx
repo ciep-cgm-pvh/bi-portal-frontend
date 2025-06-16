@@ -7,7 +7,7 @@ type DataItem = {
 };
 
 type BarChartProps = {
-  title: string
+  title: string;
   data: DataItem[];
   keys?: string[];
   colors: readonly string[];
