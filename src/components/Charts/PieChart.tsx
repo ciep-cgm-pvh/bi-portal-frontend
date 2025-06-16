@@ -1,7 +1,7 @@
 // exemplo de uso no final do componente
-import { PieChart as RePieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-import { useRef, useEffect } from 'react';
 import * as d3 from 'd3';
+import { useEffect, useRef } from 'react';
+import { Cell, Legend, Pie, PieChart as RePieChart, ResponsiveContainer, Tooltip } from 'recharts';
 
 type DataItem = {
   label: string;
@@ -9,35 +9,34 @@ type DataItem = {
 };
 
 type PieChartProps = {
-  title: string;
-  data: DataItem[];
-  colors?: readonly string[];
-  sizeLegend?: number;
-  sizeTitle?: number,
-  showLegend?: boolean;
-  donut?: boolean;
-  height: number;
-  width: number;
-  className?: string;
+  title: string
+  data: DataItem[]
+  colors?: readonly string[]
+  sizeLegend?: number
+  sizeTitle?: number
+  showLegend?: boolean
+  donut?: boolean
+  chartHeight?: number
+  chartWidth?: number
+  className?: string
 };;
 
 export const PieChartRecharts = ({
   title = "Titulo do Gráfico",
   data,
   colors = [ '#8884d8', '#82ca9d', '#ffc658', '#ff8042' ],
-  height = 200,
-  width = 350,
+  chartHeight = 200,
+  chartWidth = 350,
   sizeLegend = 16,
   sizeTitle = 16,
   showLegend = true,
   donut = false,
-  className,
+  className = ''
 }: PieChartProps) => {
 
   return (
     <div
       className={`flex flex-col items-center justify-center px-2 py-3 ${className}`}
-      style={{ width: width + 50, height: height + 50 }}
     >
       <p
         className='font-semibold'
@@ -45,8 +44,8 @@ export const PieChartRecharts = ({
       >{title}</p>
       <ResponsiveContainer width="100%" height="100%">
         <RePieChart
-          width={width}
-          height={height}
+          width={chartWidth}
+          height={chartHeight}
         >
           <Pie
             data={data}
@@ -54,8 +53,8 @@ export const PieChartRecharts = ({
             nameKey="label"
             cx="50%"
             cy="50%"
-            outerRadius={height / 4}
-            innerRadius={donut ? height / 8 : 0}
+            outerRadius={chartHeight / 4}
+            innerRadius={donut ? chartHeight / 8 : 0}
             label={({ percent, name }) => `${name}: ${(percent * 100).toFixed(0)}%`}
           >
             {data.map((_, index) => (
@@ -82,14 +81,15 @@ export const PieChartD3 = ({
   sizeTitle = 16,
   showLegend = true,
   donut = false,
-  height,
-  width,
+  chartHeight = 230,
+  chartWidth = 350,
   title,
+  className = ''
 }: PieChartProps) => {
   const ref = useRef<SVGSVGElement | null>(null);
 
   // Ajustar raios para respeitar largura e altura
-  const radius = Math.min(width, height) / 2;
+  const radius = Math.min(chartWidth, chartHeight) / 2;
 
   useEffect(() => {
     if (!ref.current) return;
@@ -105,13 +105,13 @@ export const PieChartD3 = ({
 
     const arcs = pie(data);
 
-    const g = svg.append('g').attr('transform', `translate(${width / 2},${height / 2})`);
+    const g = svg.append('g').attr('transform', `translate(${chartWidth / 2},${chartHeight / 2})`);
 
     g.selectAll('path')
       .data(arcs)
       .enter()
       .append('path')
-      .attr('d', arc as any)
+      .attr('d', arc as unknow)
       .attr('fill', (_, i) => colors[ i % colors.length ])
       .attr('stroke', 'white')
       .attr('stroke-width', 2)
@@ -128,15 +128,15 @@ export const PieChartD3 = ({
       .attr('fill', 'white')
       .attr('font-size', '10px')
       .text(d => `${Math.round((d.value / d3.sum(data, d => d.value)) * 100)}%`);
-  }, [ data, colors, radius, donut, width, height ]);
+  }, [ data, colors, radius, donut, chartWidth, chartHeight ]);
 
   return (
-    <div className="w-fit flex flex-col items-center border border-amber-400">
+    <div className={`w-fit flex flex-col items-center border border-amber-400 ${className}`}>
       {title && <h2
         className={`font-semibold py-2`}
         style={{ fontSize: sizeTitle }}
       >{title}</h2>}
-      <svg ref={ref} width={width} height={height} />
+      <svg ref={ref} width={chartWidth} height={chartHeight} />
 
       {showLegend && (
         <ul

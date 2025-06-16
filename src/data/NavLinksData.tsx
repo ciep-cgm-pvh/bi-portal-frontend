@@ -1,35 +1,35 @@
 // src/data/navLinks.tsx
-import { BarChart2, Database, FileText } from "lucide-react";
+import { BarChart2, Database, House } from "lucide-react";
 import type { NavLinkInterface } from "../interfaces/navLinksInterface";
-import Dashboard from "../pages/Dashboard";
-import DataSource from "../pages/DataSource";
-import Reports from "../pages/Reports";
-import Home from "../pages/Home";
+import Dashboard from '../pages/Dashboard/Dashboard';
+import DataSource from '../pages/DataSource/DataSource';
+import Home from '../pages/Home/Home';
+
 export const navLinks: NavLinkInterface[] = [
   {
-    title: "Dashboard",
+    title: "Início",
+    path: "/home",
+    icon: <House size={18} />,
+    element: <Home />,
+  },
+  {
+    title: "Painel (BI)",
     path: "/dashboard",
     icon: <BarChart2 size={18} />,
     element: <Dashboard />,
   },
   {
-    title: "Data Source",
+    title: "Acesso a Dados",
     path: "/datasource",
     icon: <Database size={18} />,
     element: <DataSource />,
   },
-  {
-    title: "Reports",
-    path: "/reports",
-    icon: <FileText size={18} />,
-    element: <Reports />,
-  },
-  {
-    title: "Home",
-    path: "/home",
-    icon: <FileText size={18} />,
-    element: <Home />,
-  },
+  // {
+  //   title: "Relatórios",
+  //   path: "/reports",
+  //   icon: <FileText size={18} />,
+  //   element: <Reports />,
+  // },
 ];
 export default function getNavLinks() {
   return navLinks;
