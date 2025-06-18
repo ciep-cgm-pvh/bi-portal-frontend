@@ -14,7 +14,6 @@ export default function Dashboard() {
   const showQuemFez = false
   return(
    <>
-    
     {/* Sections as sub-components */}
     {QuemFez('Jhonatan', showQuemFez)}
     <OverView isMobile={isMobile}/>
@@ -25,7 +24,7 @@ export default function Dashboard() {
     {QuemFez('Jhonatan', showQuemFez)}
     {!render?'':<FleetSection isMobile={isMobile} className={''}/>}
     {QuemFez('Jhonatan', showQuemFez)}
-    {!render?'':<SuppliersSection isMobile={isMobile} className={''}/>}
+    {!render?'':<SuppliersSection isMobile={isMobile}/>}
    </>
   )
 }
