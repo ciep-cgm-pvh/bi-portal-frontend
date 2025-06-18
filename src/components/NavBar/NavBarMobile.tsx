@@ -13,7 +13,7 @@ export default function NavBarMobile({
   const links: NavLinkInterface[] = getNavLinks(); // ✅ agora links existe
 
   return (
-    <nav className="fixed top-0 left-0 z-50 bg-official-blue text-white p-3 w-full shadow-lg">
+    <nav className="fixed-top-0 left-0 z-50 bg-official-blue text-white p-3 w-full shadow-lg">
       {/* Topo com título e botão */}
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-bold">Menu</h1>
