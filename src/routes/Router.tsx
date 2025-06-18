@@ -12,7 +12,7 @@ function Router() {
   return (
       <Routes>
       {/* Redirecionamento raiz */}
-      <Route path="/" element={<Navigate to="/home" />} />
+      <Route path="/" element={<Navigate to="/hub" />} />
 
       {/* Página do hub - FORA DO LAYOUT */}
       <Route path="/hub" element={<HubPage />} />
