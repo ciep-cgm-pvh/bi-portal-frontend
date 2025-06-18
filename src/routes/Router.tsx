@@ -2,9 +2,9 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import getNavLinks from "../data/NavLinksData";
 import LayoutBase from '../layouts/LayoutBase/LayoutBase';
-import Home from "../pages/Home/Home";
 import HubPage from '../pages/Hub/Hub';
 import NotFound from "../pages/NotFound/NotFound";
+import Home from "../pages/panels/Manutencao/Home/Home";
 
 function Router() {
   const navLinks = getNavLinks();
@@ -20,8 +20,10 @@ function Router() {
       {/* Demais rotas COM layout base (com sidebar/navbar) */}
       <Route element={<LayoutBase />}>
         <Route path="/home" element={<Home />} />
-        {navLinks.map(({ path, element }) => (
-          <Route key={path} path={path} element={element} />
+        {navLinks
+          .filter(link => link.path.startsWith("/painel/"))
+          .map(({ path, element }) => (
+            <Route key={path} path={path} element={element} />
         ))}
       </Route>
 
