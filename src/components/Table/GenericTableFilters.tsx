@@ -1,21 +1,23 @@
-type FilterConfig = {
-  field: string;
-  label?: string;
-  type?: 'text' | 'number' | 'select' | 'range';
-  options?: (string | number)[];
-};
+// src/components/Table/GenericTableFilters.tsx
+import type { FilterConfig } from './GenericTable';
 
-const GenericTableFilters = ({
+interface GenericTableFiltersProps<T extends Record<string, unknown>> {
+  filters: Partial<Record<Extract<keyof T, string>, string | number>>;
+  setFilters: (val: Partial<Record<Extract<keyof T, string>, string | number>>) => void;
+  filterConfig: FilterConfig<T>[];
+}
+
+function GenericTableFilters<T extends Record<string, unknown>>({
   filters,
   setFilters,
   filterConfig,
-}: {
-  filters: never;
-  setFilters: (val: never) => void;
-  filterConfig: FilterConfig[];
-}) => {
+}: GenericTableFiltersProps<T>) {
+  const handleChange = (field: Extract<keyof T, string>, value: string | number) => {
+    setFilters({ ...filters, [field]: value });
+  };
+
   return (
-    <div className="flex flex-wrap gap-3  justify-center bg-white p-2 shadow-md">
+    <div className="flex flex-wrap gap-3 justify-center bg-white p-2 shadow-md">
       {filterConfig.map(({ field, label, type = 'text', options }) => {
         const value = filters[field] ?? '';
 
@@ -26,11 +28,11 @@ const GenericTableFilters = ({
               <select
                 className="border px-2 py-1 rounded"
                 value={value}
-                onChange={(e) => setFilters({ ...filters, [field]: e.target.value })}
+                onChange={(e) => handleChange(field, e.target.value)}
               >
                 <option value="">Todos</option>
                 {options?.map((opt) => (
-                  <option key={opt} value={opt}>
+                  <option key={String(opt)} value={opt}>
                     {opt}
                   </option>
                 ))}
@@ -47,13 +49,13 @@ const GenericTableFilters = ({
               className="border px-2 py-1 rounded"
               placeholder={label || field}
               value={value}
-              onChange={(e) => setFilters({ ...filters, [field]: e.target.value })}
+              onChange={(e) => handleChange(field, e.target.value)}
             />
           </div>
         );
       })}
     </div>
   );
-};
+}
 
 export default GenericTableFilters;

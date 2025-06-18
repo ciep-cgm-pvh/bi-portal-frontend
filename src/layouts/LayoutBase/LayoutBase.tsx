@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Outlet } from "react-router-dom";
-import NavBarMobile from '../../components/navbar/NavBarMobile';
+import NavBarMobile from '../../components/NavBar/NavBarMobile';
 import SideBar from '../../components/SideBar/Sidebar';
 import useIsMobile from '../../hooks/useIsMobile';
 

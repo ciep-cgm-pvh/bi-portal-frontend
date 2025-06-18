@@ -1,7 +1,7 @@
-import { navLinks as navLinksData } from "../../data/NavLinksData";
+import getNavLinks from '../../data/NavLinksData';
 import { NavLinkItem } from "../NavLinkItem/NavLinkItem";
 
-
+const navLinksData = getNavLinks();
 export function SideBarNav({isOpen}: {isOpen: boolean}) {
   return (<>
     {/* NavLinks */}

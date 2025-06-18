@@ -111,7 +111,7 @@ export const PieChartD3 = ({
       .data(arcs)
       .enter()
       .append('path')
-      .attr('d', arc as unknow)
+      .attr('d', arc as never)
       .attr('fill', (_, i) => colors[ i % colors.length ])
       .attr('stroke', 'white')
       .attr('stroke-width', 2)
