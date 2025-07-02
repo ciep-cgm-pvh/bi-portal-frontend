@@ -1,46 +1,19 @@
-import { ArrowRight, Banknote, Car, TicketsPlane, Users, Wrench } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import getHubCardsData from '../../data/HubCardsData';
+import getHubNavLinks from '../../data/HubNavLinks';
 
-const dashboards = [
-  {
-    title: "Diárias",
-    description: "Painel com dados de concessão de diárias.",
-    route: "/painel/diarias/home",
-    icon: <TicketsPlane className="text-orange-400 w-6 h-6" />,
-    type: "Gestão",
-  },
-  {
-    title: "Frota",
-    description: "Custos, manutenção e uso da frota municipal.",
-    route: "#",
-    icon: <Car className="text-shadow-blue-500 w-6 h-6" />,
-    type: "Infraestrutura",
-  },
-  {
-    title: "Compras",
-    description: "Processos de compras e licitações em tempo real.",
-    route: "#",
-    icon: <Banknote className="text-green-700 w-6 h-6" />,
-    type: "Financeiro",
-  },
-  {
-    title: "Servidores",
-    description: "Painel com dados funcionais dos servidores.",
-    route: "#",
-    icon: <Users className="text-purple-700 w-6 h-6" />,
-    type: "Pessoal",
-  },
-  {
-    title: "Manutenção",
-    description: "Painel com dados funcionais dos servidores.",
-    route: "/painel/manutencao/home",
-    icon: <Wrench className="text-slate-700 w-6 h-6" />,
-    type: "Gestão",
-  },
-];
+const hubCards = getHubCardsData();
+const hubNavLinks = getHubNavLinks();
+const brasaoUrl = "https://upload.wikimedia.org/wikipedia/commons/8/89/Coat_of_arms_of_Porto_Velho.svg";
 
-const types = ["Gestão", "Infraestrutura", "Financeiro", "Pessoal"];
+const types = hubCards.reduce<string[]>((acc, item) => {
+  if (!acc.includes(item.type)) {
+    acc.push(item.type);
+  }
+  return acc;
+}, []);
 
 export default function HubPage() {
 
@@ -63,10 +36,10 @@ function HubContentSection() {
     );
   };
 
-  const filteredDashboards =
+  const filteredHubCards =
     selectedTypes.length === 0
-      ? dashboards
-      : dashboards.filter((d) => selectedTypes.includes(d.type));
+      ? hubCards
+      : hubCards.filter((d) => selectedTypes.includes(d.type));
 
   return (
     <>
@@ -100,10 +73,10 @@ function HubContentSection() {
         <section className="lg:col-span-3">
           <h2 className="text-2xl font-bold mb-6 text-gray-800">Painéis Disponíveis</h2>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredDashboards.map((item) => (
+            {filteredHubCards.map((item) => (
               <DashboardCard key={item.title} {...item} />
             ))}
-            {filteredDashboards.length === 0 && (
+            {filteredHubCards.length === 0 && (
               <p className="text-gray-600 col-span-full">Nenhum painel encontrado.</p>
             )}
           </div>
@@ -123,8 +96,8 @@ function HubHeroSection() {
         <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-5 pointer-events-none" />
 
         <img
-          src="https://upload.wikimedia.org/wikipedia/commons/2/2e/Bras%C3%A3o_de_Porto_Velho.svg"
-          alt="Prefeitura"
+          src={brasaoUrl}
+          alt="Brasão de Porto Velho"
           className="h-24 mx-auto mb-6 relative z-10"
         />
         <h3 className="text-xl font-bold relative z-10">Controladoria Geral do Município</h3>
@@ -140,33 +113,55 @@ function HubHeroSection() {
 }
 
 function HubNavBar() {
+
   return (
     <>
-            {/* Navbar topo */}
-<div className="bg-white border-b border-gray-200">
-  <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
-    {/* Logo + Título juntos */}
-  <div className="flex items-center gap-3">
-    <img
-      src="https://upload.wikimedia.org/wikipedia/commons/2/2e/Bras%C3%A3o_de_Porto_Velho.svg"
-      alt="Brasão de Porto Velho"
-      className="h-10 w-auto"
-    />
-    <h1 className="text-lg font-semibold text-gray-800">
-      Prefeitura de Porto Velho
-    </h1>
-  </div>
-    <nav className="hidden md:flex gap-6 text-sm text-gray-700 font-medium">
-      <a href="/" className="hover:text-blue-600">Início</a>
-      <a href="#painel" className="hover:text-blue-600">Painéis</a>
-      <a href="#sobre" className="hover:text-blue-600">Sobre</a>
-      <a href="#contato" className="hover:text-blue-600">Contato</a>
-    </nav>
-  </div>
-</div>
+      {/* Navbar topo */}
+      <div className="bg-white border-b border-gray-200">
+        <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+          <a href="http://cgm.portovelho.ro.gov.br/">
+          {/* Logo + Título juntos */}
+          <div className="flex items-center justify-start align-middle">
+            {/* Coluna 1: CGM */}
+            <div className="flex flex-col text-gray-800 index-10 text-right leading-tight mr-1">
+              <span className="text-3xl font-bold leading-none">CGM</span>
+              <span className="text-[10px] font-semibold tracking-[.2em]">
+                CONTROLADORIA
+              </span>
+              <span className="text-[10px] font-semibold tracking-wider">
+                GERAL DO MUNICÍPIO
+              </span>
+            </div>
+
+            {/* Coluna 2: Brasão */}
+            <div className="shrink-0">
+              <img
+                src={brasaoUrl}
+                alt="Brasão de Porto Velho"
+                className="h-14 w-auto"
+              />
+            </div>
+
+            {/* Coluna 3: Prefeitura */}
+            <div className="flex flex-col font-semibold text-gray-800 leading-tight justify-center text-center -ml-2">
+              <span>PREFEITURA DO MUNICÍPIO</span>
+              <span>DE <b>PORTO VELHO</b></span>
+            </div>
+          </div>
+          </a>
+          <nav className="hidden md:flex gap-6 text-sm text-gray-700 font-medium">
+            {hubNavLinks.map((link) => (
+              <a key={link.title} href={link.path} className="hover:text-blue-600">
+                {link.title}
+              </a>
+            ))}
+          </nav>
+        </div>
+      </div>
     </>
   )
 }
+
 
 function DashboardCard({
   title,
@@ -180,15 +175,47 @@ function DashboardCard({
   icon: React.ReactNode;
 }) {
   const navigate = useNavigate();
+
+  // 1. VERIFICAÇÕES DA LÓGICA
+  const isRouteDisabled = !route || route === '#';
+  const isInternalRoute = typeof route === 'string' && route.startsWith('/');
+
+  // Lógica de navegação (sem alterações)
+  const handleAccess = () => {
+    if (isRouteDisabled) return; // Não faz nada se a rota estiver desabilitada
+
+    if (route.startsWith("http")) {
+      window.open(route, "_blank", "noopener,noreferrer");
+    } else {
+      navigate(route);
+    }
+  };
+
+  // 2. CLASSES CONDICIONAIS
+  // Define a classe do card como amarela se for uma rota interna
+  const cardStyle = isInternalRoute ? 'bg-white border-gray-200' : 'bg-white border-gray-200';
+  // Define as classes do botão se ele estiver desabilitado
+  const buttonStyle = isRouteDisabled
+    ? 'bg-gray-600 cursor-not-allowed text-gray-400 hover:bg-gray-600'
+    : 'bg-blue-600 cursor-pointer text-white hover:bg-blue-700';
+
   return (
-    <Card className="hover:shadow-lg transition-all border border-gray-200">
-      <CardContent>
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg font-semibold text-gray-800">{title}</h3>
-          {icon}
+    // Aplica a cor condicional do card
+    <Card className={`hover:shadow-lg transition-all flex flex-col h-full ${cardStyle}`}>
+      <CardContent className="flex flex-col flex-grow">
+        <div className="flex-grow">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className={`text-lg ${isInternalRoute ? 'font-extrabold text-gray-600' : 'font-bold text-gray-600'}`}>{title}</h3>
+            {icon}
+          </div>
+          <p className="text-sm text-gray-600">{description}</p>
         </div>
-        <p className="text-sm text-gray-600 mb-4">{description}</p>
-        <Button onClick={() => navigate(route)} className="flex items-center gap-2">
+
+        <Button
+          onClick={handleAccess}
+          disabled={isRouteDisabled} // Desabilita o botão
+          className={`flex items-center gap-2 max-w-fit mt-4 ${buttonStyle}`} // Aplica o estilo condicional do botão
+        >
           Acessar painel <ArrowRight size={16} />
         </Button>
       </CardContent>
@@ -196,29 +223,36 @@ function DashboardCard({
   );
 }
 
+// Componentes base (sem alterações)
+
 // Componentes base
 
 function Card({ children, className = "" }: { children: React.ReactNode; className?: string }) {
-  return <div className={`bg-white rounded-xl p-4 ${className}`}>{children}</div>;
+  // A classe 'bg-white' foi removida daqui para permitir que a cor seja definida no DashboardCard
+  return <div className={`rounded-xl p-4 ${className}`}>{children}</div>;
 }
 
-function CardContent({ children }: { children: React.ReactNode }) {
-  return <div>{children}</div>;
+function CardContent({ children, className = "" }: { children: React.ReactNode; className?: string }) {
+  return <div className={`p-4 ${className}`}>{children}</div>;
 }
 
+// O botão agora aceita e aplica a propriedade 'disabled'
 function Button({
   children,
   onClick,
   className = "",
+  disabled = false, // Adicionada a propriedade 'disabled'
 }: {
   children: React.ReactNode;
   onClick?: () => void;
   className?: string;
+  disabled?: boolean; // Adicionada a tipagem
 }) {
   return (
     <button
       onClick={onClick}
-      className={`bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium ${className}`}
+      disabled={disabled} // A propriedade é passada para o elemento HTML
+      className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${className}`}
     >
       {children}
     </button>
