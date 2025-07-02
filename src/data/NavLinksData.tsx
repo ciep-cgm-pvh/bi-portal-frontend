@@ -1,36 +1,60 @@
 // src/data/navLinks.tsx
-import { BarChart2, Database, House, LayoutGrid } from "lucide-react";
+import { BarChart2, Database, House } from "lucide-react";
 import type { NavLinkInterface } from "../interfaces/navLinksInterface";
-import Dashboard from '../pages/Dashboard/Dashboard';
-import DataSource from '../pages/DataSource/DataSource';
-import Home from '../pages/Home/Home';
-import HubPage from '../pages/Hub/Hub';
+import Dashboard from '../pages/panels/Manutencao/Dashboard/Dashboard';
+import DataSource from '../pages/panels/Manutencao/DataSource/DataSource';
+import Home from '../pages/panels/Manutencao/Home/Home';
+
+import DashboardDiarias from '../pages/panels/Diarias/Dashboard/Dashboard';
+import DataSourceDiarias from '../pages/panels/Diarias/DataSource/DataSource';
+import HomeDiarias from '../pages/panels/Diarias/Home/Home';
 
 const navLinks: NavLinkInterface[] = [
+
+  // Agrupamento dos painéis
   {
     title: "Início",
-    path: "/home",
+    path: "/painel/manutencao/home",
     icon: <House size={18} />,
     element: <Home />,
+    group: "manutencao",
   },
   {
-    title: "Painel (BI)",
-    path: "/dashboard",
+    title: "Painel",
+    path: "/painel/manutencao/dashboard",
     icon: <BarChart2 size={18} />,
     element: <Dashboard />,
+    group: "manutencao",
   },
   {
-    title: "Acesso a Dados",
-    path: "/datasource",
+    title: "Fonte de Dados",
+    path: "/painel/manutencao/datasource",
     icon: <Database size={18} />,
     element: <DataSource />,
+    group: "manutencao",
   },
   {
-    title: "Hub",
-    path: "/hub",
-    icon: <LayoutGrid size={18} />,
-    element: <HubPage />,
+    title: "Início",
+    path: "/painel/diarias/home",
+    icon: <House size={18} />,
+    element: <HomeDiarias />,
+    group: "diarias",
   },
+  {
+    title: "Painel",
+    path: "/painel/diarias/dashboard",
+    icon: <BarChart2 size={18} />,
+    element: <DashboardDiarias />,
+    group: "diarias",
+  },
+  {
+    title: "Fonte de Dados",
+    path: "/painel/diarias/datasource",
+    icon: <Database size={18} />,
+    element: <DataSourceDiarias />,
+    group: "diarias",
+  },
+
 ];
 export default function getNavLinks() {
   return navLinks;

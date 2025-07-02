@@ -6,7 +6,7 @@ const dashboards = [
   {
     title: "Diárias",
     description: "Painel com dados de concessão de diárias.",
-    route: "#",
+    route: "/painel/diarias/home",
     icon: <TicketsPlane className="text-orange-400 w-6 h-6" />,
     type: "Gestão",
   },
@@ -34,7 +34,7 @@ const dashboards = [
   {
     title: "Manutenção",
     description: "Painel com dados funcionais dos servidores.",
-    route: "/home",
+    route: "/painel/manutencao/home",
     icon: <Wrench className="text-slate-700 w-6 h-6" />,
     type: "Gestão",
   },

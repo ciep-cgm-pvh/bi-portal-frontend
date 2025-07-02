@@ -1,7 +1,7 @@
-import { BarChartRecharts } from '../../../components/Charts/BarChart'
-import { LineChartRecharts } from '../../../components/Charts/LineChart'
-import { PieChartRecharts } from '../../../components/Charts/PieChart'
-import GenericTable from '../../../components/Table/GenericTable'
+import { BarChartRecharts } from '../../../../../components/Charts/BarChart'
+import { LineChartRecharts } from '../../../../../components/Charts/LineChart'
+import { PieChartRecharts } from '../../../../../components/Charts/PieChart'
+import GenericTable from '../../../../../components/Table/GenericTable'
 
 
 const FleetSection = ({isMobile, className}:{isMobile:boolean, className:string}) => {

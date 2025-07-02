@@ -1,6 +1,6 @@
-import { VerticalBarChartRecharts } from '../../../components/Charts/BarChart';
-import { LineChartRecharts } from '../../../components/Charts/LineChart';
-import GenericTable from '../../../components/Table/GenericTable';
+import { VerticalBarChartRecharts } from '../../../../../components/Charts/BarChart';
+import { LineChartRecharts } from '../../../../../components/Charts/LineChart';
+import GenericTable from '../../../../../components/Table/GenericTable';
 
 const SuppliersSection = ({isMobile}:{isMobile:boolean}) => {
   return (
