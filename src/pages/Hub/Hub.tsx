@@ -7,6 +7,8 @@ import getHubNavLinks from '../../data/HubNavLinks';
 const hubCards = getHubCardsData();
 const hubNavLinks = getHubNavLinks();
 const brasaoUrl = "https://upload.wikimedia.org/wikipedia/commons/8/89/Coat_of_arms_of_Porto_Velho.svg";
+const brasaoCidadePortoVelho = "https://github.com/CGM-PVH/CGM-ASSETS/blob/main/logomarcas/logo%20-%20brasao%20-%20cidade%20de%20Porto%20Velho.png?raw=true";
+const logoCGM = "https://github.com/CGM-PVH/CGM-ASSETS/blob/main/logomarcas/logo%20CGM%20-%20cidade%20de%20Porto%20Velho.png?raw=true";
 
 const types = hubCards.reduce<string[]>((acc, item) => {
   if (!acc.includes(item.type)) {
@@ -91,19 +93,21 @@ function HubHeroSection() {
   return (
     <>
     {/* Hero institucional */}
-      <div className="relative bg-gradient-to-br from-official-blue via-official-blue to-cyan-500 text-white py-20 px-4 text-center overflow-hidden">
+      <div className="relative bg-gradient-to-br from-official-blue via-official-blue to-cyan-500 text-white 
+      py-10 px-4 text-center overflow-hidden">
         {/* Imagem decorativa SVG ou elementos absolutos podem ser adicionados aqui */}
         <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-5 pointer-events-none" />
 
         <img
-          src={brasaoUrl}
+          src={brasaoCidadePortoVelho}
           alt="Brasão de Porto Velho"
           className="h-24 mx-auto mb-6 relative z-10"
         />
-        <h3 className="text-xl font-bold relative z-10">Controladoria Geral do Município</h3>
-        <h1 className="text-4xl md:text-5xl font-extrabold mt-2 relative z-10">
+        <h3 className="text-xl font-bold relative z-10">Prefeitura de Porto Velho</h3>
+        <h4 className="text-xl font-semibold relative z-10">Controladoria Geral do Município</h4>
+        {/* <h1 className="text-4xl md:text-5xl font-extrabold mt-2 relative z-10">
           Central de Inteligência Municipal
-        </h1>
+        </h1> */}
         <p className="text-md mt-3 max-w-2xl mx-auto relative z-10">
           Acesse painéis estratégicos e dados analíticos da gestão pública de Porto Velho.
         </p>
@@ -120,35 +124,9 @@ function HubNavBar() {
       <div className="bg-white border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
           <a href="http://cgm.portovelho.ro.gov.br/">
-          {/* Logo + Título juntos */}
-          <div className="flex items-center justify-start align-middle">
-            {/* Coluna 1: CGM */}
-            <div className="flex flex-col text-gray-800 index-10 text-right leading-tight mr-1">
-              <span className="text-3xl font-bold leading-none">CGM</span>
-              <span className="text-[10px] font-semibold tracking-[.2em]">
-                CONTROLADORIA
-              </span>
-              <span className="text-[10px] font-semibold tracking-wider">
-                GERAL DO MUNICÍPIO
-              </span>
-            </div>
-
-            {/* Coluna 2: Brasão */}
-            <div className="shrink-0">
-              <img
-                src={brasaoUrl}
-                alt="Brasão de Porto Velho"
-                className="h-14 w-auto"
-              />
-            </div>
-
-            {/* Coluna 3: Prefeitura */}
-            <div className="flex flex-col font-semibold text-gray-800 leading-tight justify-center text-center -ml-2">
-              <span>PREFEITURA DO MUNICÍPIO</span>
-              <span>DE <b>PORTO VELHO</b></span>
-            </div>
-          </div>
+            <img src={logoCGM} alt="" className="max-h-18"/>
           </a>
+
           <nav className="hidden md:flex gap-6 text-sm text-gray-700 font-medium">
             {hubNavLinks.map((link) => (
               <a key={link.title} href={link.path} className="hover:text-blue-600">

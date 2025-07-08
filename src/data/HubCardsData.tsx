@@ -68,30 +68,9 @@ const HubCardsData: HubCardInterface[] = [
     type: "Financeiro",
   },
   {
-    title: "Combustível 2025",
-    description: "Painel de despesas com combustível de 2025.",
-    route: "https://lookerstudio.google.com/u/0/reporting/0dbabe8c-74b1-4c5e-be7e-19b215e6c01a/page/V8XIF",
-    icon: <Fuel className="text-blue-500 w-6 h-6" />,
-    type: "Frota",
-  },
-  {
-    title: "Combustível 2024",
-    description: "Painel de despesas com combustível de 2024.",
-    route: "https://lookerstudio.google.com/u/0/reporting/28f5c735-c612-4c15-8d40-f558b12c6542/page/9srdE",
-    icon: <Fuel className="text-blue-500 w-6 h-6" />,
-    type: "Frota",
-  },
-  {
-    title: "Manutenção 2025",
+    title: "Manutenção",
     description: "Painel de manutenção da frota de 2025.",
-    route: "https://lookerstudio.google.com/u/0/reporting/3b5a98ec-64ad-4916-99ec-3cf68f562264/page/inJJF",
-    icon: <Wrench className="text-slate-700 w-6 h-6" />,
-    type: "Frota",
-  },
-  {
-    title: "Manutenção 2024",
-    description: "Painel de manutenção da frota de 2024.",
-    route: "https://lookerstudio.google.com/u/0/reporting/d766874f-c22c-489e-b81a-e63905a82757/page/l1UhE",
+    route: "https://lookerstudio.google.com/u/0/reporting/a41d513b-d75c-40bd-93e3-8f53825a1966/page/inJJF/edit",
     icon: <Wrench className="text-slate-700 w-6 h-6" />,
     type: "Frota",
   },
@@ -108,6 +87,13 @@ const HubCardsData: HubCardInterface[] = [
     route: "https://ouvidoria.portovelho.ro.gov.br/painel-ouvidoria",
     icon: <BookUser className="text-red-500 w-6 h-6" />,
     type: "Gestão",
+  },
+  {
+    title: "Abastecimento",
+    description: "Painel com dados de abastecimento.",
+    route: "https://lookerstudio.google.com/reporting/1630a802-c80f-4231-9fe8-226a207b9b8a",
+    icon: <Fuel className="text-orange-400 w-6 h-6" />,
+    type: "Frota",
   },
 ];
 
