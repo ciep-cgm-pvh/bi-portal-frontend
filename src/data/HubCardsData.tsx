@@ -68,16 +68,9 @@ const HubCardsData: HubCardInterface[] = [
     type: "Financeiro",
   },
   {
-    title: "Manutenção 2025",
+    title: "Manutenção",
     description: "Painel de manutenção da frota de 2025.",
-    route: "https://lookerstudio.google.com/u/0/reporting/3b5a98ec-64ad-4916-99ec-3cf68f562264/page/inJJF",
-    icon: <Wrench className="text-slate-700 w-6 h-6" />,
-    type: "Frota",
-  },
-  {
-    title: "Manutenção 2024",
-    description: "Painel de manutenção da frota de 2024.",
-    route: "https://lookerstudio.google.com/u/0/reporting/d766874f-c22c-489e-b81a-e63905a82757/page/l1UhE",
+    route: "https://lookerstudio.google.com/u/0/reporting/a41d513b-d75c-40bd-93e3-8f53825a1966/page/inJJF/edit",
     icon: <Wrench className="text-slate-700 w-6 h-6" />,
     type: "Frota",
   },
@@ -100,7 +93,7 @@ const HubCardsData: HubCardInterface[] = [
     description: "Painel com dados de abastecimento.",
     route: "https://lookerstudio.google.com/reporting/1630a802-c80f-4231-9fe8-226a207b9b8a",
     icon: <Fuel className="text-orange-400 w-6 h-6" />,
-    type: "Financeiro",
+    type: "Frota",
   },
 ];
 
