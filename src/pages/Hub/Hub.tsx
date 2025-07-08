@@ -91,7 +91,7 @@ function HubHeroSection() {
   return (
     <>
     {/* Hero institucional */}
-      <div className="relative bg-gradient-to-br from-official-blue via-official-blue to-cyan-500 text-white py-20 px-4 text-center overflow-hidden">
+      <div className="relative bg-gradient-to-br from-official-blue via-official-blue to-cyan-500 text-white py-6 px-4 text-center overflow-hidden">
         {/* Imagem decorativa SVG ou elementos absolutos podem ser adicionados aqui */}
         <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-5 pointer-events-none" />
 
