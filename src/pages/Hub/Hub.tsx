@@ -100,10 +100,11 @@ function HubHeroSection() {
           alt="Brasão de Porto Velho"
           className="h-24 mx-auto mb-6 relative z-10"
         />
-        <h3 className="text-xl font-bold relative z-10">Controladoria Geral do Município</h3>
-        <h1 className="text-4xl md:text-5xl font-extrabold mt-2 relative z-10">
+        <h3 className="text-xl font-bold relative z-10">Prefeitura de Porto Velho</h3>
+        <h4 className="text-xl font-semibold relative z-10">Controladoria Geral do Município</h4>
+        {/* <h1 className="text-4xl md:text-5xl font-extrabold mt-2 relative z-10">
           Central de Inteligência Municipal
-        </h1>
+        </h1> */}
         <p className="text-md mt-3 max-w-2xl mx-auto relative z-10">
           Acesse painéis estratégicos e dados analíticos da gestão pública de Porto Velho.
         </p>

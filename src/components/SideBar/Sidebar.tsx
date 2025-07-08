@@ -16,7 +16,7 @@ export default function SideBar({isOpen, setIsOpen}: {isOpen: boolean, setIsOpen
       >
         <TitleSidebar closeSideBar={setIsOpen} />
 
-        <SideBarNav isOpen={isOpen}/>
+        <SideBarNav isOpen={isOpen} />
         <FooterSidebar />
       </aside>
     </>
