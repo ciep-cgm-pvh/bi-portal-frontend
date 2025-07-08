@@ -6,7 +6,7 @@ import getHubNavLinks from '../../data/HubNavLinks';
 
 const hubCards = getHubCardsData();
 const hubNavLinks = getHubNavLinks();
-const brasaoUrl = "https://upload.wikimedia.org/wikipedia/commons/8/89/Coat_of_arms_of_Porto_Velho.svg";
+//const brasaoUrl = "https://upload.wikimedia.org/wikipedia/commons/8/89/Coat_of_arms_of_Porto_Velho.svg";
 const brasaoCidadePortoVelho = "https://github.com/CGM-PVH/CGM-ASSETS/blob/main/logomarcas/logo%20-%20brasao%20-%20cidade%20de%20Porto%20Velho.png?raw=true";
 const logoCGM = "https://github.com/CGM-PVH/CGM-ASSETS/blob/main/logomarcas/logo%20CGM%20-%20cidade%20de%20Porto%20Velho.png?raw=true";
 
