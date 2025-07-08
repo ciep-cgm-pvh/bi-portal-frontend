@@ -109,6 +109,13 @@ const HubCardsData: HubCardInterface[] = [
     icon: <BookUser className="text-red-500 w-6 h-6" />,
     type: "Gestão",
   },
+  {
+    title: "Abastecimento",
+    description: "Painel com dados de abastecimento.",
+    route: "https://lookerstudio.google.com/reporting/1630a802-c80f-4231-9fe8-226a207b9b8a",
+    icon: <Fuel className="text-orange-400 w-6 h-6" />,
+    type: "Financeiro",
+  },
 ];
 
 export default function getHubCardsData() {
