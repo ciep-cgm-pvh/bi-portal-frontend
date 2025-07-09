@@ -68,7 +68,7 @@ function HubContentSection() {
             </div>
             <button
                 onClick={() => setSelectedTypes([])}
-                className="mt-6 w-full bg-official-green hover:bg-official-green-dark text-white py-2 rounded-md font-medium"
+                className="mt-6 w-full bg-official-blue hover:bg-official-blue-dark text-white py-2 rounded-md font-medium"
             >
               Limpar Filtros
             </button>
@@ -176,7 +176,7 @@ function HubNavBar() {
 function HubFooter() {
   const currentYear = new Date().getFullYear();
   return (
-      <footer className="bg-official-green border-gray-200">
+      <footer className="bg-official-blue border-gray-200">
         <div className="max-w-7xl mx-auto py-6 px-4 text-center font-semibold text-official-white">
           <p className="text-sm">
             © {currentYear} Controladoria Geral do Município de Porto Velho.
@@ -224,7 +224,7 @@ function DashboardCard({
   // Define as classes do botão se ele estiver desabilitado
   const buttonStyle = isRouteDisabled
       ? 'bg-gray-600 cursor-not-allowed text-gray-400 hover:bg-gray-600'
-      : 'bg-official-green cursor-pointer text-white hover:bg-official-green-dark';
+      : 'bg-official-blue cursor-pointer text-white hover:bg-official-blue-dark';
 
   return (
       // Aplica a cor condicional do card
