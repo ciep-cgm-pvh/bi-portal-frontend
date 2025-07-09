@@ -7,8 +7,8 @@ import getHubNavLinks from '../../data/HubNavLinks';
 const hubCards = getHubCardsData();
 const hubNavLinks = getHubNavLinks();
 //const brasaoUrl = "https://upload.wikimedia.org/wikipedia/commons/8/89/Coat_of_arms_of_Porto_Velho.svg";
-const brasaoCidadePortoVelho = "https://github.com/CGM-PVH/CGM-ASSETS/blob/main/logomarcas/logo%20-%20brasao%20-%20cidade%20de%20Porto%20Velho.png?raw=true";
-const logoCGM = "https://github.com/CGM-PVH/CGM-ASSETS/blob/main/logomarcas/logo%20CGM%20-%20cidade%20de%20Porto%20Velho.png?raw=true";
+const brasaoCidadePortoVelho = "https://raw.githubusercontent.com/CGM-PVH/CGM-ASSETS/refs/heads/main/logomarcas/svg/logo%20-%20escudo%20-%20cidade%20de%20porto%20velho.svg";
+const logoCGM = "https://raw.githubusercontent.com/CGM-PVH/CGM-ASSETS/refs/heads/main/logomarcas/svg/logo%20cgm%20-%20cidade%20de%20porto%20velho.svg";
 
 const types = hubCards.reduce<string[]>((acc, item) => {
   if (!acc.includes(item.type)) {
@@ -124,7 +124,7 @@ function HubNavBar() {
       <div className="bg-slate-100 border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
           <a href="http://cgm.portovelho.ro.gov.br/">
-            <img src={logoCGM} alt="" className="max-h-18"/>
+            <img src={logoCGM} alt="" className="max-h-18 h-18"/>
           </a>
 
           <nav className="hidden md:flex gap-6 text-sm text-gray-700 font-medium">
