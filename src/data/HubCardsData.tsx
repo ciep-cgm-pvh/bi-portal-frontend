@@ -33,16 +33,9 @@ const HubCardsData: HubCardInterface[] = [
   // },
 
   {
-    title: "Diárias 2025",
-    description: "Painel com dados de diárias concedidas em 2025.",
-    route: "https://lookerstudio.google.com/u/0/reporting/ff73c52e-ae9a-4c31-824f-01b3c1b4f64a/page/TAEHF",
-    icon: <TicketsPlane className="text-orange-400 w-6 h-6" />,
-    type: "Gestão",
-  },
-  {
-    title: "Diárias 2024",
-    description: "Painel com dados de diárias concedidas em 2024.",
-    route: "https://lookerstudio.google.com/u/0/reporting/b00c64f0-95ea-49ae-bb0a-9b660de3c392/page/iaVlE",
+    title: "Diárias",
+    description: "Painel com dados de diárias concedidas.",
+    route: "https://lookerstudio.google.com/reporting/613ae68b-beee-4091-9f6b-7aa1da14de8b/page/TAEHF",
     icon: <TicketsPlane className="text-orange-400 w-6 h-6" />,
     type: "Gestão",
   },
@@ -69,7 +62,7 @@ const HubCardsData: HubCardInterface[] = [
   },
   {
     title: "Manutenção",
-    description: "Painel de manutenção da frota de 2025.",
+    description: "Painel de manutenção da frota.",
     route: "https://lookerstudio.google.com/u/0/reporting/a41d513b-d75c-40bd-93e3-8f53825a1966/page/inJJF/edit",
     icon: <Wrench className="text-slate-700 w-6 h-6" />,
     type: "Frota",
