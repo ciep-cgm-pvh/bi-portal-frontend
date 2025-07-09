@@ -21,7 +21,7 @@ export default function HubPage() {
 
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-slate-200">
       <HubNavBar/>
       <HubHeroSection />
       <HubContentSection />
@@ -48,7 +48,7 @@ function HubContentSection() {
     {/* Conteúdo principal com filtro + resultados */}
     <div className="max-w-7xl mx-auto p-6 grid grid-cols-1 lg:grid-cols-4 gap-6">
         {/* Filtro lateral */}
-        <aside className="bg-white max-h-fit rounded-lg shadow p-4 lg:col-span-1">
+        <aside className="bg-slate-100 max-h-fit rounded-lg shadow p-4 lg:col-span-1">
           <h2 className="text-lg font-bold mb-4 text-gray-800">Filtrar por tipo</h2>
           <div className="flex flex-col gap-2">
             {types.map((type) => (
@@ -121,7 +121,7 @@ function HubNavBar() {
   return (
     <>
       {/* Navbar topo */}
-      <div className="bg-white border-b border-gray-200">
+      <div className="bg-slate-100 border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
           <a href="http://cgm.portovelho.ro.gov.br/">
             <img src={logoCGM} alt="" className="max-h-18"/>
@@ -171,7 +171,7 @@ function DashboardCard({
 
   // 2. CLASSES CONDICIONAIS
   // Define a classe do card como amarela se for uma rota interna
-  const cardStyle = isInternalRoute ? 'bg-white border-gray-200' : 'bg-white border-gray-200';
+  const cardStyle = isInternalRoute ? 'bg-slate-100 border-gray-200' : 'bg-slate-100 border-gray-200';
   // Define as classes do botão se ele estiver desabilitado
   const buttonStyle = isRouteDisabled
     ? 'bg-gray-600 cursor-not-allowed text-gray-400 hover:bg-gray-600'
@@ -206,7 +206,7 @@ function DashboardCard({
 // Componentes base
 
 function Card({ children, className = "" }: { children: React.ReactNode; className?: string }) {
-  // A classe 'bg-white' foi removida daqui para permitir que a cor seja definida no DashboardCard
+  // A classe 'bg-slate-100' foi removida daqui para permitir que a cor seja definida no DashboardCard
   return <div className={`rounded-xl p-4 ${className}`}>{children}</div>;
 }
 
