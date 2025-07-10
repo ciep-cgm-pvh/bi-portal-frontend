@@ -35,7 +35,7 @@ const HubCardsData: HubCardInterface[] = [
   {
     title: "Diárias",
     description: "Painel com dados de diárias concedidas.",
-    route: "https://lookerstudio.google.com/reporting/613ae68b-beee-4091-9f6b-7aa1da14de8b/page/TAEHF",
+    route: "https://dashboard-geral.vercel.app/paineis/diarias",
     icon: <TicketsPlane className="text-orange-400 w-6 h-6" />,
     type: "Gestão",
   },
@@ -63,7 +63,7 @@ const HubCardsData: HubCardInterface[] = [
   {
     title: "Manutenção",
     description: "Painel de manutenção da frota.",
-    route: "https://lookerstudio.google.com/u/0/reporting/a41d513b-d75c-40bd-93e3-8f53825a1966/page/inJJF/edit",
+    route: "https://dashboard-geral.vercel.app/paineis/manutencao",
     icon: <Wrench className="text-slate-700 w-6 h-6" />,
     type: "Frota",
   },
