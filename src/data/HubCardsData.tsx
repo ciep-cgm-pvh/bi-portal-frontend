@@ -41,15 +41,15 @@ const HubCardsData: HubCardInterface[] = [
     type: "Gestão",
   },
   {
-    title: "Obras 2025",
-    description: "Painel de acompanhamento de obras de 2025.",
+    title: "Obras",
+    description: "Painel de acompanhamento de obras.",
     route: "https://lookerstudio.google.com/u/0/reporting/973f6e54-754d-4e03-9bd9-aedeea124ca2/page/7jzHF",
     icon: <TrafficCone className="text-yellow-500 w-6 h-6" />,
     type: "Infraestrutura",
   },
   {
     title: "Sup. de Fundos",
-    description: "Painel de suprimento de fundos de 2025.",
+    description: "Painel de suprimento de fundos.",
     route: "https://lookerstudio.google.com/s/rR6sP6HktxA",
     icon: <Banknote className="text-green-700 w-6 h-6" />,
     type: "Financeiro",
