@@ -48,16 +48,9 @@ const HubCardsData: HubCardInterface[] = [
     type: "Infraestrutura",
   },
   {
-    title: "Sup. de Fundos 2025",
+    title: "Sup. de Fundos",
     description: "Painel de suprimento de fundos de 2025.",
-    route: "https://lookerstudio.google.com/reporting/40cc18e1-c36e-40eb-99f6-114d224866b2",
-    icon: <Banknote className="text-green-700 w-6 h-6" />,
-    type: "Financeiro",
-  },
-    {
-    title: "Sup. de Fundos 2024",
-    description: "Painel de suprimento de fundos de 2024.",
-    route: "https://lookerstudio.google.com/u/0/reporting/0f03c025-df3c-4aa1-bdaf-2b052df4569b/page/3fWlE",
+    route: "https://lookerstudio.google.com/s/rR6sP6HktxA",
     icon: <Banknote className="text-green-700 w-6 h-6" />,
     type: "Financeiro",
   },
