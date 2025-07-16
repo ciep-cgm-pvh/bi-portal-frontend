@@ -50,7 +50,7 @@ const HubCardsData: HubCardInterface[] = [
   {
     title: "Sup. de Fundos",
     description: "Painel de suprimento de fundos.",
-    route: "https://lookerstudio.google.com/s/rR6sP6HktxA",
+    route: "https://lookerstudio.google.com/reporting/40cc18e1-c36e-40eb-99f6-114d224866b2",
     icon: <Banknote className="text-green-700 w-6 h-6" />,
     type: "Financeiro",
   },
