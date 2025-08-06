@@ -1,8 +1,10 @@
 import { FuelIcon } from 'lucide-react';
-import type { JSX, Key } from 'react';
+import { useState, type JSX, type Key } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Header from '../../../../components/Header/Header';
-import { KPICard, KPISection } from '../../../../components/KPI/KPISection';
+import FiltersSection from '../../../../components/FiltersSection/FiltersSection';
+import Header from '../../../../components/HeaderSection/Header';
+import { KPICard, KPISection } from '../../../../components/KPISection/KPISection';
+import type { FilterConfig, FilterValues } from '../../../../types/filters';
 
 
 const buttonFunction = () => {
@@ -51,12 +53,92 @@ const KPIAbastecimento = ({ kpiDataList }: { kpiDataList: { icon: JSX.Element; t
   );
 }
 
+const FiltersAbastecimento = () => {
+  // 1. DEFINIR A ESTRUTURA DOS FILTROS
+  const filterConfiguration: FilterConfig[] = [
+    {
+      id: 'vehicle',
+      label: 'Veículo',
+      type: 'select',
+      placeholder: 'Todos os veículos',
+      options: [
+        { value: 'fiat-strada', label: 'Fiat Strada (ABC-1234)' },
+        { value: 'vw-gol', label: 'VW Gol (DEF-5678)' },
+      ],
+    },
+    {
+      id: 'status',
+      label: 'Status',
+      type: 'select',
+      placeholder: 'Todos os status',
+      options: [
+        { value: 'approved', label: 'Aprovado' },
+        { value: 'pending', label: 'Pendente' },
+        { value: 'rejected', label: 'Rejeitado' },
+      ],
+    },
+    {
+      id: 'startDate',
+      label: 'Data Inicial',
+      type: 'date',
+    },
+    {
+      id: 'endDate',
+      label: 'Data Final',
+      type: 'date',
+    },
+  ];
+
+  // VALORES INICIAIS DOS FILTROS (VAZIOS)
+  const initialFilterValues: FilterValues = {
+    vehicle: '',
+    status: '',
+    startDate: '',
+    endDate: '',
+  };
+
+  // 2. CRIAR O ESTADO PARA GUARDAR OS VALORES
+  const [filterValues, setFilterValues] = useState<FilterValues>(initialFilterValues);
+
+  // 3. DEFINIR AS FUNÇÕES DE MANIPULAÇÃO
+  const handleFilterChange = (id: string, value: string | number) => {
+    console.log(`Filtro '${id}' alterado para:`, value);
+    setFilterValues((prevValues) => ({
+      ...prevValues,
+      [id]: value,
+    }));
+  };
+
+  const handleApplyFilters = () => {
+    // Aqui você pegaria os `filterValues` e faria a chamada para a API GraphQL
+    console.log('Aplicando filtros:', filterValues);
+    alert('Filtros aplicados! Veja o console.');
+  };
+
+  const handleClearFilters = () => {
+    console.log('Limpando filtros');
+    setFilterValues(initialFilterValues);
+    // Opcional: pode também chamar onApply() para buscar os dados sem filtros
+  };
+
+  return (
+    <FiltersSection
+      config={filterConfiguration}
+      values={filterValues}
+      onChange={handleFilterChange}
+      onApply={handleApplyFilters}
+      onClear={handleClearFilters}
+    />
+  );
+};
+
 const DashboardAbastecimento = () => {
 
   return (
     <div>
       <Header title={AbastecimentoConfig.title} description={AbastecimentoConfig.description} onBackToHub={AbastecimentoConfig.buttonFunction} lastUpdate={AbastecimentoConfig.lastUpdate}/>
       <KPIAbastecimento kpiDataList={AbastecimentoConfig.kpiData} />
+      <FiltersAbastecimento/>
     </div>
 
   );
