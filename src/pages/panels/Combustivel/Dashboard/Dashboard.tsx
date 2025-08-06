@@ -1,9 +1,11 @@
 import { FuelIcon } from 'lucide-react';
 import { useState, type JSX, type Key } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { ChartsSection } from '../../../../components/ChartSection/Chartsection';
 import FiltersSection from '../../../../components/FiltersSection/FiltersSection';
 import Header from '../../../../components/HeaderSection/Header';
 import { KPICard, KPISection } from '../../../../components/KPISection/KPISection';
+import type { ChartConfig } from '../../../../types/charts';
 import type { FilterConfig, FilterValues } from '../../../../types/filters';
 
 
@@ -38,6 +40,55 @@ const AbastecimentoConfig = {
   icon: <FuelIcon />,
   kpiData: KPIData,
 };
+
+// Mock de dados para os gráficos
+const gastoPorVeiculoData = [
+  { vehicle: 'Fiat Strada', total: 4500.50 },
+  { vehicle: 'VW Gol', total: 3200.00 },
+  { vehicle: 'Honda Civic', total: 5100.75 },
+  { vehicle: 'Toyota Corolla', total: 4800.00 },
+];
+
+const gastoPorStatusData = [
+  { name: 'Aprovado', value: 15000 },
+  { name: 'Pendente', value: 2100 },
+  { name: 'Rejeitado', value: 500 },
+];
+
+// O componente que consome a seção de gráficos
+const ChartsAbastecimento = () => {
+  // 1. DEFINIR A ESTRUTURA DOS GRÁFICOS
+  // Em um caso real, esses dados viriam da sua API GraphQL
+  const chartConfiguration: ChartConfig[] = [
+    {
+      id: 'gasto-por-veiculo',
+      title: 'Gasto Total por Veículo',
+      type: 'bar-horizontal',
+      data: gastoPorVeiculoData,
+      config: {
+        dataKey: 'total',
+        categoryKey: 'vehicle',
+        color: '#8884d8',
+      },
+    },
+    {
+      id: 'gasto-por-status',
+      title: 'Distribuição de Gasto por Status',
+      type: 'pie',
+      data: gastoPorStatusData,
+      config: {
+        dataKey: 'value',
+        nameKey: 'name',
+      },
+    },
+  ];
+  
+  // Opcional: estado de loading
+  const [isLoading, setIsLoading] = useState(false);
+  
+  return <ChartsSection charts={chartConfiguration} isLoading={isLoading} />;
+};
+
 const KPIAbastecimento = ({ kpiDataList }: { kpiDataList: { icon: JSX.Element; title: string; value: string; }[] }) => {
   return (
     <KPISection>
@@ -139,6 +190,7 @@ const DashboardAbastecimento = () => {
       <Header title={AbastecimentoConfig.title} description={AbastecimentoConfig.description} onBackToHub={AbastecimentoConfig.buttonFunction} lastUpdate={AbastecimentoConfig.lastUpdate}/>
       <KPIAbastecimento kpiDataList={AbastecimentoConfig.kpiData} />
       <FiltersAbastecimento/>
+      <ChartsAbastecimento />
     </div>
 
   );
