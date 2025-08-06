@@ -14,11 +14,11 @@ export default function LayoutBase() {
   const isMobile =  useIsMobile()
 
 
-  const screenMode = ['bg-slate-900', 'bg-white'];
+  const screenMode = ['bg-slate-900', 'bg-blue-50'];
 
 
   return (
-    <div className={`flex flex-col min-h-screen ${screenMode[0]}`}>
+    <div className={`flex flex-col min-h-screen ${screenMode[1]}`}>
       {isMobile ? (
         <NavBarMobile isOpen={isOpen} setIsOpen={externalSetIsOpen} />
       ) : (

@@ -17,20 +17,27 @@ import type { HubCardInterface } from '../interfaces/hubCardInterface';
 * para o relatório correspondente no Looker Studio.
 */
 const HubCardsData: HubCardInterface[] = [
-  // {
-  //   title: "Diárias (demo)",
-  //   description: "Painel com dados de concessão de diárias.",
-  //   route: "/painel/diarias/home",
-  //   icon: <TicketsPlane className="text-orange-400 w-6 h-6" />,
-  //   type: "Gestão",
-  // },
-  // {
-  //   title: "Manutenção (demo)",
-  //   description: "Painel com dados de manutenção de frota.",
-  //   route: "/painel/manutencao/home",
-  //   icon: <Wrench className="text-slate-700 w-6 h-6" />,
-  //   type: "Gestão",
-  // },
+  {
+    title: "Diárias (demo)",
+    description: "Painel com dados de concessão de diárias.",
+    route: "/painel/diarias/home",
+    icon: <TicketsPlane className="text-orange-400 w-6 h-6" />,
+    type: "demonstracão",
+  },
+  {
+    title: "Manutenção (demo)",
+    description: "Painel com dados de manutenção de frota.",
+    route: "/painel/manutencao/home",
+    icon: <Wrench className="text-slate-700 w-6 h-6" />,
+    type: "demonstracão",
+  },
+  {
+    title: "Abastecimento (demo)",
+    description: "Painel com dados de abastecimento de frota.",
+    route: "/painel/abastecimento/home",
+    icon: <Fuel className="text-orange-400 w-6 h-6" />,
+    type: "demonstracão",
+  },
 
   {
     title: "Diárias",

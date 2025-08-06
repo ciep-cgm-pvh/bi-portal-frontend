@@ -1,10 +1,14 @@
 // src/data/navLinks.tsx
 import { BarChart2, Database, House } from "lucide-react";
 import type { NavLinkInterface } from "../interfaces/navLinksInterface";
+
 import Dashboard from '../pages/panels/Manutencao/Dashboard/Dashboard';
 import DataSource from '../pages/panels/Manutencao/DataSource/DataSource';
 import Home from '../pages/panels/Manutencao/Home/Home';
 
+import DashboardAbastecimento from '../pages/panels/Combustivel/Dashboard/Dashboard';
+import DataSourceAbastecimento from '../pages/panels/Combustivel/DataSoruce/DataSource';
+import HomeAbastecimento from '../pages/panels/Combustivel/Home/Home';
 import DashboardDiarias from '../pages/panels/Diarias/Dashboard/Dashboard';
 import DataSourceDiarias from '../pages/panels/Diarias/DataSource/DataSource';
 import HomeDiarias from '../pages/panels/Diarias/Home/Home';
@@ -54,6 +58,27 @@ const navLinks: NavLinkInterface[] = [
     element: <DataSourceDiarias />,
     group: "diarias",
   },
+  {
+    title: "Início",
+    path: "/painel/abastecimento/home",
+    icon: <House size={18} />,
+    element: <HomeAbastecimento />,
+    group: "abastecimento",
+  },
+  {
+    title: "Painel",
+    path: "/painel/abastecimento/dashboard",
+    icon: <BarChart2 size={18} />,
+    element: <DashboardAbastecimento />,
+    group: "abastecimento",
+  },
+  {
+    title: "Fonte de Dados",
+    path: "/painel/abastecimento/datasource",
+    icon: <Database size={18} />,
+    element: <DataSourceAbastecimento />,
+    group: "abastecimento",
+  }
 
 ];
 export default function getNavLinks() {
