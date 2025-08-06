@@ -1,12 +1,15 @@
 import { FuelIcon } from 'lucide-react';
-import { useState, type JSX, type Key } from 'react';
+import { useMemo, useState, type JSX, type Key } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ChartsSection } from '../../../../components/ChartSection/Chartsection';
+import { ChartsSection } from '../../../../components/ChartSection/ChartSection';
 import FiltersSection from '../../../../components/FiltersSection/FiltersSection';
 import Header from '../../../../components/HeaderSection/Header';
 import { KPICard, KPISection } from '../../../../components/KPISection/KPISection';
+import { PaginationControls } from '../../../../components/PaginationControls/PaginationControls';
+import { TableSection } from '../../../../components/TableSection/TableSection';
 import type { ChartConfig } from '../../../../types/charts';
 import type { FilterConfig, FilterValues } from '../../../../types/filters';
+import type { SortConfig, TableColumn, TableDataItem } from '../../../../types/tables';
 
 
 const buttonFunction = () => {
@@ -54,6 +57,80 @@ const gastoPorStatusData = [
   { name: 'Pendente', value: 2100 },
   { name: 'Rejeitado', value: 500 },
 ];
+
+// Dados mockados para a tabela
+const supplyData = [
+  { id: 1, date: '2025-08-01', vehicle: 'Fiat Strada', driver: 'João Silva', cost: 250.75, status: 'Aprovado' },
+  { id: 2, date: '2025-08-01', vehicle: 'VW Gol', driver: 'Maria Santos', cost: 180.50, status: 'Aprovado' },
+  { id: 3, date: '2025-08-02', vehicle: 'Honda Civic', driver: 'Pedro Almeida', cost: 320.00, status: 'Pendente' },
+  { id: 4, date: '2025-08-03', vehicle: 'Fiat Strada', driver: 'João Silva', cost: 260.10, status: 'Rejeitado' },
+  // ... adicione mais 10 a 15 linhas para testar a paginação
+];
+
+// Componente que renderiza a tabela e seus controles
+const SupplyTable = () => {
+  // 1. ESTADO: Dados, Paginação e Ordenação
+  const [data, setData] = useState(supplyData);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [sortConfig, setSortConfig] = useState<SortConfig<TableDataItem> | null>(null);
+  const ITEMS_PER_PAGE = 5;
+
+  // 2. LÓGICA: Ordenação e Paginação dos dados
+  const processedData = useMemo(() => {
+    let sortableItems = [...data];
+    // Lógica de Ordenação
+    if (sortConfig !== null) {
+      sortableItems.sort((a, b) => {
+        if (a[sortConfig.key] < b[sortConfig.key]) {
+          return sortConfig.direction === 'ascending' ? -1 : 1;
+        }
+        if (a[sortConfig.key] > b[sortConfig.key]) {
+          return sortConfig.direction === 'ascending' ? 1 : -1;
+        }
+        return 0;
+      });
+    }
+    // Lógica de Paginação (aplica depois de ordenar)
+    const firstPageIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+    const lastPageIndex = firstPageIndex + ITEMS_PER_PAGE;
+    return sortableItems.slice(firstPageIndex, lastPageIndex);
+  }, [data, currentPage, sortConfig]);
+
+  // 3. HANDLERS: Funções que alteram o estado
+  const handleSort = (key: keyof TableDataItem) => {
+    let direction: 'ascending' | 'descending' = 'ascending';
+    if (sortConfig && sortConfig.key === key && sortConfig.direction === 'ascending') {
+      direction = 'descending';
+    }
+    setSortConfig({ key, direction });
+  };
+
+  // 4. CONFIGURAÇÃO: Definição das colunas
+  const columns: TableColumn<TableDataItem>[] = [
+    { header: 'Data', accessor: 'date', sortable: true },
+    { header: 'Veículo', accessor: 'vehicle', sortable: true },
+    { header: 'Motorista', accessor: 'driver', sortable: false },
+    { header: 'Custo', accessor: 'cost', sortable: true, render: (item) => `R$ ${item.cost.toFixed(2)}` },
+    { header: 'Status', accessor: 'status', sortable: true },
+  ];
+  
+  return (
+    <>
+      <TableSection
+        title="Últimos Abastecimentos"
+        columns={columns}
+        data={processedData}
+        sortConfig={sortConfig}
+        onSort={handleSort}
+      />
+      <PaginationControls
+        currentPage={currentPage}
+        totalPages={Math.ceil(data.length / ITEMS_PER_PAGE)}
+        onPageChange={setCurrentPage}
+      />
+    </>
+  );
+};
 
 // O componente que consome a seção de gráficos
 const ChartsAbastecimento = () => {
@@ -186,11 +263,12 @@ const FiltersAbastecimento = () => {
 const DashboardAbastecimento = () => {
 
   return (
-    <div>
+    <div className="my-4">
       <Header title={AbastecimentoConfig.title} description={AbastecimentoConfig.description} onBackToHub={AbastecimentoConfig.buttonFunction} lastUpdate={AbastecimentoConfig.lastUpdate}/>
       <KPIAbastecimento kpiDataList={AbastecimentoConfig.kpiData} />
       <FiltersAbastecimento/>
       <ChartsAbastecimento />
+      <SupplyTable />
     </div>
 
   );
