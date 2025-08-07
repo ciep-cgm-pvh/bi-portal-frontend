@@ -1,8 +1,9 @@
 import { useState, useMemo } from 'react';
 import type { SortConfig, TableDataItem } from '../../../../../types/tables';
+import { useQuery } from 'urql';
 
 // Mock dos dados brutos
-const rawSupplyData: TableDataItem[] = [
+const mockAbastecimentoData: TableDataItem[] = [
   { id: 1, date: '2025-08-01', vehicle: 'Fiat Strada', driver: 'João Silva', cost: 250.75, status: 'Aprovado' },
   { id: 2, date: '2025-08-01', vehicle: 'VW Gol', driver: 'Maria Santos', cost: 180.50, status: 'Aprovado' },
   { id: 3, date: '2025-08-02', vehicle: 'Honda Civic', driver: 'Pedro Almeida', cost: 320.00, status: 'Pendente' },
@@ -20,13 +21,44 @@ const rawSupplyData: TableDataItem[] = [
   { id: 14, date: '2025-08-13', vehicle: 'Peugeot 208', driver: 'Tiago Costa', cost: 260.00, status: 'Aprovado' },
   { id: 15, date: '2025-08-14', vehicle: 'Citroën C3', driver: 'Isabela Martins', cost: 220.00, status: 'Pendente' },
 ];
+
+// Exemplo de query para buscar os dados da tabela
+const GET_ABASTECIMENTO_QUERY = `
+  query GetAbastecimento($limit: Int, $offset: Int, $sortBy: String, $sortDirection: String) {
+    abastecimento(limit: $limit, offset: $offset, sortBy: $sortBy, sortDirection: $sortDirection) {
+      id
+      date
+      vehicle
+      driver
+      cost
+      status
+    }
+    suppliesCount
+  }
+`;
+
 const ITEMS_PER_PAGE = 5;
 
-export const useSupplyData = () => {
-  // Em um caso real, `rawSupplyData` viria de um SWR ou React Query
-  const [ data, setData ] = useState(rawSupplyData);
+export const useAbastecimentoData = () => {
+  // Em um caso real, `rawAbastecimentoData` viria de um SWR ou React Query
   const [ currentPage, setCurrentPage ] = useState(1);
   const [ sortConfig, setSortConfig ] = useState<SortConfig<TableDataItem> | null>(null);
+
+  const [ result ] = useQuery({
+    query: GET_ABASTECIMENTO_QUERY,
+    // Você pode passar variáveis para a query aqui, se necessário
+    // variables: { limit: ITEMS_PER_PAGE, offset: (currentPage - 1) * ITEMS_PER_PAGE, ... }
+  });
+
+  const { data: apiData, fetching: isLoading, error } = result;
+
+  // Se houver erro na API, logue o erro e use o mock
+  if (error) {
+    console.error("Falha ao buscar dados da API:", error.message);
+  }
+
+  const data = apiData?.supplies || mockAbastecimentoData;
+  const totalItems = apiData?.suppliesCount || mockAbastecimentoData.length;
 
   const processedData = useMemo(() => {
     let sortableItems = [ ...data ];
@@ -49,7 +81,7 @@ export const useSupplyData = () => {
     setSortConfig({ key, direction });
   };
 
-  const totalPages = Math.ceil(data.length / ITEMS_PER_PAGE);
+  const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE);
 
   return {
     // Dados e Estado
@@ -57,6 +89,7 @@ export const useSupplyData = () => {
     sortConfig,
     currentPage,
     totalPages,
+    isLoading,
     // Handlers
     handleSort,
     onPageChange: setCurrentPage,
