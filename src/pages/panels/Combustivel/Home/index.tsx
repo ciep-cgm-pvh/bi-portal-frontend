@@ -16,13 +16,13 @@ const panelDescription = (
 const panelActionLinks: ActionLink[] = [
   {
     text: 'Acessar Dashboard',
-    path: '/panels/abastecimento/dashboard', // Caminho correto para o dashboard
+    path: '/painel/abastecimento/dashboard', // Caminho correto para o dashboard
     variant: 'primary',
     icon: <LayoutDashboard size={18} />,
   },
   {
     text: 'Ver Fontes de Dados',
-    path: '/panels/abastecimento/datasource', // Caminho correto para a fonte de dados
+    path: '/painel/abastecimento/datasource', // Caminho correto para a fonte de dados
     variant: 'secondary',
     icon: <Database size={18} />,
   }
