@@ -2,7 +2,8 @@
 import { PaginationControls } from '../../../../../components/PaginationControls/PaginationControls';
 import { TableSection } from '../../../../../components/TableSection/TableSection';
 import type { TableColumn, TableDataItem } from '../../../../../types/tables';
-import { useSupplyData } from '../hooks/useSupplyData';
+import { useAbastecimentoData } from '../hooks/useAbastecimentoData';
+
 
 const columns: TableColumn<TableDataItem>[] = [
   { header: 'Data', accessor: 'date', sortable: true },
@@ -12,8 +13,8 @@ const columns: TableColumn<TableDataItem>[] = [
   { header: 'Status', accessor: 'status', sortable: true },
 ];
 
-export const SupplyTable = () => {
-  const { processedData, sortConfig, currentPage, totalPages, handleSort, onPageChange } = useSupplyData();
+export const AbastecimentoTable = () => {
+  const { processedData, sortConfig, currentPage, totalPages, handleSort, onPageChange } = useAbastecimentoData();
 
   return (
     <>

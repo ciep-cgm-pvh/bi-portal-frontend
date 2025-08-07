@@ -3,7 +3,7 @@ import { DashboardPanelTemplate } from '../../../../templates/DashboardPanelTemp
 
 // Importando componentes e configs locais
 import { SupplyFilters } from './components/Filters';
-import { SupplyTable } from './components/Table';
+import { AbastecimentoTable } from './components/Table';
 import { chartConfiguration } from './data/charts.config';
 import { kpiData } from './data/kpi.config';
 
@@ -16,7 +16,7 @@ const DashboardCombustivel = () => {
       kpiData={kpiData}
       chartConfig={chartConfiguration}
       filtersComponent={<SupplyFilters />}
-      tableComponent={<SupplyTable />}
+      tableComponent={<AbastecimentoTable />}
     />
   );
 };
