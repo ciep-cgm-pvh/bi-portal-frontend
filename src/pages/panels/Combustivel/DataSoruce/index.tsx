@@ -14,7 +14,7 @@ const GET_VEHICLE_SUMMARY_QUERY = `
 `;
 
 // Crie a configuração para os cards desta página
-const combustivelDataSources: DataSourceConfig[] = [
+const abastecimentoDataSources: DataSourceConfig[] = [
   {
     id: 'all-supplies',
     title: 'Todos os Abastecimentos',
@@ -32,14 +32,14 @@ const combustivelDataSources: DataSourceConfig[] = [
 ];
 
 
-const DataSourceCombustivel = () => {
+const DataSourceAbastecimento = () => {
   return (
     <DataSourcePanelTemplate
       pageTitle="Fontes de Dados - Abastecimento"
       overviewText={<p>Acesse os dados brutos ou consolidados referentes aos abastecimentos. Use os botões abaixo para baixar o conjunto de dados completo no formato desejado.</p>}
-      dataSources={combustivelDataSources}
+      dataSources={abastecimentoDataSources}
     />
   );
 };
 
-export default DataSourceCombustivel;
+export default DataSourceAbastecimento;

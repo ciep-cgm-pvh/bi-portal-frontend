@@ -7,12 +7,12 @@ import DataSource from '../pages/panels/Manutencao/DataSource/DataSource';
 import Home from '../pages/panels/Manutencao/Home/Home';
 
 import DashboardAbastecimento from '../pages/panels/Combustivel/Dashboard';
-import HomeAbastecimento from '../pages/panels/Combustivel/Home/Home';
 
-import DataSourceCombustivel from '../pages/panels/Combustivel/DataSoruce';
 import DashboardDiarias from '../pages/panels/Diarias/Dashboard';
 import DataSourceDiarias from '../pages/panels/Diarias/DataSource/DataSource';
 import HomeDiarias from '../pages/panels/Diarias/Home/Home';
+import DataSourceAbastecimento from '../pages/panels/Combustivel/DataSoruce';
+import HomeAbastecimento from '../pages/panels/Combustivel/Home';
 
 const navLinks: NavLinkInterface[] = [
 
@@ -77,7 +77,7 @@ const navLinks: NavLinkInterface[] = [
     title: "Fonte de Dados",
     path: "/painel/abastecimento/datasource",
     icon: <Database size={18} />,
-    element: <DataSourceCombustivel />,
+    element: <DataSourceAbastecimento />,
     group: "abastecimento",
   }
 
