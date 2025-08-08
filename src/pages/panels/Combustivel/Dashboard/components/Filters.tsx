@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { filterConfiguration, initialFilterValues } from '../data/filters.config';
 import FiltersSection from '../../../../../components/FiltersSection/FiltersSection';
 
-export const SupplyFilters = () => {
+export const AbastecimentoFilters = () => {
   const [filterValues, setFilterValues] = useState(initialFilterValues);
   
   const handleFilterChange = (id: string, value: string | number) => {

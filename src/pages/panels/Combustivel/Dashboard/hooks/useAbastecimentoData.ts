@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useEffect } from 'react';
 import type { SortConfig, TableDataItem } from '../../../../../types/tables';
 import { useQuery } from 'urql';
 
@@ -24,54 +24,94 @@ const mockAbastecimentoData: TableDataItem[] = [
 
 // Exemplo de query para buscar os dados da tabela
 const GET_ABASTECIMENTO_QUERY = `
-  query GetAbastecimento($limit: Int, $offset: Int, $sortBy: String, $sortDirection: String) {
-    abastecimento(limit: $limit, offset: $offset, sortBy: $sortBy, sortDirection: $sortDirection) {
-      id
-      date
-      vehicle
-      driver
-      cost
-      status
+  query GetAbastecimentos(
+  $limit: Int,
+  $offset: Int,
+  $sortBy: String,
+  $sortDirection: String,
+  $filters: AbastecimentoFiltersInput
+) {
+  abastecimentos(
+    limit: $limit,
+    offset: $offset,
+    sortBy: $sortBy,
+    sortDirection: $sortDirection,
+    filters: $filters
+  ) {
+    id
+    datetime
+    cost
+    fuelVolume
+    fuelType
+    status
+    driverName
+
+    vehicle {
+      plate
+      model
+      brand
     }
-    suppliesCount
+
+    gasStation {
+      name
+      city
+    }
+
+    department
+    costCenter
   }
+
+  abastecimentosCount(filters: $filters)
+}
+
+# O backend precisaria definir um tipo de input para os filtros
+# input AbastecimentoFiltersInput {
+#   dateRange: DateRangeInput
+#   status: [String!]
+#   fuelType: [String!]
+#   vehiclePlate: String
+#   driverName: String
+# }
+#
+# input DateRangeInput {
+#   from: DateTime!
+#   to: DateTime!
+# }
 `;
 
 const ITEMS_PER_PAGE = 5;
 
 export const useAbastecimentoData = () => {
-  // Em um caso real, `rawAbastecimentoData` viria de um SWR ou React Query
   const [ currentPage, setCurrentPage ] = useState(1);
-  const [ sortConfig, setSortConfig ] = useState<SortConfig<TableDataItem> | null>(null);
+  const [ sortConfig, setSortConfig ] = useState<SortConfig<TableDataItem> | null>({ key: 'date', direction: 'descending' });
 
-  const [ result ] = useQuery({
+  // Variables for the GraphQL query are now derived from state
+  const queryVariables = {
+    limit: ITEMS_PER_PAGE,
+    offset: (currentPage - 1) * ITEMS_PER_PAGE,
+    sortBy: sortConfig?.key,
+    sortDirection: sortConfig?.direction,
+  };
+
+  const [ result, reexecuteQuery ] = useQuery({
     query: GET_ABASTECIMENTO_QUERY,
-    // Você pode passar variáveis para a query aqui, se necessário
-    // variables: { limit: ITEMS_PER_PAGE, offset: (currentPage - 1) * ITEMS_PER_PAGE, ... }
+    variables: queryVariables,
   });
 
   const { data: apiData, fetching: isLoading, error } = result;
 
-  // Se houver erro na API, logue o erro e use o mock
+  // Trigger a refetch when state changes
+  useEffect(() => {
+    reexecuteQuery({ requestPolicy: 'network-only' });
+  }, [ currentPage, sortConfig, reexecuteQuery ]);
+
   if (error) {
-    console.error("Falha ao buscar dados da API:", error.message);
+    console.error("API Error:", error.message);
   }
 
-  const data = apiData?.supplies || mockAbastecimentoData;
-  const totalItems = apiData?.suppliesCount || mockAbastecimentoData.length;
-
-  const processedData = useMemo(() => {
-    let sortableItems = [ ...data ];
-    if (sortConfig) {
-      sortableItems.sort((a, b) => {
-        if (a[ sortConfig.key ] < b[ sortConfig.key ]) return sortConfig.direction === 'ascending' ? -1 : 1;
-        if (a[ sortConfig.key ] > b[ sortConfig.key ]) return sortConfig.direction === 'ascending' ? 1 : -1;
-        return 0;
-      });
-    }
-    const firstPageIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-    return sortableItems.slice(firstPageIndex, firstPageIndex + ITEMS_PER_PAGE);
-  }, [ data, currentPage, sortConfig ]);
+  // Use API data if available, otherwise use mock data as a fallback
+  const processedData = apiData?.abastecimento || mockAbastecimentoData;
+  const totalItems = apiData?.abastecimentoCount || mockAbastecimentoData.length;
 
   const handleSort = (key: keyof TableDataItem) => {
     let direction: 'ascending' | 'descending' = 'ascending';
@@ -79,17 +119,19 @@ export const useAbastecimentoData = () => {
       direction = 'descending';
     }
     setSortConfig({ key, direction });
+    setCurrentPage(1); // Reset to first page on new sort
   };
 
   const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE);
 
   return {
-    // Dados e Estado
+    // Data and State
     processedData,
     sortConfig,
     currentPage,
     totalPages,
     isLoading,
+    error, // Pass error to the UI
     // Handlers
     handleSort,
     onPageChange: setCurrentPage,
