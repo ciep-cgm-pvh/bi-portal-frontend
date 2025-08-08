@@ -8,7 +8,7 @@ export interface FilterOption {
 export interface FilterConfig {
   id: string; // Identificador único, ex: 'status' ou 'vehicleId'
   label: string; // O que aparece para o usuário, ex: "Status"
-  type: 'select' | 'date' | 'text'; // O tipo de input a ser renderizado
+  type: 'select' | 'date' | 'text' | 'daterange'; // O tipo de input a ser renderizado
   placeholder?: string;
   options?: FilterOption[]; // Obrigatório apenas se o type for 'select'
 }

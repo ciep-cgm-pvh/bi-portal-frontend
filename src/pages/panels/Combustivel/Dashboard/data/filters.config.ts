@@ -1,38 +1,29 @@
+// src/pages/DashboardCombustivel/data/filters.config.ts
+
 import type { FilterConfig } from '../../../../../types/filters';
 
-
-export const filterConfiguration: FilterConfig[] = [
+// Esta é a configuração ESTRUTURAL dos filtros.
+export const baseFilterConfig: FilterConfig[] = [
   {
     id: 'vehicle',
     label: 'Veículo',
     type: 'select',
     placeholder: 'Todos os veículos',
-    options: [
-      { value: 'fiat-strada', label: 'Fiat Strada (ABC-1234)' },
-      { value: 'vw-gol', label: 'VW Gol (DEF-5678)' },
-    ],
+    options: [], // As opções serão preenchidas dinamicamente
   },
   {
     id: 'status',
     label: 'Status',
     type: 'select',
     placeholder: 'Todos os status',
-    options: [
-      { value: 'approved', label: 'Aprovado' },
-      { value: 'pending', label: 'Pendente' },
-      { value: 'rejected', label: 'Rejeitado' },
-    ],
+    options: [], // As opções serão preenchidas dinamicamente
   },
   {
-    id: 'startDate',
-    label: 'Data Inicial',
-    type: 'date',
-  },
-  {
-    id: 'endDate',
-    label: 'Data Final',
-    type: 'date',
+    id: 'dateRange', // Agrupando as datas
+    label: 'Período',
+    type: 'daterange',
   },
 ];
 
-export const initialFilterValues = { vehicle: '', status: '', startDate: '', endDate: '' };
+// Mantenha os valores iniciais
+export const initialFilterValues = { vehicle: '', status: '', dateRange: '' };

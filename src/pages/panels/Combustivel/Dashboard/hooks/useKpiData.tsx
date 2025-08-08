@@ -22,9 +22,9 @@ const formatCurrency = (value: number) => {
   return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 };
 
-export const useKpiData = () => {
+export const useKpiData = ({ filters }: { filters: any }) => {
   // 2. Busque os dados da API
-  const [ result ] = useQuery({ query: GET_ABASTECIMENTO_KPIS_QUERY });
+  const [ result ] = useQuery({ query: GET_ABASTECIMENTO_KPIS_QUERY, variables: { filters } });
   const { data, fetching: isLoading, error } = result;
 
   // 3. Transforme os dados brutos no formato esperado pelo componente

@@ -24,9 +24,9 @@ interface ChartApiResponse {
   costByStatus: { status: string; total: number }[];
 }
 
-export const useChartData = () => {
+export const useChartData = ({ filters }: { filters: any }) => {
   // 2. Busque os dados da API
-  const [ result ] = useQuery({ query: GET_CHART_DATA_QUERY });
+  const [ result ] = useQuery({ query: GET_CHART_DATA_QUERY, variables: { filters } });
   const { data, fetching: isLoading, error } = result;
 
   // 3. Transforme os dados brutos no array de configuração de gráficos

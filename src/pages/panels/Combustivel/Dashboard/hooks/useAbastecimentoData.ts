@@ -81,7 +81,7 @@ const GET_ABASTECIMENTO_QUERY = `
 
 const ITEMS_PER_PAGE = 5;
 
-export const useAbastecimentoData = () => {
+export const useAbastecimentoData = ({ filters }: { filters: any }) => {
   const [ currentPage, setCurrentPage ] = useState(1);
   const [ sortConfig, setSortConfig ] = useState<SortConfig<TableDataItem> | null>({ key: 'date', direction: 'descending' });
 
@@ -91,6 +91,7 @@ export const useAbastecimentoData = () => {
     offset: (currentPage - 1) * ITEMS_PER_PAGE,
     sortBy: sortConfig?.key,
     sortDirection: sortConfig?.direction,
+    filters, // Passa os filtros para a query
   };
 
   const [ result, reexecuteQuery ] = useQuery({
