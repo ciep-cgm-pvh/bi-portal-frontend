@@ -94,6 +94,8 @@ export const ChartsSection = ({ charts, isLoading = false }: ChartsSectionProps)
             </ResponsiveContainer>
           )}
 
+          {/* Renderiza Tabela de Ranking */}
+
         </ChartCard>
       ))}
     </section>

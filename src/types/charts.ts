@@ -31,5 +31,20 @@ export interface PieChartConfig extends BaseChartConfig {
   };
 }
 
+// Tipagem para a configuração de uma coluna da tabela
+export interface RankingTableColumnConfig {
+  header: string; // O texto do cabeçalho (ex: 'Placa')
+  dataKey: string; // A chave do dado no objeto (ex: 'plate')
+  formatter?: (value: any) => React.ReactNode; // Função opcional para formatar o valor
+}
+
+// Configuração específica para a tabela de ranking
+export interface RankingTableConfig {
+  type: 'ranking-table';
+  config: {
+    columns: RankingTableColumnConfig[];
+  };
+}
+
 // União de todos os tipos de configuração de gráfico possíveis
-export type ChartConfig = BarChartConfig | PieChartConfig;
+export type ChartConfig = BarChartConfig | PieChartConfig | RankingTableConfig;

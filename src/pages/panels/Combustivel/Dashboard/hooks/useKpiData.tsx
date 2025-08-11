@@ -1,6 +1,6 @@
 // src/pages/DashboardCombustivel/hooks/useKpiData.ts
 
-import { BeakerIcon, CalendarIcon, FuelIcon } from 'lucide-react';
+import { BeakerIcon, CalendarIcon, CarIcon, DollarSign, FuelIcon, Gauge } from 'lucide-react';
 import { useMemo } from 'react';
 import { useQuery } from 'urql';
 
@@ -45,9 +45,10 @@ export const useKpiData = ({ filters }: { filters: any }) => {
 
     // Formata os dados recebidos da API
     return [
-      { title: 'Gastos Totais', value: formatCurrency(kpis.totalCost), icon: <FuelIcon /> },
-      { title: 'Média Diária', value: formatCurrency(kpis.dailyAverageCost), icon: <CalendarIcon /> },
-      { title: 'Abastecimentos', value: String(kpis.suppliesCount), icon: <BeakerIcon /> },
+      { title: 'Gastos Totais', value: formatCurrency(kpis.totalCost), icon: <DollarSign color='#4CAF50' /> },
+      { title: 'Combustível Consumido', value: formatCurrency(kpis.fuelConsumed), icon: <FuelIcon color='#FF9800' /> },
+      { title: 'Kilometros Rodados (litros)', value: parseFloat(kpis.kilometersDriven).toFixed(2), icon: <Gauge color='#2196F3' /> },
+      { title: 'Numero de Veículos', value: String(kpis.vehiclesCount), icon: <CarIcon color='#9C27B0' /> },
     ];
   }, [ data ]);
 
