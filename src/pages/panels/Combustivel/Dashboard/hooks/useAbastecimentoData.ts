@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
-import type { SortConfig, TableDataItem } from '../../../../../types/tables';
+import { useEffect, useState } from 'react';
 import { useQuery } from 'urql';
+import type { SortConfig, TableDataItem } from '../../../../../types/tables';
 
 // Mock dos dados brutos
 const mockAbastecimentoData: TableDataItem[] = [
@@ -61,7 +61,7 @@ const GET_ABASTECIMENTO_QUERY = `
     costCenter
   }
 
-  abastecimentosCount(filters: $filters)
+  # abastecimentosCount(filters: $filters)
 }
 
 # O backend precisaria definir um tipo de input para os filtros
@@ -99,6 +99,8 @@ export const useAbastecimentoData = ({ filters }: { filters: any }) => {
     variables: queryVariables,
   });
 
+  console.log(result);
+
   const { data: apiData, fetching: isLoading, error } = result;
 
   // Trigger a refetch when state changes
@@ -111,7 +113,7 @@ export const useAbastecimentoData = ({ filters }: { filters: any }) => {
   }
 
   // Use API data if available, otherwise use mock data as a fallback
-  const processedData = apiData?.abastecimento || mockAbastecimentoData;
+  const processedData = apiData?.abastecimentos || mockAbastecimentoData;
   const totalItems = apiData?.abastecimentoCount || mockAbastecimentoData.length;
 
   const handleSort = (key: keyof TableDataItem) => {
