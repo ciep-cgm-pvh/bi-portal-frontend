@@ -18,6 +18,7 @@ export interface BarChartConfig extends BaseChartConfig {
     dataKey: string;    // A chave do valor numérico (ex: 'total')
     categoryKey: string; // A chave da categoria/label (ex: 'month')
     color: string;      // A cor das barras (ex: '#8884d8')
+    tickFormatter?: (value: any) => string;
   };
 }
 

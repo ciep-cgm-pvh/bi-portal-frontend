@@ -5,26 +5,6 @@ import type { FilterConfig } from '../../../../../types/filters';
 // Esta é a configuração ESTRUTURAL dos filtros.
 export const baseFilterConfig: FilterConfig[] = [
   {
-    id: 'vehicle',
-    label: 'Veículo',
-    type: 'select',
-    placeholder: 'Todos os veículos',
-    options: [], // As opções serão preenchidas dinamicamente
-  },
-  {
-    id: 'status',
-    label: 'Status',
-    type: 'select',
-    placeholder: 'Todos os status',
-    options: [], // As opções serão preenchidas dinamicamente
-  },
-  // {
-  //   id: 'dateRange', // Agrupando as datas
-  //   label: 'Período',
-  //   type: 'daterange',
-  //   placeholder: 'Selecione o período',
-  // },
-  {
     id: 'startDate',
     label: 'Data Inicial',
     type: 'date',
@@ -34,7 +14,48 @@ export const baseFilterConfig: FilterConfig[] = [
     label: 'Data Final',
     type: 'date',
   },
+  {
+    id: 'department',
+    label: 'Departamento',
+    type: 'select',
+    placeholder: 'Todos os departamentos',
+    options: [], // As opções serão preenchidas dinamicamente
+  },
+  {
+    id: 'vehiclePlate',
+    label: 'Placa do Veículo',
+    type: 'select',
+    placeholder: 'Todas as placas',
+    options: [], // As opções serão preenchidas dinamicamente
+  },
+  {
+    id: 'vehicleModel',
+    label: 'Modelo do Veículo',
+    type: 'select',
+    placeholder: 'Todos os modelos',
+    options: [], // As opções serão preenchidas dinamicamente
+  },
+  {
+    id: 'gasStationCity',
+    label: 'Cidade do Posto',
+    type: 'select',
+    placeholder: 'Todas as cidades',
+    options: [], // As opções serão preenchidas dinamicamente
+  },
+  {
+    id: 'gasStationName',
+    label: 'Nome do Posto',
+    type: 'select',
+    placeholder: 'Todos os postos',
+    options: [], // As opções serão preenchidas dinamicamente
+  },
+
 ];
 
 // Mantenha os valores iniciais
-export const initialFilterValues = { vehicle: '', status: '', dateRange: '' };
+export const initialFilterValues = {
+  vehicle: '',
+  status: '',
+  startDate: '',
+  endDate: ''
+};

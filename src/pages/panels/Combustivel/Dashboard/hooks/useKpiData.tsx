@@ -1,19 +1,22 @@
 // src/pages/DashboardCombustivel/hooks/useKpiData.ts
 
-import { useQuery } from 'urql';
+import { BeakerIcon, CalendarIcon, FuelIcon } from 'lucide-react';
 import { useMemo } from 'react';
-import { FuelIcon, CalendarIcon, BeakerIcon } from 'lucide-react';
+import { useQuery } from 'urql';
 
 // 1. Defina a query
 const GET_ABASTECIMENTO_KPIS_QUERY = `
   query GetAbastecimentoKpis {
     abastecimentoKpis {
       totalCost
+      fuelConsumed
+      kilometersDriven
+      vehiclesCount
       dailyAverageCost
       suppliesCount
       lastUpdate
     }
-  }
+}
 `;
 
 // Helper para formatar moeda

@@ -6,15 +6,22 @@ import { KPICard, KPISection } from '../components/KPISection/KPISection';
 import type { JSX, ReactNode } from 'react';
 import type { ChartConfig } from '../types/charts';
 
+// Função para formatar a data no padrão pt-BR
+const formatBrDate = (dateString?: string): string | undefined => {
+  if (!dateString) return undefined;
+  // Converte a string ISO para um objeto Date e formata
+  return new Date(dateString).toLocaleDateString('pt-BR', {
+    timeZone: 'UTC', // Garante que a data não mude por causa do fuso horário
+  });
+};
+
 // Props que o nosso template de painel vai receber
 interface DashboardPanelTemplateProps {
   title: string;
   description: string;
-  lastUpdate: string;
+  lastUpdate?: string;
   kpiData: { icon: JSX.Element; title: string; value: string }[];
   chartConfig: ChartConfig[];
-  
-  // Componentes específicos do painel são passados como children
   filtersComponent: ReactNode;
   tableComponent: ReactNode;
 }
@@ -29,6 +36,7 @@ export const DashboardPanelTemplate = ({
   tableComponent,
 }: DashboardPanelTemplateProps) => {
   const navigate = useNavigate();
+  const formattedLastUpdate = formatBrDate(lastUpdate);
 
   return (
     <div className="space-y-6 my-4">
@@ -36,7 +44,7 @@ export const DashboardPanelTemplate = ({
         title={title}
         description={description}
         onBackToHub={() => navigate('/hub')}
-        lastUpdate={lastUpdate}
+        lastUpdate={formattedLastUpdate}
       />
       <KPISection>
         {kpiData.map((kpi, index) => <KPICard key={index} {...kpi} />)}

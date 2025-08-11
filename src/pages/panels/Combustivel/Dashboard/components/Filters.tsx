@@ -4,15 +4,17 @@ import { useState } from 'react';
 import FiltersSection from '../../../../../components/FiltersSection/FiltersSection';
 import { initialFilterValues } from '../data/filters.config';
 import { useFiltersConfig } from '../hooks/useFilterConfig';
+
 interface AbastecimentoFiltersProps {
   onApply: (filters: any) => void;
   onClear: () => void;
+  initialValues: any;
 }
 
-export const AbastecimentoFilters = ({ onApply, onClear }: AbastecimentoFiltersProps) => {
+export const AbastecimentoFilters = ({initialValues, onApply, onClear }: AbastecimentoFiltersProps) => {
   // Use o hook para obter a configuração dinâmica
   const { filterConfig, isLoading: isLoadingConfig } = useFiltersConfig();
-  const [draftFilters, setDraftFilters] = useState(initialFilterValues);
+  const [draftFilters, setDraftFilters] = useState(initialValues);
   
   const handleFilterChange = (id: string, value: any) => {
     setDraftFilters((prev) => ({ ...prev, [id]: value }));

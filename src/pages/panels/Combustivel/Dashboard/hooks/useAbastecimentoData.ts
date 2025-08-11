@@ -64,12 +64,18 @@ const GET_ABASTECIMENTO_QUERY = `
 }
 
 # O backend precisaria definir um tipo de input para os filtros
+# conforme as novas opções disponíveis:
+#
 # input AbastecimentoFiltersInput {
 #   dateRange: DateRangeInput
-#   status: [String!]
+
 #   fuelType: [String!]
-#   vehiclePlate: String
 #   driverName: String
+#   department: [String!]
+#   vehiclePlate: [String!]
+#   vehicleModel: [String!]
+#   gasStationCity: [String!]
+#   gasStationName: [String!]
 # }
 #
 # input DateRangeInput {
@@ -84,13 +90,6 @@ export const useAbastecimentoData = ({ filters }: { filters: any }) => {
   const [ currentPage, setCurrentPage ] = useState(1);
   const [ sortConfig, setSortConfig ] = useState<SortConfig<TableDataItem> | null>({ key: 'date', direction: 'descending' });
 
-  // =================================================================
-  // LÓGICA DE CORREÇÃO ADICIONADA AQUI
-  // =================================================================
-  /**
-   * Prepara os filtros para a query GraphQL, limpando valores vazios,
-   * nulos e chaves inválidas, além de renomear campos necessários.
-   */
   const prepareGqlFilters = (rawFilters: any) => {
     const gqlFilters: { [ key: string ]: any } = {};
 
@@ -105,9 +104,11 @@ export const useAbastecimentoData = ({ filters }: { filters: any }) => {
     }
 
     // 3. Inclui 'dateRange' apenas se for um objeto válido com 'from' e 'to'.
-    //    Isso previne o erro de "Expected type 'DateRangeInput' to be an object".
-    if (rawFilters.dateRange && typeof rawFilters.dateRange === 'object' && rawFilters.dateRange.from && rawFilters.dateRange.to) {
-      gqlFilters.dateRange = rawFilters.dateRange;
+    if (rawFilters.startDate && rawFilters.endDate) {
+      gqlFilters.dateRange = {
+        from: new Date(rawFilters.startDate).toISOString(),
+        to: new Date(rawFilters.endDate).toISOString(),
+      };
     }
 
     // Adicione aqui outras lógicas de filtro conforme necessário (ex: fuelType, driverName)
