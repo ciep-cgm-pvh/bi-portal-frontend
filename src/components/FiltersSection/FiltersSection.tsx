@@ -63,6 +63,8 @@ export const FiltersSection = ({ config, values, onChange, onApply, onClear }: F
                 className="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
               />
             )}
+        {/*  Outro tipo de 'input' pode ser adicionado aqui */}
+
           </div>
         ))}
       </div>

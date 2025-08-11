@@ -43,7 +43,6 @@ const GET_ABASTECIMENTO_QUERY = `
     cost
     fuelVolume
     fuelType
-    status
     driverName
 
     vehicle {
@@ -85,13 +84,45 @@ export const useAbastecimentoData = ({ filters }: { filters: any }) => {
   const [ currentPage, setCurrentPage ] = useState(1);
   const [ sortConfig, setSortConfig ] = useState<SortConfig<TableDataItem> | null>({ key: 'date', direction: 'descending' });
 
-  // Variables for the GraphQL query are now derived from state
+  // =================================================================
+  // LÓGICA DE CORREÇÃO ADICIONADA AQUI
+  // =================================================================
+  /**
+   * Prepara os filtros para a query GraphQL, limpando valores vazios,
+   * nulos e chaves inválidas, além de renomear campos necessários.
+   */
+  const prepareGqlFilters = (rawFilters: any) => {
+    const gqlFilters: { [ key: string ]: any } = {};
+
+    // 1. Renomeia 'vehicle' para 'vehiclePlate' e só inclui se tiver valor.
+    if (rawFilters.vehicle) {
+      gqlFilters.vehiclePlate = rawFilters.vehicle;
+    }
+
+    // 2. Inclui 'status' apenas se tiver valor.
+    if (rawFilters.status) {
+      gqlFilters.status = rawFilters.status;
+    }
+
+    // 3. Inclui 'dateRange' apenas se for um objeto válido com 'from' e 'to'.
+    //    Isso previne o erro de "Expected type 'DateRangeInput' to be an object".
+    if (rawFilters.dateRange && typeof rawFilters.dateRange === 'object' && rawFilters.dateRange.from && rawFilters.dateRange.to) {
+      gqlFilters.dateRange = rawFilters.dateRange;
+    }
+
+    // Adicione aqui outras lógicas de filtro conforme necessário (ex: fuelType, driverName)
+
+    // 4. Retorna um objeto limpo. Se estiver vazio, a API GraphQL não receberá a variável 'filters' com campos nulos.
+    return gqlFilters;
+  };
+
   const queryVariables = {
     limit: ITEMS_PER_PAGE,
     offset: (currentPage - 1) * ITEMS_PER_PAGE,
     sortBy: sortConfig?.key,
     sortDirection: sortConfig?.direction,
-    filters, // Passa os filtros para a query
+    // Usa os filtros preparados em vez dos filtros brutos
+    filters: prepareGqlFilters(filters),
   };
 
   const [ result, reexecuteQuery ] = useQuery({
@@ -99,14 +130,16 @@ export const useAbastecimentoData = ({ filters }: { filters: any }) => {
     variables: queryVariables,
   });
 
-  console.log(result);
+  // Para depuração, você pode verificar o que está sendo enviado
+  console.log("Variáveis da Query Enviadas:", queryVariables);
 
   const { data: apiData, fetching: isLoading, error } = result;
 
-  // Trigger a refetch when state changes
+  // Adicionado `filters` ao array de dependências para refazer a busca quando os filtros mudarem.
   useEffect(() => {
+    // Quando qualquer um desses estados mudar, uma nova query será feita.
     reexecuteQuery({ requestPolicy: 'network-only' });
-  }, [ currentPage, sortConfig, reexecuteQuery ]);
+  }, [ currentPage, sortConfig, filters, reexecuteQuery ]);
 
   if (error) {
     console.error("API Error:", error.message);

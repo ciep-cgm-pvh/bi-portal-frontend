@@ -18,10 +18,21 @@ export const baseFilterConfig: FilterConfig[] = [
     placeholder: 'Todos os status',
     options: [], // As opções serão preenchidas dinamicamente
   },
+  // {
+  //   id: 'dateRange', // Agrupando as datas
+  //   label: 'Período',
+  //   type: 'daterange',
+  //   placeholder: 'Selecione o período',
+  // },
   {
-    id: 'dateRange', // Agrupando as datas
-    label: 'Período',
-    type: 'daterange',
+    id: 'startDate',
+    label: 'Data Inicial',
+    type: 'date',
+  },
+  {
+    id: 'endDate',
+    label: 'Data Final',
+    type: 'date',
   },
 ];
 
