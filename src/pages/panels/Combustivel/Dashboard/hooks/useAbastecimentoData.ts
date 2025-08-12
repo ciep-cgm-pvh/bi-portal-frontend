@@ -110,6 +110,8 @@ export const useAbastecimentoData = ({ filters }: { filters: any }) => {
   // Adicionado `filters` ao array de dependências para refazer a busca quando os filtros mudarem.
   useEffect(() => {
     // Quando qualquer um desses estados mudar, uma nova query será feita.
+    console.log('%c[HOOK-TABLE] 4. Efeito de re-execução da query foi ativado!', 'color: red; font-weight: bold;');
+
     reexecuteQuery({ requestPolicy: 'network-only' });
   }, [ currentPage, sortConfig, filters, reexecuteQuery ]);
 

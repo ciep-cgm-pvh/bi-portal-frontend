@@ -28,6 +28,7 @@ const formatCurrency = (value: number) => {
 };
 
 export const useKpiData = ({ filters }: { filters: any }) => {
+  console.log('%c[HOOK-KPI] 3. Hook de KPI recebeu filtros:', 'color: orange; font-weight: bold;', filters);
   // 2. Busque os dados da API
   const [ result ] = useQuery({ 
     query: GET_ABASTECIMENTO_KPIS_QUERY, 
@@ -51,8 +52,8 @@ export const useKpiData = ({ filters }: { filters: any }) => {
     // Formata os dados recebidos da API
     return [
       { title: 'Gastos Totais', value: formatCurrency(kpis.totalCost), icon: <DollarSign color='#4CAF50' /> },
-      { title: 'Combustível Consumido', value: formatCurrency(kpis.fuelConsumed), icon: <FuelIcon color='#FF9800' /> },
-      { title: 'Kilometros Rodados (litros)', value: parseFloat(kpis.kilometersDriven).toFixed(2), icon: <Gauge color='#2196F3' /> },
+      { title: 'Combustível Consumido (litros)', value: formatCurrency(kpis.fuelConsumed), icon: <FuelIcon color='#FF9800' /> },
+      { title: 'Kilometros Rodados', value: parseFloat(kpis.kilometersDriven).toFixed(2), icon: <Gauge color='#2196F3' /> },
       { title: 'Numero de Veículos', value: String(kpis.vehiclesCount), icon: <CarIcon color='#9C27B0' /> },
     ];
   }, [ data ]);
