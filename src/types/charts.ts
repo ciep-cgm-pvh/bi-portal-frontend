@@ -1,50 +1,56 @@
-// Um item de dado genérico para qualquer gráfico
-export type ChartDataItem = {
-  [ key: string ]: string | number;
-};
-
-// Configuração base para qualquer gráfico
+// Tipos base existentes (sem alterações)
 interface BaseChartConfig {
-  id: string; // Identificador único para o `key` do React
+  id: string;
   title: string;
-  type: 'bar-vertical' | 'bar-horizontal' | 'pie';
-  data: ChartDataItem[];
+  data: any[];
 }
 
-// Configuração específica para gráficos de barra
 export interface BarChartConfig extends BaseChartConfig {
   type: 'bar-vertical' | 'bar-horizontal';
   config: {
-    dataKey: string;    // A chave do valor numérico (ex: 'total')
-    categoryKey: string; // A chave da categoria/label (ex: 'month')
-    color: string;      // A cor das barras (ex: '#8884d8')
+    dataKey: string;
+    categoryKey: string;
+    color?: string;
     tickFormatter?: (value: any) => string;
   };
 }
 
-// Configuração específica para gráficos de pizza/donut
 export interface PieChartConfig extends BaseChartConfig {
   type: 'pie';
   config: {
-    dataKey: string; // A chave do valor numérico (ex: 'value')
-    nameKey: string; // A chave do nome da fatia (ex: 'name')
+    dataKey: string;
+    nameKey: string;
   };
 }
 
-// Tipagem para a configuração de uma coluna da tabela
-export interface RankingTableColumnConfig {
-  header: string; // O texto do cabeçalho (ex: 'Placa')
-  dataKey: string; // A chave do dado no objeto (ex: 'plate')
-  formatter?: (value: any) => React.ReactNode; // Função opcional para formatar o valor
+// --- NOVOS TIPOS ADICIONADOS ---
+
+// 1. Definição para o Gráfico de Linha
+export interface LineChartConfig extends BaseChartConfig {
+  type: 'line';
+  config: {
+    dataKey: string;
+    categoryKey: string;
+    color?: string;
+    tickFormatter?: (value: any) => string;
+  };
 }
 
-// Configuração específica para a tabela de ranking
-export interface RankingTableConfig {
+// 2. Definição para as colunas da Tabela de Ranking
+export interface RankingTableColumn {
+  header: string;
+  accessor: string;
+  className?: string;
+  render?: (value: any) => React.ReactNode;
+}
+
+// 3. Definição para a Tabela de Ranking
+export interface RankingTableConfig extends BaseChartConfig {
   type: 'ranking-table';
   config: {
-    columns: RankingTableColumnConfig[];
+    columns: RankingTableColumn[];
   };
 }
 
-// União de todos os tipos de configuração de gráfico possíveis
-export type ChartConfig = BarChartConfig | PieChartConfig | RankingTableConfig;
+// 4. Atualize o tipo unificado para incluir os novos tipos
+export type ChartConfig = BarChartConfig | PieChartConfig | LineChartConfig | RankingTableConfig;

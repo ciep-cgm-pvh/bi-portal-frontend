@@ -8,8 +8,8 @@ import { prepareGqlFilters } from '../utils/filter.utils'; // <-- 1. IMPORTE A F
 
 // 1. Defina a query
 const GET_ABASTECIMENTO_KPIS_QUERY = `
-  query GetAbastecimentoKpis {
-    abastecimentoKpis {
+  query GetAbastecimentoKpis($filters: AbastecimentoFiltersInput) {
+    abastecimentoKpis(filters: $filters) {
       totalCost
       fuelConsumed
       kilometersDriven
@@ -18,7 +18,7 @@ const GET_ABASTECIMENTO_KPIS_QUERY = `
       suppliesCount
       lastUpdate
     }
-}
+  }
 `;
 
 // Helper para formatar moeda
@@ -52,7 +52,7 @@ export const useKpiData = ({ filters }: { filters: any }) => {
     // Formata os dados recebidos da API
     return [
       { title: 'Gastos Totais', value: formatCurrency(kpis.totalCost), icon: <DollarSign color='#4CAF50' /> },
-      { title: 'Combustível Consumido (litros)', value: formatCurrency(kpis.fuelConsumed), icon: <FuelIcon color='#FF9800' /> },
+      { title: 'Combustível Consumido  (litros)', value: formatCurrency(kpis.fuelConsumed), icon: <FuelIcon color='#FF9800' /> },
       { title: 'Kilometros Rodados', value: parseFloat(kpis.kilometersDriven).toFixed(2), icon: <Gauge color='#2196F3' /> },
       { title: 'Numero de Veículos', value: String(kpis.vehiclesCount), icon: <CarIcon color='#9C27B0' /> },
     ];

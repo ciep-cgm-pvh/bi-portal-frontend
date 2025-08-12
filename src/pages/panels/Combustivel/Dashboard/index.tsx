@@ -65,6 +65,7 @@ const DashboardCombustivel = () => {
 
   return (
     <DashboardPanelTemplate
+      mockData={false}
       title="Abastecimento"
       description="Visualize e filtre os dados de gastos com combustível."
       lastUpdate={lastUpdate}

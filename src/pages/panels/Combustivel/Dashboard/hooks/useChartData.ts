@@ -1,144 +1,130 @@
-// src/pages/DashboardCombustivel/hooks/useChartData.ts
-
 import { useMemo } from 'react';
 import { useQuery } from 'urql';
 import type { ChartConfig } from '../../../../../types/charts';
 import { prepareGqlFilters } from '../utils/filter.utils';
 
-// 1. Defina a query
+// 1. ATUALIZE A QUERY PARA BUSCAR TODOS OS DADOS NECESSÁRIOS
 const GET_CHART_DATA_QUERY = `
-  query GetChartData {
-    costByDepartment {
-      department
-      total
-    }
-    costByCity {
-      city
-      total
-    }
-    costByGasStation {
-      name
-      total
-    }
-    costByPlate {
-      plate
-      total
-    }
-    costByDate{
-      date
-      total
-    }
-    costOverTime {
-      date
-      total
-    }
+  query GetChartData($filters: AbastecimentoFiltersInput) {
+    costByDepartment(filters: $filters) { department total }
+    costByPlate(filters: $filters) { plate total }
+    costOverTime(filters: $filters) { date total }
+    rankingByDate(filters: $filters) { date total }
+    rankingByPlate(filters: $filters) { plate total quantity }
+    rankingByDepartment(filters: $filters) { department total }
   }
 `;
 
-// Estrutura de dados que a API retorna
-interface ChartApiResponse {
-  costByVehicle: { vehicle: string; total: number }[];
-  costByStatus: { status: string; total: number }[];
-  costByDepartment: { department: string; total: number }[];
-  costByCity: { city: string; total: number }[];
-  costByGasStation: { name: string; total: number }[];
-  costByPlate: { plate: string; total: number }[];
-  costByDate: { date: string; total: number }[];
-  costOverTime: { date: string; total: number }[];
-}
+// Helper para formatar moeda
+const formatCurrency = (value: number) =>
+  new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value);
+
+// Helper para formatar datas curtas (ex: 01/Jan)
+const formatDateShort = (isoString: string) => {
+  const date = new Date(isoString);
+  return date.toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', timeZone: 'UTC' });
+};
 
 export const useChartData = ({ filters }: { filters: any }) => {
-  // 2. Busque os dados da API
-  const [ result ] = useQuery({ query: GET_CHART_DATA_QUERY, variables: { filters: prepareGqlFilters(filters) }, });
+  const [ result ] = useQuery({
+    query: GET_CHART_DATA_QUERY,
+    variables: { filters: prepareGqlFilters(filters) },
+  });
+
   const { data, fetching: isLoading, error } = result;
 
-  // 3. Transforme os dados brutos no array de configuração de gráficos
+  // 2. ATUALIZE O useMemo PARA CONSTRUIR AS NOVAS CONFIGURAÇÕES
   const chartConfig = useMemo((): ChartConfig[] => {
-    const chartData: ChartApiResponse | undefined = data;
-
-    if (!chartData) {
-      // Retorna uma configuração vazia ou com placeholders enquanto carrega
-      return [
-        // Graficos: Pie -> Valor por Secretaria; Barra Vertical -->Top 10 Veículos por Custo por Placa; Double linechart --> Custo ao Longo do tempo por semestre (compara 2024.2 com 2025.2); tabela --> [data - litros - custo] --> ranking de dia com mais gasto;tabela --> [placa - litros - custo] --> ranking de veículos por gasto; tabela --> [departamento - litros - custo] --> ranking de departamentos por gasto;
-
-        {
-          id: 'valor-por-secretaria',
-          title: 'Valor por Secretaria',
-          type: 'pie',
-          data: [],
-          config: { dataKey: 'value', nameKey: 'name' }
-        },
-        {
-          id: 'top-10-veiculos-custo',
-          title: 'Top 10 Veículos por Custo',
-          type: 'bar-vertical', // Alterado para vertical conforme solicitado
-          data: [],
-          config: { dataKey: 'total', categoryKey: 'plate', color: '#155dfc' }
-        },
-      ];
+    if (!data) {
+      return []; // Retorna vazio enquanto carrega
     }
 
-    let processedDepartments = [];
-    const topN = 9;
+    // Configurações dos Gráficos existentes
+    const costByDeptConfig: ChartConfig = {
+      id: 'gasto-por-secretaria',
+      title: 'Gasto por Secretaria',
+      type: 'pie',
+      data: data.costByDepartment?.map((item: any) => ({ name: item.department, value: item.total })) || [],
+      config: { dataKey: 'value', nameKey: 'name' },
+    };
 
-    // 1. Ordena os departamentos por valor total, do maior para o menor
-    const sortedDepartments = [ ...chartData.costByDepartment ].sort((a, b) => b.total - a.total);
+    const costByPlateConfig: ChartConfig = {
+      id: 'gasto-por-veiculo',
+      title: 'Gasto por Veículo (Top 10)',
+      type: 'bar-horizontal',
+      // get top 10 order by cost
+      data: data.costByPlate
+        ?.slice() // cria cópia para não mutar o original
+        .sort((a: { total: number; }, b: { total: number; }) => b.total - a.total) // ordena do maior para o menor
+        .slice(0, 10)
+        .reverse() || [],
+      config: { dataKey: 'total', categoryKey: 'plate', color: '#8884d8' },
+    };
 
-    // 2. Se houver mais departamentos que o nosso limite (9)
-    if (sortedDepartments.length > topN) {
-      // Pega os 9 primeiros
-      const topDepartments = sortedDepartments.slice(0, topN);
+    // --- NOVAS CONFIGURAÇÕES ---
 
-      // Pega o restante para somar
-      const otherDepartments = sortedDepartments.slice(topN);
-      const othersTotal = otherDepartments.reduce((acc, item) => acc + item.total, 0);
+    const costOverTimeConfig: ChartConfig = {
+      id: 'custo-por-tempo',
+      title: 'Custo ao longo do Tempo',
+      type: 'line',
+      data: data.costOverTime || [],
+      config: {
+        dataKey: 'total',
+        categoryKey: 'date',
+        color: '#82ca9d',
+        tickFormatter: formatDateShort,
+      },
+    };
 
-      // Junta os 9 primeiros com a nova categoria "Outros"
-      processedDepartments = [ ...topDepartments ];
-      if (othersTotal > 0) {
-        processedDepartments.push({ department: 'Outros', total: othersTotal });
-      }
+    const rankingByDateConfig: ChartConfig = {
+      id: 'ranking-por-data',
+      title: 'Ranking por Data',
+      type: 'ranking-table',
+      data: data.rankingByDate || [],
+      config: {
+        columns: [
+          { header: 'Data', accessor: 'date', render: (value) => new Date(value).toLocaleDateString('pt-BR', { timeZone: 'UTC' }) },
+          { header: 'Total Gasto', accessor: 'total', className: 'text-right', render: formatCurrency },
+        ],
+      },
+    };
 
-    } else {
-      // Se houver 9 ou menos, apenas usa a lista ordenada
-      processedDepartments = sortedDepartments;
-    }
+    const rankingByPlateConfig: ChartConfig = {
+      id: 'ranking-por-placa',
+      title: 'Ranking por Veículo',
+      type: 'ranking-table',
+      data: data.rankingByPlate || [],
+      config: {
+        columns: [
+          { header: 'Placa', accessor: 'plate' },
+          { header: 'Qtde.', accessor: 'quantity', className: 'text-center' },
+          { header: 'Total Gasto', accessor: 'total', className: 'text-right', render: formatCurrency },
+        ],
+      },
+    };
 
-    const top10Vehicles = [ ...chartData.costByPlate ] // Cria uma cópia para não alterar o original
-      .sort((a, b) => b.total - a.total) // Ordena do maior para o menor custo
-      .slice(0, 10); // Pega apenas os 10 primeiros itens
-
-    // Mapeia os dados já processados para o formato que o gráfico espera
-    const pieChartData = processedDepartments.map(item => ({
-      name: item.department,
-      value: parseFloat(item.total.toFixed(2)),
-    }));
+    const rankingByDeptConfig: ChartConfig = {
+      id: 'ranking-por-secretaria',
+      title: 'Ranking por Secretaria',
+      type: 'ranking-table',
+      data: data.rankingByDepartment || [],
+      config: {
+        columns: [
+          { header: 'Secretaria', accessor: 'department' },
+          { header: 'Total Gasto', accessor: 'total', className: 'text-right', render: formatCurrency },
+        ],
+      },
+    };
 
     return [
-      {
-        id: 'valor-por-secretaria',
-        title: 'Valor por Secretaria',
-        type: 'pie',
-        data: pieChartData,
-        config: { dataKey: 'value', nameKey: 'name' },
-      },
-      {
-        id: 'top-10-veiculos-custo',
-        title: 'Top 10 Veículos por Custo',
-        type: 'bar-horizontal',
-        // top 10
-        data: top10Vehicles.map(item => ({
-          plate: item.plate,
-          total: parseFloat(item.total.toFixed(2)),
-        })),
-        config: { dataKey: 'total', categoryKey: 'plate', color: '#155dfc', tickFormatter: (value: number) => `R$ ${(value / 1000000).toFixed(1)}M`, },
-      },
+      costOverTimeConfig,
+      costByDeptConfig,
+      costByPlateConfig,
+      rankingByDateConfig,
+      rankingByPlateConfig,
+      rankingByDeptConfig,
     ];
   }, [ data ]);
 
-  return {
-    chartConfig,
-    isLoading,
-    error,
-  };
+  return { chartConfig, isLoading, error };
 };
