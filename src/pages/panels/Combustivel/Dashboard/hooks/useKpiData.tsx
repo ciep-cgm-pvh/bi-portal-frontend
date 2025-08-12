@@ -3,6 +3,8 @@
 import { BeakerIcon, CalendarIcon, CarIcon, DollarSign, FuelIcon, Gauge } from 'lucide-react';
 import { useMemo } from 'react';
 import { useQuery } from 'urql';
+import { prepareGqlFilters } from '../utils/filter.utils'; // <-- 1. IMPORTE A FUNÇÃO
+
 
 // 1. Defina a query
 const GET_ABASTECIMENTO_KPIS_QUERY = `
@@ -27,7 +29,10 @@ const formatCurrency = (value: number) => {
 
 export const useKpiData = ({ filters }: { filters: any }) => {
   // 2. Busque os dados da API
-  const [ result ] = useQuery({ query: GET_ABASTECIMENTO_KPIS_QUERY, variables: { filters } });
+  const [ result ] = useQuery({ 
+    query: GET_ABASTECIMENTO_KPIS_QUERY, 
+    variables: { filters: prepareGqlFilters(filters) }, 
+  });
   const { data, fetching: isLoading, error } = result;
 
   // 3. Transforme os dados brutos no formato esperado pelo componente

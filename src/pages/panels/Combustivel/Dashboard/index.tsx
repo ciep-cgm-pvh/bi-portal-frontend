@@ -1,5 +1,5 @@
 // Importando o novo template
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { DashboardPanelTemplate } from '../../../../templates/DashboardPanelTemplate';
 
 // Importando componentes e configs locais
@@ -11,18 +11,27 @@ import { useKpiData } from './hooks/useKpiData'; // with graphql integration, no
 
 // Função auxiliar para formatar a data no padrão YYYY-MM-DD para o input 'date'
 const formatDateForInput = (dateString: string | Date): string => {
+  if (!dateString) return '';
   const date = new Date(dateString);
-  return date.toISOString().split('T')[0];
+  // Pega o ano, mês e dia em UTC para evitar deslocamento por fuso horário
+  const year = date.getUTCFullYear();
+  const month = String(date.getUTCMonth() + 1).padStart(2, '0');
+  const day = String(date.getUTCDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
 };
 
 const DashboardCombustivel = () => {
   const [filters, setFilters] = useState(initialFilterValues);
 
-  const { kpiData, lastUpdate  } = useKpiData({ filters });
+  const hasInitialized = useRef(false);
+
+  const { kpiData, lastUpdate } = useKpiData({ filters });
   const { chartConfig } = useChartData({ filters });
+  
 
   useEffect(() => {
-    if (lastUpdate) {
+    // Roda apenas se 'lastUpdate' existir E se a inicialização ainda não ocorreu
+    if (lastUpdate && !hasInitialized.current) {
       const currentYear = new Date().getFullYear();
       const firstDayOfYear = formatDateForInput(new Date(currentYear, 0, 1));
       const lastUpdateDate = formatDateForInput(lastUpdate);
@@ -32,23 +41,20 @@ const DashboardCombustivel = () => {
         startDate: firstDayOfYear,
         endDate: lastUpdateDate,
       });
+
+      // Marca como inicializado para não executar novamente
+      hasInitialized.current = true;
     }
-  }, [lastUpdate]);
-  
-  // A função para aplicar os filtros é passada para o componente filho.
+  }, [lastUpdate]); // A dependência continua a mesma, mas a lógica interna impede re-execução
+
   const handleApplyFilters = (newFilters: any) => {
     setFilters(newFilters);
   };
-  
+
   const handleClearFilters = () => {
-    const currentYear = new Date().getFullYear();
-    const firstDayOfYear = formatDateForInput(new Date(currentYear, 0, 1));
-    const lastUpdateDate = lastUpdate ? formatDateForInput(lastUpdate) : '';
-    
+    // Agora, "Limpar" reseta para o período padrão, não para valores vazios.
     setFilters({
       ...initialFilterValues,
-      startDate: firstDayOfYear,
-      endDate: lastUpdateDate,
     });
   };
 
@@ -60,13 +66,14 @@ const DashboardCombustivel = () => {
       kpiData={kpiData}
       chartConfig={chartConfig}
       filtersComponent={
-        <AbastecimentoFilters
-          initialValues={filters}
-          onApply={handleApplyFilters}
-          onClear={handleClearFilters}
-        />
+        <>
+          <AbastecimentoFilters
+            initialValues={filters} // Passa os filtros (com as datas) para o componente
+            onApply={handleApplyFilters}
+            onClear={handleClearFilters}
+          />
+        </>
       }
-      // Passe os filtros para a tabela também
       tableComponent={<AbastecimentoTable filters={filters} />}
     />
   );

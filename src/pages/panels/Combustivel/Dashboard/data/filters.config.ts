@@ -54,8 +54,11 @@ export const baseFilterConfig: FilterConfig[] = [
 
 // Mantenha os valores iniciais
 export const initialFilterValues = {
-  vehicle: '',
-  status: '',
   startDate: '',
-  endDate: ''
+  endDate: '',
+  department: '',
+  vehiclePlate: '',
+  vehicleModel: '',
+  gasStationCity: '',
+  gasStationName: ''
 };

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useQuery } from 'urql';
 import type { SortConfig, TableDataItem } from '../../../../../types/tables';
+import { prepareGqlFilters } from '../utils/filter.utils';
 
 // Mock dos dados brutos
 const mockAbastecimentoData: TableDataItem[] = [
@@ -90,33 +91,6 @@ export const useAbastecimentoData = ({ filters }: { filters: any }) => {
   const [ currentPage, setCurrentPage ] = useState(1);
   const [ sortConfig, setSortConfig ] = useState<SortConfig<TableDataItem> | null>({ key: 'date', direction: 'descending' });
 
-  const prepareGqlFilters = (rawFilters: any) => {
-    const gqlFilters: { [ key: string ]: any } = {};
-
-    // 1. Renomeia 'vehicle' para 'vehiclePlate' e só inclui se tiver valor.
-    if (rawFilters.vehicle) {
-      gqlFilters.vehiclePlate = rawFilters.vehicle;
-    }
-
-    // 2. Inclui 'status' apenas se tiver valor.
-    if (rawFilters.status) {
-      gqlFilters.status = rawFilters.status;
-    }
-
-    // 3. Inclui 'dateRange' apenas se for um objeto válido com 'from' e 'to'.
-    if (rawFilters.startDate && rawFilters.endDate) {
-      gqlFilters.dateRange = {
-        from: new Date(rawFilters.startDate).toISOString(),
-        to: new Date(rawFilters.endDate).toISOString(),
-      };
-    }
-
-    // Adicione aqui outras lógicas de filtro conforme necessário (ex: fuelType, driverName)
-
-    // 4. Retorna um objeto limpo. Se estiver vazio, a API GraphQL não receberá a variável 'filters' com campos nulos.
-    return gqlFilters;
-  };
-
   const queryVariables = {
     limit: ITEMS_PER_PAGE,
     offset: (currentPage - 1) * ITEMS_PER_PAGE,
@@ -130,9 +104,6 @@ export const useAbastecimentoData = ({ filters }: { filters: any }) => {
     query: GET_ABASTECIMENTO_QUERY,
     variables: queryVariables,
   });
-
-  // Para depuração, você pode verificar o que está sendo enviado
-  console.log("Variáveis da Query Enviadas:", queryVariables);
 
   const { data: apiData, fetching: isLoading, error } = result;
 

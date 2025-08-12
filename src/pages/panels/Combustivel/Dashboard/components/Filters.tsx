@@ -1,8 +1,7 @@
 // src/pages/DashboardCombustivel/components/Filters.tsx
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import FiltersSection from '../../../../../components/FiltersSection/FiltersSection';
-import { initialFilterValues } from '../data/filters.config';
 import { useFiltersConfig } from '../hooks/useFilterConfig';
 
 interface AbastecimentoFiltersProps {
@@ -15,15 +14,20 @@ export const AbastecimentoFilters = ({initialValues, onApply, onClear }: Abastec
   // Use o hook para obter a configuração dinâmica
   const { filterConfig, isLoading: isLoadingConfig } = useFiltersConfig();
   const [draftFilters, setDraftFilters] = useState(initialValues);
-  
+
+  useEffect(() => {
+    setDraftFilters(initialValues);
+  }, [initialValues]);
+
+
   const handleFilterChange = (id: string, value: any) => {
-    setDraftFilters((prev) => ({ ...prev, [id]: value }));
+    setDraftFilters((prev: any) => ({ ...prev, [id]: value }));
   };
 
-  const handleApply = () => onApply(draftFilters);
+  const handleApply = () => {onApply(draftFilters)};
 
   const handleClear = () => {
-    setDraftFilters(initialFilterValues);
+    
     onClear();
   };
 
