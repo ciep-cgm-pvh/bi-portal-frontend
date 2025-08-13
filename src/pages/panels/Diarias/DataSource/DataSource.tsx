@@ -1,7 +1,7 @@
 import DataPreview from './sections/DataPreview';
 import Overview from './sections/Overview';
 
-export default function DataSource() {
+export default function DataSourceDiarias() {
   return (
     <div className='flex gap-4 flex-col md:mb-4'>
       {/* <h1 className='text-2xl font-bold bg-official-yellow rounded-md py-2 px-4 text-left'>ACESSO AOS DADOS</h1> */}

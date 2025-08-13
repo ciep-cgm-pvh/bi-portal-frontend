@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useQuery } from 'urql';
 import type { SortConfig, TableDataItem } from '../../../../../types/tables';
 import { prepareGqlFilters } from '../utils/filter.utils';
@@ -52,6 +52,17 @@ interface UseAbastecimentoDataProps {
 export const useAbastecimentoData = ({ filters, itemsPerPage }: UseAbastecimentoDataProps) => {
   const [ currentPage, setCurrentPage ] = useState(1);
   const [ sortConfig, setSortConfig ] = useState<SortConfig<TableDataItem> | null>({ key: 'datetime', direction: 'descending' }); // datetime é mais provável que 'date'
+  const isInitialMount = useRef(true); // Para evitar o reset na montagem inicial
+
+  // Reseta para a primeira página sempre que os filtros mudam.
+  useEffect(() => {
+    // Evita o reset na primeira renderização
+    if (!isInitialMount.current) {
+      setCurrentPage(1);
+    } else {
+      isInitialMount.current = false;
+    }
+  }, [ filters ]); // Depende do objeto de filtros combinado
 
   const queryVariables = {
     limit: itemsPerPage, // 2. Usa a prop dinâmica
@@ -67,6 +78,17 @@ export const useAbastecimentoData = ({ filters, itemsPerPage }: UseAbastecimento
   });
 
   const { data: apiData, fetching: isLoading, error } = result;
+  useEffect(() => {
+    // --- COLOQUE O LOG AQUI ---
+    console.log('%c[API Request] Enviando nova requisição com os filtros:', 'color: yellow; font-weight: bold;', {
+      filters: prepareGqlFilters(filters),
+      page: currentPage,
+      limit: itemsPerPage,
+      sort: sortConfig
+    });
+
+    reexecuteQuery({ requestPolicy: 'network-only' });
+  }, [ currentPage, sortConfig, filters, itemsPerPage, reexecuteQuery ]);
 
   useEffect(() => {
     // 4. Adiciona `itemsPerPage` às dependências do efeito

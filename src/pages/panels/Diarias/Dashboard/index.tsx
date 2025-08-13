@@ -14,8 +14,7 @@ const DashboardDiarias = () => {
       kpiData={kpiData}
       chartConfig={chartConfiguration}
       filtersComponent={<Filters />}
-      tableComponent={<Table />}
-    />
+      tableComponent={<Table />} mockData={false} panelStatus={false} panelStatusPhasesData={{}}    />
   );
 };
 

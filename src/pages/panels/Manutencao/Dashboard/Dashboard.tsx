@@ -6,7 +6,7 @@ import FleetSection from './Sections/FleetSection';
 import { OverView } from './Sections/OverView';
 import SuppliersSection from './Sections/Supplierssection';
 
-export default function Dashboard() {
+export default function DashboardManutencao() {
   const isMobile = useOutletContext<boolean>();
 
   console.log('Dashboard received isMobile:', isMobile);

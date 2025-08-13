@@ -5,5 +5,6 @@ export interface NavLinkInterface {
   path: string;
   icon: ReactNode;
   element?: ReactNode;
+  published: boolean;
   group?: string; // Optional grouping for navigation links
 }

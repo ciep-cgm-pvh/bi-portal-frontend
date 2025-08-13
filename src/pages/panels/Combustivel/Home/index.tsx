@@ -9,7 +9,7 @@ const panelSubtitle = "Análise e Acompanhamento de Gastos com Combustível";
 const panelDescription = (
   <>
     Esta seção oferece uma visão completa sobre os dados de abastecimento da frota. 
-    Utilize o <strong>Dashboard</strong> para visualizações interativas e a <strong>Fonte de Dados</strong> para downloads de relatórios completos.
+    Utilize o <strong>Painel</strong> para visualizações interativas, a aba de <strong>Fonte de Dados</strong> para downloads dos dados utilizados completos está em fase de construção
   </>
 );
 

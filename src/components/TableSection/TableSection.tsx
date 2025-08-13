@@ -10,6 +10,9 @@ interface TableSectionProps<T extends TableDataItem> {
   // Props para ordenação
   sortConfig?: SortConfig<T> | null;
   onSort: (key: keyof T) => void;
+  // Novas props para a filtragem
+  filterValues?: { [key: string]: string };
+  onFilterChange?: (accessor: keyof T, value: string) => void;
 }
 
 export const TableSection = <T extends TableDataItem>({
@@ -20,6 +23,8 @@ export const TableSection = <T extends TableDataItem>({
   emptyMessage = 'Nenhum resultado encontrado.',
   sortConfig,
   onSort,
+  filterValues,
+  onFilterChange,
 }: TableSectionProps<T>) => {
   const renderSortIcon = (key: keyof T) => {
     if (!sortConfig || sortConfig.key !== key) {
@@ -32,12 +37,15 @@ export const TableSection = <T extends TableDataItem>({
     return <ChevronDown className="h-4 w-4 text-gray-600" />;
   };
 
+  const hasFilters = columns.some(c => c.isFilterable);
+
   return (
-    <section className="bg-white px-4 pt-4 rounded-t-lg shadow-md">
+     <section className="bg-white px-4 pt-4 rounded-t-lg">
       {title && <h2 className="text-xl font-bold text-gray-800 mb-4">{title}</h2>}
       <div className="overflow-x-auto">
         <table className="w-full text-left text-sm">
           <thead className="border-b border-gray-200">
+            {/* Linha 1: Cabeçalhos */}
             <tr>
               {columns.map((column) => (
                 <th key={String(column.accessor)} className={`py-3 px-4 font-semibold text-gray-600 uppercase`}>
@@ -52,6 +60,26 @@ export const TableSection = <T extends TableDataItem>({
                 </th>
               ))}
             </tr>
+            
+            {/* 3. Nova Linha de Filtros (renderizada condicionalmente) */}
+            {hasFilters && onFilterChange && filterValues && (
+              <tr className="border-b border-gray-200">
+                {columns.map((column) => (
+                  <td key={`${String(column.accessor)}-filter`} className="p-2">
+                    {column.isFilterable ? (
+                      <input
+                        type="text"
+                        placeholder={`Filtrar ${column.header}...`}
+                        value={filterValues[column.accessor as string] || ''}
+                        onChange={(e) => onFilterChange(column.accessor, e.target.value)}
+                        className="w-full px-2 py-1 text-sm border border-gray-300 rounded-md focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+                      />
+                    ) : null /* Célula vazia para colunas não filtráveis */}
+                  </td>
+                ))}
+              </tr>
+            )}
+            
           </thead>
           <tbody>
             {isLoading ? (

@@ -2,7 +2,7 @@
 import { AlertTriangle, HomeIcon } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 
-export default function Home() {
+export default function HomeManutencao() {
   const navigate = useNavigate();
 
   const handleGoToNotFound = () => {

@@ -20,12 +20,10 @@ const formatDateForInput = (dateString: string | Date): string => {
 
 const DashboardCombustivel = () => {
   const [filters, setFilters] = useState(initialFilterValues);
-
   const hasInitialized = useRef(false);
 
   const { kpiData, lastUpdate } = useKpiData({ filters });
   const { chartConfig } = useChartData({ filters });
-
   useEffect(() => {
     // Roda apenas se 'lastUpdate' existir E se a inicialização ainda não ocorreu
     if (lastUpdate && !hasInitialized.current) {
@@ -44,7 +42,6 @@ const DashboardCombustivel = () => {
     }
   }, [lastUpdate]); // A dependência continua a mesma, mas a lógica interna impede re-execução
 
-// ADICIONE ESTE LOG PARA VERIFICAR A ATUALIZAÇÃO DO ESTADO PRINCIPAL
   useEffect(() => {
     console.log('%c[DASHBOARD] 2. Estado de filtros foi atualizado (pai):', 'color: green; font-weight: bold;', filters);
   }, [filters]);
@@ -60,12 +57,28 @@ const DashboardCombustivel = () => {
     });
   };
 
+  // const handleClearFilters = () => {
+  //   if (lastUpdate) {
+  //       const currentYear = new Date().getFullYear();
+  //       const firstDayOfYear = formatDateForInput(new Date(currentYear, 0, 1));
+  //       const lastUpdateDate = formatDateForInput(lastUpdate);
+  //       setFilters({
+  //           ...initialFilterValues,
+  //           startDate: firstDayOfYear,
+  //           endDate: lastUpdateDate,
+  //       });
+  //   } else {
+  //       setFilters(initialFilterValues);
+  //   }
+  // };
+
   const phaseData: { [key: string]: 'done' | 'in-progress' | 'pending' } = {
     "KPI's": 'done',
     'Filtros': 'done',
     'Gráficos': 'done',
     'Tabela de Ranking': 'done',
     'Responsividade': 'done',
+    'Filtros por Coluna': 'done'
   };
 
   // if all done panelStatus will receive false
