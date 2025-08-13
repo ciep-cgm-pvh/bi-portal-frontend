@@ -1,4 +1,4 @@
-import { Database, Fuel, LayoutDashboard } from 'lucide-react';
+import { Fuel, LayoutDashboard } from 'lucide-react';
 import { HomePanelTemplate } from '../../../../templates/HomePanelTemplate';
 import type { ActionLink } from '../../../../types/home';
 
@@ -15,17 +15,11 @@ const panelDescription = (
 
 const panelActionLinks: ActionLink[] = [
   {
-    text: 'Acessar Dashboard',
+    text: 'Acessar Painel',
     path: '/painel/abastecimento/dashboard', // Caminho correto para o dashboard
     variant: 'primary',
     icon: <LayoutDashboard size={18} />,
   },
-  {
-    text: 'Ver Fontes de Dados',
-    path: '/painel/abastecimento/datasource', // Caminho correto para a fonte de dados
-    variant: 'secondary',
-    icon: <Database size={18} />,
-  }
 ];
 
 const HomeAbastecimento = () => {
