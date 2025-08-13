@@ -10,15 +10,11 @@ import type { ChartConfig } from '../types/charts';
 
 type PhaseStatus = 'done' | 'in-progress' | 'pending';
 
-const ProjectPhases = ({ mockData }: { mockData: boolean }) => {
+const ProjectPhases = ({ mockData, phasesData }: { mockData: boolean, phasesData: { [key: string]: PhaseStatus } }) => {
   // Define the status for each phase
-  const phases: { [key: string]: PhaseStatus } = {
+  const phases = {
     'Dados de Abastecimento': !mockData ? 'done' : 'in-progress',
-    "KPI's": 'in-progress',
-    'Filtros': 'done',
-    'Gráficos': 'in-progress',
-    'Tabela de Ranking': 'pending',
-    'Responsividade': 'pending',
+    ...phasesData
   };
 
   const phasesArray = Object.entries(phases);
@@ -92,6 +88,8 @@ const formatBrDate = (dateString?: string): string | undefined => {
 // Props que o nosso template de painel vai receber
 interface DashboardPanelTemplateProps {
   mockData: boolean;
+  panelStatus: boolean;
+  panelStatusPhasesData: { [key: string]: PhaseStatus };
   title: string;
   description: string;
   lastUpdate?: string;
@@ -103,6 +101,8 @@ interface DashboardPanelTemplateProps {
 
 export const DashboardPanelTemplate = ({
   mockData = true,
+  panelStatus = false,
+  panelStatusPhasesData = {},
   title,
   description,
   lastUpdate,
@@ -119,7 +119,7 @@ export const DashboardPanelTemplate = ({
       {mockData && mockDataWarning()}
 
       {/* Development Progress Timeline */}
-      <ProjectPhases mockData={mockData} />
+      {panelStatus && <ProjectPhases mockData={mockData} phasesData={panelStatusPhasesData}/>}
 
       <Header
         title={title}

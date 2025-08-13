@@ -33,7 +33,7 @@ export const TableSection = <T extends TableDataItem>({
   };
 
   return (
-    <section className="bg-white p-4 rounded-lg shadow-md">
+    <section className="bg-white px-4 pt-4 rounded-t-lg shadow-md">
       {title && <h2 className="text-xl font-bold text-gray-800 mb-4">{title}</h2>}
       <div className="overflow-x-auto">
         <table className="w-full text-left text-sm">

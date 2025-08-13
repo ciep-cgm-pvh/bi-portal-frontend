@@ -1,13 +1,11 @@
-// Importando o novo template
 import { useEffect, useRef, useState } from 'react';
 import { DashboardPanelTemplate } from '../../../../templates/DashboardPanelTemplate';
 
-// Importando componentes e configs locais
-import { AbastecimentoFilters } from './components/Filters'; // pending graphql integration
-import { AbastecimentoTable } from './components/Table'; // with graphql integration, no filters yet
+import { AbastecimentoFilters } from './components/Filters';
+import { AbastecimentoTable } from './components/Table';
 import { initialFilterValues } from './data/filters.config';
-import { useChartData } from './hooks/useChartData'; // with graphql integration, no filters yet
-import { useKpiData } from './hooks/useKpiData'; // with graphql integration, no filters yet
+import { useChartData } from './hooks/useChartData';
+import { useKpiData } from './hooks/useKpiData';
 
 // Função auxiliar para formatar a data no padrão YYYY-MM-DD para o input 'date'
 const formatDateForInput = (dateString: string | Date): string => {
@@ -27,7 +25,6 @@ const DashboardCombustivel = () => {
 
   const { kpiData, lastUpdate } = useKpiData({ filters });
   const { chartConfig } = useChartData({ filters });
-  
 
   useEffect(() => {
     // Roda apenas se 'lastUpdate' existir E se a inicialização ainda não ocorreu
@@ -63,9 +60,23 @@ const DashboardCombustivel = () => {
     });
   };
 
+  const phaseData: { [key: string]: 'done' | 'in-progress' | 'pending' } = {
+    "KPI's": 'done',
+    'Filtros': 'done',
+    'Gráficos': 'done',
+    'Tabela de Ranking': 'done',
+    'Responsividade': 'done',
+  };
+
+  // if all done panelStatus will receive false
+  const showPanelStatus = !Object.values(phaseData).every((phase) => phase === 'done');
+
+
   return (
     <DashboardPanelTemplate
       mockData={false}
+      panelStatus={showPanelStatus}
+      panelStatusPhasesData={phaseData}
       title="Abastecimento"
       description="Visualize e filtre os dados de gastos com combustível."
       lastUpdate={lastUpdate}

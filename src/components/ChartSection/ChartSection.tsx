@@ -2,6 +2,7 @@ import { Bar, BarChart, CartesianGrid, Cell, Legend, Line, LineChart, Pie, PieCh
 import type { BarChartConfig, ChartConfig, LineChartConfig, PieChartConfig, RankingTableConfig } from '../../types/charts';
 import { ChartCard } from '../Charts/ChartCard/ChartCard';
 import { RankingTable } from '../Rankingtable/RankingTable';
+import useIsMobile from '../../hooks/useIsMobile';
 
 // --- HELPERS (No changes) ---
 const formatCurrency = (value: number) =>
@@ -85,21 +86,45 @@ const processPieData = (data: any[], nameKey: string, dataKey: string) => {
   return top9;
 };
 const renderPieChart = (chart: PieChartConfig) => {
-  // Process the data to limit slices before rendering
+  // --- INÍCIO DAS ALTERAÇÕES ---
+
+  // 2. Chama o hook para verificar o tamanho da tela
+  const isMobile = useIsMobile();
+  
   const processedData = processPieData(chart.data, chart.config.nameKey, chart.config.dataKey);
+
+  // 3. Define props dinâmicas com base em isMobile
+  const legendProps = isMobile
+    ? {
+        layout: 'horizontal' as const,
+        verticalAlign: 'bottom' as const,
+        align: 'center' as const,
+        wrapperStyle: { paddingTop: '15px', width: '100%' }
+      }
+    : {
+        layout: 'vertical' as const,
+        verticalAlign: 'middle' as const,
+        align: 'right' as const,
+        wrapperStyle: { paddingLeft: "10px" }
+      };
+
+  const pieCx = isMobile ? '50%' : '40%';
+  const pieOuterRadius = isMobile ? 80 : 100;
 
   return (
     <ResponsiveContainer width="100%" height="100%">
-      <RechartsPieChart margin={{ top: 5, right: 30, left: 30, bottom: 5 }}>
+      {/* Ajusta a margem inferior no mobile para dar espaço à legenda */}
+      <RechartsPieChart margin={{ top: 5, right: 20, left: 20, bottom: isMobile ? 60 : 5 }}>
         <Tooltip formatter={(value: number, name: string) => [formatCurrency(value), name]} />
-        <Legend layout="vertical" verticalAlign="middle" align="right" wrapperStyle={{ paddingLeft: "10px" }} />
-        <Pie 
-          data={processedData} 
-          dataKey={chart.config.dataKey} 
+        {/* Aplica as props da legenda dinamicamente */}
+        <Legend {...legendProps} />
+        <Pie
+          data={processedData}
+          dataKey={chart.config.dataKey}
           nameKey={chart.config.nameKey}
-          cx="40%"
-          cy="50%" 
-          outerRadius={100} 
+          cx={pieCx} // Posição X dinâmica
+          cy="50%"
+          outerRadius={pieOuterRadius} // Raio dinâmico
           labelLine={false}
           label={({ percent }) => `${(percent * 100).toFixed(1)}%`}
         >

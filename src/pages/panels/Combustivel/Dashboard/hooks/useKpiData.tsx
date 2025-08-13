@@ -1,6 +1,6 @@
 // src/pages/DashboardCombustivel/hooks/useKpiData.ts
 
-import { BeakerIcon, CalendarIcon, CarIcon, DollarSign, FuelIcon, Gauge } from 'lucide-react';
+import { BeakerIcon, CalendarIcon, CarIcon, DollarSign, FuelIcon } from 'lucide-react';
 import { useMemo } from 'react';
 import { useQuery } from 'urql';
 import { prepareGqlFilters } from '../utils/filter.utils'; // <-- 1. IMPORTE A FUNÇÃO
@@ -53,8 +53,8 @@ export const useKpiData = ({ filters }: { filters: any }) => {
     return [
       { title: 'Gastos Totais', value: formatCurrency(kpis.totalCost), icon: <DollarSign color='#4CAF50' /> },
       { title: 'Combustível Consumido  (litros)', value: formatCurrency(kpis.fuelConsumed), icon: <FuelIcon color='#FF9800' /> },
-      { title: 'Kilometros Rodados', value: parseFloat(kpis.kilometersDriven).toFixed(2), icon: <Gauge color='#2196F3' /> },
-      { title: 'Numero de Veículos', value: String(kpis.vehiclesCount), icon: <CarIcon color='#9C27B0' /> },
+      // { title: 'Kilometros Rodados', value: `${kpis.kilometersDriven.toLocaleString('pt-BR')} Km`, icon: <Gauge color='#2196F3' /> },
+      { title: 'Numero de Veículos', value: `${kpis.vehiclesCount.toLocaleString('pt-BR')}`, icon: <CarIcon color='#9C27B0' /> },
     ];
   }, [ data ]);
 
