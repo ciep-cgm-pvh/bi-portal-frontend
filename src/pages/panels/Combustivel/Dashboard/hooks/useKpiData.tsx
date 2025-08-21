@@ -28,11 +28,12 @@ const formatCurrency = (value: number) => {
 };
 
 export const useKpiData = ({ filters }: { filters: any }) => {
+  const { filters: gqlFilters } = prepareGqlFilters(filters);
   console.log('%c[HOOK-KPI] 3. Hook de KPI recebeu filtros:', 'color: orange; font-weight: bold;', filters);
   // 2. Busque os dados da API
   const [ result ] = useQuery({ 
     query: GET_ABASTECIMENTO_KPIS_QUERY, 
-    variables: { filters: prepareGqlFilters(filters) }, 
+    variables: { filters: gqlFilters }, 
   });
   const { data, fetching: isLoading, error } = result;
 

@@ -26,9 +26,10 @@ const formatDateShort = (isoString: string) => {
 };
 
 export const useChartData = ({ filters }: { filters: any }) => {
+  const { filters: gqlFilters } = prepareGqlFilters(filters);
   const [ result ] = useQuery({
     query: GET_CHART_DATA_QUERY,
-    variables: { filters: prepareGqlFilters(filters) },
+    variables: { filters: gqlFilters },
   });
 
   const { data, fetching: isLoading, error } = result;

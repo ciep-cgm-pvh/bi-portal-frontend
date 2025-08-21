@@ -1,33 +1,45 @@
-// src/pages/panels/Combustivel/Dashboard/utils/filter.utils.ts
+export const prepareGqlFilters = (raw: any) => {
+  const filters: Record<string, any> = {};
+  const tableFilters: Record<string, any> = {};
 
-/**
- * Prepara o objeto de filtros do frontend para ser enviado como variável
- * para a query GraphQL, tratando datas e removendo valores nulos/vazios.
- * @param rawFilters - O estado bruto dos filtros do formulário.
- * @returns Um objeto de filtros limpo e formatado para a API.
- */
-export const prepareGqlFilters = (rawFilters: any) => {
-  const gqlFilters: { [ key: string ]: any } = {};
+  if (!raw) return { filters, tableFilters };
 
-  // Itera sobre todas as chaves do objeto de filtros
-  for (const key in rawFilters) {
-    // Ignora as chaves de data, pois serão tratadas separadamente
-    if (key === 'startDate' || key === 'endDate') {
-      continue;
-    }
-    // Adiciona o filtro à nova estrutura apenas se ele tiver um valor
-    if (rawFilters[ key ]) {
-      gqlFilters[ key ] = rawFilters[ key ];
-    }
-  }
-
-  // Trata o filtro de período (daterange) de forma especial
-  if (rawFilters.startDate && rawFilters.endDate) {
-    gqlFilters.dateRange = {
-      from: new Date(rawFilters.startDate).toISOString(),
-      to: new Date(rawFilters.endDate).toISOString(),
+  // dateRange só no geral
+  if (raw.startDate && raw.endDate) {
+    filters.dateRange = {
+      from: new Date(raw.startDate).toISOString(),
+      to: new Date(raw.endDate).toISOString(),
     };
   }
 
-  return gqlFilters;
+  const TABLE_ONLY = new Set([ 'datetime', 'cost', 'fuelVolume' ]);
+  const SHARED = new Set([
+    'fuelType',
+    'vehiclePlate',
+    'driverName',
+    'department',
+    'vehicleModel',
+    'vehicleBrand',
+    'gasStationCity',
+    'gasStationName',
+  ]);
+
+  const isEmpty = (v: any) =>
+    v === null || v === undefined || v === '' || (Array.isArray(v) && v.length === 0);
+
+  for (const [ key, value ] of Object.entries(raw)) {
+    if (key === 'startDate' || key === 'endDate') continue;
+    if (isEmpty(value)) continue;
+
+    if (TABLE_ONLY.has(key)) {
+      tableFilters[ key ] = value;
+    } else if (SHARED.has(key)) {
+      filters[ key ] = value;
+      tableFilters[ key ] = value;
+    } else {
+      filters[ key ] = value;
+    }
+  }
+
+  return { filters, tableFilters };
 };

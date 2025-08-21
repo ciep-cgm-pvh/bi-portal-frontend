@@ -5,26 +5,40 @@ import { prepareGqlFilters } from '../utils/filter.utils';
 
 
 const GET_ABASTECIMENTO_QUERY = `
-  query GetAbastecimentos(
+  query Abastecimentos(
   $limit: Int,
   $offset: Int,
   $sortBy: String,
   $sortDirection: String,
   $filters: AbastecimentoFiltersInput
+  $tableFilters: AbastecimentoTableFiltersInput
 ) {
-  abastecimentos(
-    limit: $limit,
-    offset: $offset,
-    sortBy: $sortBy,
-    sortDirection: $sortDirection,
-    filters: $filters
+  getAbastecimentos(filters: $filters) {
+    id
+    datetime
+    vehicle {
+      plate
+      model
+    }
+    gasStation {
+      name
+      city
+    }
+    department
+  }
+
+  getAbastecimentosTable(
+    limit: $limit
+    offset: $offset
+    sortBy: $sortBy
+    sortDirection: $sortDirection
+    filters: $filters  
+    tableFilters: $tableFilters
   ) {
     id
     datetime
     cost
     fuelVolume
-    fuelType
-    driverName
     vehicle {
       plate
       model
@@ -35,9 +49,9 @@ const GET_ABASTECIMENTO_QUERY = `
       city
     }
     department
-    costCenter
   }
-  abastecimentosCount(filters: $filters)
+
+  abastecimentosCount(filters: $filters tableFilters: $tableFilters)
 }
 `;
 
@@ -64,12 +78,15 @@ export const useAbastecimentoData = ({ filters, itemsPerPage }: UseAbastecimento
     }
   }, [ filters ]); // Depende do objeto de filtros combinado
 
+  const { filters: gqlFilters, tableFilters: gqlTableFilters } = prepareGqlFilters(filters);
+
   const queryVariables = {
-    limit: itemsPerPage, // 2. Usa a prop dinâmica
-    offset: (currentPage - 1) * itemsPerPage, // 3. Usa a prop dinâmica no cálculo
+    limit: itemsPerPage,
+    offset: (currentPage - 1) * itemsPerPage,
     sortBy: sortConfig?.key,
     sortDirection: sortConfig?.direction,
-    filters: prepareGqlFilters(filters),
+    filters: gqlFilters,
+    tableFilters: gqlTableFilters,
   };
 
   const [ result, reexecuteQuery ] = useQuery({
@@ -81,7 +98,8 @@ export const useAbastecimentoData = ({ filters, itemsPerPage }: UseAbastecimento
   useEffect(() => {
     // --- COLOQUE O LOG AQUI ---
     console.log('%c[API Request] Enviando nova requisição com os filtros:', 'color: yellow; font-weight: bold;', {
-      filters: prepareGqlFilters(filters),
+      filters: gqlFilters,
+      tableFilters: gqlTableFilters,
       page: currentPage,
       limit: itemsPerPage,
       sort: sortConfig
@@ -99,7 +117,7 @@ export const useAbastecimentoData = ({ filters, itemsPerPage }: UseAbastecimento
     console.error("API Error:", error.message);
   }
 
-  const processedData = apiData?.abastecimentos;
+  const processedData = apiData?.getAbastecimentosTable ?? [];
   const totalItems = apiData?.abastecimentosCount;
 
   // 5. Calcula totalPages com a prop dinâmica
