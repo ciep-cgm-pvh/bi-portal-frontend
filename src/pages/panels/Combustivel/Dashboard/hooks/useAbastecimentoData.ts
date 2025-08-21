@@ -39,6 +39,8 @@ const GET_ABASTECIMENTO_QUERY = `
     datetime
     cost
     fuelVolume
+    fuelType
+    driverName
     vehicle {
       plate
       model
