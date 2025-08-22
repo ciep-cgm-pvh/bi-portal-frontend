@@ -25,7 +25,7 @@ export const AbastecimentoFilters = ({initialValues, onApply, onClear }: Abastec
   };
 
   const handleApply = () => {
-    console.log('%c[FILTERS] 1. Aplicando filtros (filho):', 'color: blue; font-weight: bold;', draftFilters);
+    console.log('%c[FILTERS] 1. Aplicando filtros (filho):', 'color: #0071ce; font-weight: bold;', draftFilters);
     onApply(draftFilters);
   };
 

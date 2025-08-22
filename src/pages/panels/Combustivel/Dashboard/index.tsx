@@ -45,7 +45,7 @@ const DashboardCombustivel = () => {
   useEffect(() => {
     console.log('%c[DASHBOARD] 2. Estado de filtros foi atualizado (pai):', 'color: green; font-weight: bold;', filters);
   }, [filters]);
-
+  
   const handleApplyFilters = (newFilters: any) => {
     setFilters(newFilters);
   };
