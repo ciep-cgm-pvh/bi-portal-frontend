@@ -1,26 +1,50 @@
 import { DataSourcePanelTemplate, type DataSourceConfig } from '../../../../templates/DataSourcePanelTemplate';
 
-// Defina as queries GraphQL para cada fonte de dados
-const GET_ALL_SUPPLIES_QUERY = `
-  query GetAllSupplies {
-    supplies { id date vehicle driver cost status }
+const GET_ALL_ABASTECIMENTOS_DETALHADO_QUERY = `
+  query DownloadAbastecimentos {
+    getAbastecimentosTable {
+      id
+      datetime
+      cost
+      fuelVolume
+      fuelType
+      driverName
+      department
+      vehicle {
+        plate
+        model
+        brand
+      }
+      gasStation {
+        name
+        city
+      }
+    }
   }
 `;
 
 const GET_VEHICLE_SUMMARY_QUERY = `
   query GetVehicleSummary {
-    vehicleSummary { vehicle totalCost supplyCount }
+    vehicleSummary {
+      department
+      totalCost
+      supplyCount
+      vehicle {
+        plate
+        model
+        brand
+      }
+    }
   }
 `;
 
-// Crie a configuração para os cards desta página
 const abastecimentoDataSources: DataSourceConfig[] = [
   {
-    id: 'all-supplies',
-    title: 'Todos os Abastecimentos',
-    description: 'Relatório detalhado com todos os registros de abastecimento.',
+    id: 'all-supplies-detailed',
+    title: 'Relatório Completo de Abastecimentos',
+    description: 'Baixe o relatório detalhado com todos os registros de abastecimento, incluindo informações do veículo, motorista e posto.',
     filename: 'relatorio_abastecimentos_completo',
-    query: GET_ALL_SUPPLIES_QUERY,
+    query: GET_ALL_ABASTECIMENTOS_DETALHADO_QUERY,
   },
   {
     id: 'vehicle-summary',
@@ -30,7 +54,6 @@ const abastecimentoDataSources: DataSourceConfig[] = [
     query: GET_VEHICLE_SUMMARY_QUERY,
   },
 ];
-
 
 const DataSourceAbastecimento = () => {
   return (

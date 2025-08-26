@@ -1,14 +1,13 @@
 import { Download, Loader2 } from 'lucide-react';
 import { type DownloadFormat, useDataDownloader } from '../pages/panels/Combustivel/DataSoruce/hooks/useDataDownloader';
- // Ajuste o caminho conforme sua estrutura
 
-// A configuração para cada card de fonte de dados
+
 export interface DataSourceConfig {
   id: string;
   title: string;
   description: string;
-  filename: string; // Nome base para o arquivo baixado
-  query: string; // A query GraphQL para buscar os dados
+  filename: string;
+  query: string;
 }
 
 interface DataSourcePanelTemplateProps {
@@ -17,10 +16,15 @@ interface DataSourcePanelTemplateProps {
   dataSources: DataSourceConfig[];
 }
 
-// O Card Individual
 const DataSourceCard = ({ config, onDownload, loadingStates }: { config: DataSourceConfig, onDownload: Function, loadingStates: any }) => {
-  const formats: DownloadFormat[] = ['csv', 'json', 'xlsx'];
-  
+  const formats: DownloadFormat[] = ['csv', 'xlsx', 'json'];
+
+  const formatStyles: { [key in DownloadFormat]: string } = {
+    csv: 'bg-green-200 text-green-900 border-green-300 hover:bg-green-300 font-bold',
+    xlsx: 'bg-green-700 text-white border-green-800 hover:bg-green-800',
+    json: 'bg-gray-800 text-yellow-300 border-gray-700 hover:bg-black',
+  };
+
   return (
     <div className="bg-white rounded-lg shadow-md flex flex-col">
       <div className="p-4 border-b">
@@ -33,12 +37,14 @@ const DataSourceCard = ({ config, onDownload, loadingStates }: { config: DataSou
           {formats.map(format => {
             const loadingKey = `${config.id}-${format}`;
             const isLoading = loadingStates[loadingKey];
+            const baseButtonClasses = "flex items-center space-x-2 px-3 py-2 text-sm font-medium border rounded-md disabled:opacity-50 disabled:cursor-wait transition-colors duration-200";
+
             return (
               <button
                 key={format}
                 disabled={isLoading}
                 onClick={() => onDownload(config.id, config.query, format, config.filename)}
-                className="flex items-center space-x-2 px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-100 disabled:opacity-50 disabled:cursor-wait"
+                className={`${baseButtonClasses} ${formatStyles[format]}`}
               >
                 {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Download className="h-4 w-4" />}
                 <span>{format.toUpperCase()}</span>
@@ -51,8 +57,6 @@ const DataSourceCard = ({ config, onDownload, loadingStates }: { config: DataSou
   );
 };
 
-
-// O Template Principal
 export const DataSourcePanelTemplate = ({ pageTitle, overviewText, dataSources }: DataSourcePanelTemplateProps) => {
   const { handleDownload, loadingStates } = useDataDownloader();
   

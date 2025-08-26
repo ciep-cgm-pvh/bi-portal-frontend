@@ -5,9 +5,8 @@ import { generateAndDownloadCSV, generateAndDownloadJSON, generateAndDownloadXLS
 export type DownloadFormat = 'csv' | 'json' | 'xlsx';
 
 export const useDataDownloader = () => {
-  // Estado de loading por card e por formato
   const [ loadingStates, setLoadingStates ] = useState<{ [ key: string ]: boolean }>({});
-  const client = useClient(); // Acesso direto ao cliente urql para queries imperativas
+  const client = useClient();
 
   const handleDownload = async (
     dataSourceId: string,
@@ -23,7 +22,6 @@ export const useDataDownloader = () => {
 
       if (result.error) throw result.error;
 
-      // Assumindo que os dados vêm em um campo (ex: `result.data.supplies`)
       const dataToDownload = Object.values(result.data)[ 0 ] as any[];
 
       if (!dataToDownload || dataToDownload.length === 0) {
