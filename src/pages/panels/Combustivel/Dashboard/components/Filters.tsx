@@ -12,8 +12,8 @@ interface AbastecimentoFiltersProps {
 
 export const AbastecimentoFilters = ({initialValues, onApply, onClear }: AbastecimentoFiltersProps) => {
   // Use o hook para obter a configuração dinâmica
-  const { filterConfig, isLoading: isLoadingConfig } = useFiltersConfig();
   const [draftFilters, setDraftFilters] = useState(initialValues);
+  const { filterConfig, isLoading: isLoadingConfig } = useFiltersConfig(draftFilters);
 
   useEffect(() => {
     setDraftFilters(initialValues);

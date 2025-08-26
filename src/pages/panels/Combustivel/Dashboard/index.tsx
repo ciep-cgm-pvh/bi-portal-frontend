@@ -24,6 +24,7 @@ const DashboardCombustivel = () => {
 
   const { kpiData, lastUpdate } = useKpiData({ filters });
   const { chartConfig } = useChartData({ filters });
+
   useEffect(() => {
     // Roda apenas se 'lastUpdate' existir E se a inicialização ainda não ocorreu
     if (lastUpdate && !hasInitialized.current) {
@@ -98,7 +99,7 @@ const DashboardCombustivel = () => {
       filtersComponent={
         <>
           <AbastecimentoFilters
-            initialValues={filters} // Passa os filtros (com as datas) para o componente
+            initialValues={filters}
             onApply={handleApplyFilters}
             onClear={handleClearFilters}
           />
