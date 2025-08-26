@@ -8,9 +8,9 @@ import HomeAbastecimento from '../pages/panels/Combustivel/Home';
 import DashboardDiarias from '../pages/panels/Diarias/Dashboard';
 import DataSourceDiarias from '../pages/panels/Diarias/DataSource/DataSource';
 import HomeDiarias from '../pages/panels/Diarias/Home/Home';
-import DashboardManutencao from '../pages/panels/Manutencao/Dashboard/Dashboard';
-import DataSourceManutencao from '../pages/panels/Manutencao/DataSource/DataSource';
-import HomeManutencao from '../pages/panels/Manutencao/Home/Home';
+import DashboardManutencao from '../pages/panels/Manutencao/Dashboard';
+import DataSourceManutencao from '../pages/panels/Manutencao/DataSoruce';
+import HomeManutencao from '../pages/panels/Manutencao/Home';
 
 const navLinks: NavLinkInterface[] = [
 
