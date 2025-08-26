@@ -2,7 +2,7 @@
 import { Home } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
-const logoEscudo = '../../../public/logo - escudo - cidade de porto velho.svg';
+const logoEscudo = '../../../logo - escudo - cidade de porto velho.svg';
 
 export default function NotFound() {
   return (

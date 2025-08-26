@@ -1,10 +1,13 @@
-import { Download, Loader2 } from 'lucide-react';
+import { Database, Download, Loader2 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import Header from '../components/HeaderSection/Header';
 import { type DownloadFormat, useDataDownloader } from '../pages/panels/Combustivel/DataSoruce/hooks/useDataDownloader';
 
 
 export interface DataSourceConfig {
   id: string;
   title: string;
+  icon?: React.ReactNode;
   description: string;
   filename: string;
   query: string;
@@ -20,24 +23,25 @@ const DataSourceCard = ({ config, onDownload, loadingStates }: { config: DataSou
   const formats: DownloadFormat[] = ['csv', 'xlsx', 'json'];
 
   const formatStyles: { [key in DownloadFormat]: string } = {
-    csv: 'bg-green-200 text-green-900 border-green-300 hover:bg-green-300 font-bold',
-    xlsx: 'bg-green-700 text-white border-green-800 hover:bg-green-800',
-    json: 'bg-gray-800 text-yellow-300 border-gray-700 hover:bg-black',
-  };
+    csv: 'bg-green-400 text-black border-green-600 hover:bg-green-500 font-bold ', // ligth green for csv
+    xlsx: 'bg-green-700 text-white border-green-100 hover:bg-green-800', // dark green for xlsx
+    json: 'bg-gray-800 text-yellow-300 border-yellow-600 hover:bg-black', // purple for json
+  }; 
 
   return (
-    <div className="bg-white rounded-lg shadow-md flex flex-col">
+    <div className="bg-white rounded-2xl shadow-md flex flex-col">
       <div className="p-4 border-b">
+        {config.icon? config.icon : <Database className="h-6 w-6 text-gray-800 mb-2" />}
         <h3 className="text-lg font-bold text-gray-800">{config.title}</h3>
         <p className="text-sm text-gray-600 mt-1">{config.description}</p>
       </div>
-      <div className="p-4 bg-gray-50 flex-grow">
-        <p className="text-xs text-gray-500 uppercase font-semibold mb-2">Opções de Download</p>
+      <div className="p-4 bg-gray-900 flex-grow rounded-b-2xl">
+        <p className="text-xs text-gray-50 uppercase font-semibold mb-2">Opções de Download</p>
         <div className="flex items-center space-x-2">
           {formats.map(format => {
             const loadingKey = `${config.id}-${format}`;
             const isLoading = loadingStates[loadingKey];
-            const baseButtonClasses = "flex items-center space-x-2 px-3 py-2 text-sm font-medium border rounded-md disabled:opacity-50 disabled:cursor-wait transition-colors duration-200";
+            const baseButtonClasses = "flex items-center space-x-2 px-3 py-2 text-sm font-medium border rounded-md disabled:opacity-50 disabled:cursor-wait transition-all duration-300 ease-in-out hover:scale-105 hover:-translate-y-1";
 
             return (
               <button
@@ -59,13 +63,11 @@ const DataSourceCard = ({ config, onDownload, loadingStates }: { config: DataSou
 
 export const DataSourcePanelTemplate = ({ pageTitle, overviewText, dataSources }: DataSourcePanelTemplateProps) => {
   const { handleDownload, loadingStates } = useDataDownloader();
-  
+  const navigate = useNavigate();
   return (
-    <div className="flex flex-col gap-6">
-      <h1 className="text-2xl font-bold text-gray-800">{pageTitle}</h1>
-      <div className="bg-gray-100 p-4 rounded-lg text-gray-700">
-        {overviewText}
-      </div>
+    <>
+      <div className="flex flex-col gap-6 space-y-6 my-4">
+      <Header title={pageTitle} description={overviewText as string} onBackToHub={() => navigate('/hub')}></Header>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {dataSources.map(source => (
           <DataSourceCard 
@@ -77,5 +79,6 @@ export const DataSourcePanelTemplate = ({ pageTitle, overviewText, dataSources }
         ))}
       </div>
     </div>
+    </>
   );
 };

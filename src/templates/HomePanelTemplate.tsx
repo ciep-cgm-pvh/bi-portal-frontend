@@ -22,7 +22,7 @@ export const HomePanelTemplate = ({
 }: HomePanelTemplateProps) => {
   return (
     // Container principal para centralizar o conteúdo na tela
-    <div className="flex w-full items-center justify-center p-4">
+    <div className="flex w-full m-auto mt-32 items-center justify-center p-4">
       <div className="bg-white text-gray-800 rounded-xl shadow-2xl p-8 max-w-4xl w-full flex flex-col items-center gap-5 text-center">
         
         {/* Ícone Principal */}
