@@ -1,7 +1,10 @@
 import { Menu, X } from "lucide-react";
-import { NavLink, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import getNavLinks from "../../data/NavLinksData";
 import type { NavLinkInterface } from "../../interfaces/navLinksInterface";
+// 1. Importe o componente NavLinkItem
+import { getPanelInfo } from '../../utils/getPanelTitle';
+import { NavLinkItem } from "../NavLinkItem/NavLinkItem";
 
 export default function NavBarMobile({
   isOpen,
@@ -13,28 +16,30 @@ export default function NavBarMobile({
   const location = useLocation();
   const navLinksData: NavLinkInterface[] = getNavLinks();
 
-  // Extrair o grupo do pathname
   const match = location.pathname.match(/^\/painel\/([^/]+)/);
   const currentGroup = match?.[1] || null;
+  const { title, icon } = getPanelInfo(currentGroup);
 
-  // Filtrar links por grupo, se aplicável
   const filteredLinks = currentGroup
     ? navLinksData.filter(link => link.group === currentGroup)
-    : navLinksData.filter(link => !link.group); // ex: links como "Hub" ou "Início" global
+    : navLinksData.filter(link => !link.group);
+
   return (
+    // A estilização do contêiner principal permanece a mesma
     <nav className="fixed-top-0 left-0 z-50 bg-official-blue text-white p-3 w-full shadow-lg">
-      {/* Topo com título e botão */}
       <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold">Menu</h1>
+      <h1 className="flex items-center gap-3 text-2xl font-bold text-white">
+        {icon} {/* O ícone será renderizado aqui */}
+        <span>{title}</span> {/* O texto do título aqui */}
+      </h1>
         <button
           onClick={() => setIsOpen(!isOpen)}
           className="text-2xl transition-all duration-500 ease-in-out"
         >
-          {isOpen ? <X /> : <Menu />}{" "}
+          {isOpen ? <X /> : <Menu />}
         </button>
       </div>
 
-      {/* Menu suspenso */}
       <div
         className={`transition-all duration-500 ease-in-out overflow-hidden ${
           isOpen ? "max-h-screen" : "max-h-0"
@@ -42,22 +47,16 @@ export default function NavBarMobile({
       >
         <ul className="mt-4 space-y-2">
           {filteredLinks.map((link: NavLinkInterface) => (
-            <li key={link.path}>
-              <NavLink
-                to={link.path}
-                className={({ isActive }) =>
-                  `flex items-center gap-2 px-4 py-2 transition duration-500 ease-in-out rounded
-                  ${
-                    isActive
-                      ? "bg-official-blue-active text-white font-bold"
-                      : "hover:bg-official-yellow hover:text-black font-bold"
-                  }`
-                }
-              >
-                {link.icon}
-                {link.title}
-              </NavLink>
-            </li>
+            // 2. Substitua o <li> e <NavLink> pelo NavLinkItem
+            <NavLinkItem
+              key={link.path}
+              path={link.path}
+              title={link.title}
+              icon={link.icon}
+              published={link.published}
+              // 3. Passe `isMenuOpen` como true para garantir que a opacidade seja 1
+              isMenuOpen={true} 
+            />
           ))}
         </ul>
       </div>
