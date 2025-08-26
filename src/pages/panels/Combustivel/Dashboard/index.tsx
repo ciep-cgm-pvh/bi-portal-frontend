@@ -52,26 +52,19 @@ const DashboardCombustivel = () => {
   };
 
   const handleClearFilters = () => {
-    // Agora, "Limpar" reseta para o período padrão, não para valores vazios.
-    setFilters({
-      ...initialFilterValues,
-    });
+    if (lastUpdate) {
+        const currentYear = new Date().getFullYear();
+        const firstDayOfYear = formatDateForInput(new Date(currentYear, 0, 1));
+        const lastUpdateDate = formatDateForInput(lastUpdate);
+        setFilters({
+            ...initialFilterValues,
+            startDate: firstDayOfYear,
+            endDate: lastUpdateDate,
+        });
+    } else {
+        setFilters(initialFilterValues);
+    }
   };
-
-  // const handleClearFilters = () => {
-  //   if (lastUpdate) {
-  //       const currentYear = new Date().getFullYear();
-  //       const firstDayOfYear = formatDateForInput(new Date(currentYear, 0, 1));
-  //       const lastUpdateDate = formatDateForInput(lastUpdate);
-  //       setFilters({
-  //           ...initialFilterValues,
-  //           startDate: firstDayOfYear,
-  //           endDate: lastUpdateDate,
-  //       });
-  //   } else {
-  //       setFilters(initialFilterValues);
-  //   }
-  // };
 
   const phaseData: { [key: string]: 'done' | 'in-progress' | 'pending' } = {
     "KPI's": 'done',
