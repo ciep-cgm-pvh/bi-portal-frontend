@@ -3,7 +3,7 @@
 // ================================================
 
 // Query GraphQL para buscar dados de manutenção
-export const GET_MANUTENCAO_QUERY = `
+export const GET_MANUTENCAO_DATA_FILTERED_QUERY = `
 query GetManutencaos($limit: Int, $offset: Int, $sortBy: String, $sortDirection: String, $filters: AbastecimentoFilterInput, $tableFilters: AbastecimentoTableFilterInput) {
   getManutencaosTable(limit: $limit, offset: $offset, sortBy: $sortBy, sortDirection: $sortDirection, filters: $filters, tableFilters: $tableFilters) {
     id
@@ -20,7 +20,7 @@ query GetManutencaos($limit: Int, $offset: Int, $sortBy: String, $sortDirection:
 }
 `;
 
-export const GET_MANUTENCAO_KPIS_QUERY = `
+export const GET_MANUTENCAO_KPIS_DATA_FILTERED_QUERY = `
 query GetManutencaoKpis($filters: ManutencaoFiltersInput) {
   abastecimentoKpis(filters: $filters) {
     totalCost
@@ -44,7 +44,7 @@ query GetFilterOptions($filters: ManutencaoFiltersOptionsInput) {
 }
 `;
 
-export const GET_CHART_DATA_QUERY = `
+export const GET_CHART_DATA_FILTERED_QUERY = `
 query GetChartData($filters: ManutencaoFiltersInput) {
   costByDepartment(filters: $filters) { department total }
   costByPlate(filters: $filters) { plate total }
@@ -59,7 +59,7 @@ query GetChartData($filters: ManutencaoFiltersInput) {
 // Queries para download de dados
 // ================================================
 
-export const GET_ALL_MANUTENCOES_DETALHADO_QUERY = `
+export const GET_ALL_MAUNTENCAO_DATA_QUERY = `
   query DownloadManutencaos {
     getManutencaosTable {
       id
