@@ -1,98 +1,154 @@
-// =================================================
-// Queries para painel de manutenção
-// ================================================
+export const GET_MANUTENCAO_DASHBOARD_DATA_QUERY /*by clara*/ = `
+  query GetManutencaoDashboardData(
+    $filters: ManutencaoFiltersInput,
+    $limit: Int,
+    $offset: Int,
+    $sortBy: String,
+    $sortDirection: String
+    # A variável $tableFilters não é usada aqui porque os filtros gerais ($filters)
+    # já são aplicados a todos os campos (KPIs, Gráficos e Tabela)
+  ) {
+    # 1. KPIs
+    ManutencaoKpis(filters: $filters) {
+      totalCost
+      serviceOrderCount
+      averageCostPerOs
+      lastUpdate
+    }
 
-// Query GraphQL para buscar dados de manutenção
-export const GET_MANUTENCAO_DATA_FILTERED_QUERY = `
-query GetManutencaos($limit: Int, $offset: Int, $sortBy: String, $sortDirection: String, $filters: AbastecimentoFilterInput, $tableFilters: AbastecimentoTableFilterInput) {
-  getManutencaosTable(limit: $limit, offset: $offset, sortBy: $sortBy, sortDirection: $sortDirection, filters: $filters, tableFilters: $tableFilters) {
-    id
-    vehicle
-    description
-    cost
-    date
-    datetime
-    mileage
-    createdAt
-    updatedAt
+    # 2. Dados para Gráficos
+    ManutencaoCharts(filters: $filters) {
+      costByDepartment {
+        name: department # Usando alias para padronizar com o componente
+        value: total      # Usando alias para padronizar
+      }
+      costByTypeOfManutencao {
+        name: categoryOs # Usando alias
+        value: total       # Usando alias
+      }
+    }
+
+    # 3. Dados da Tabela (paginados)
+    tableData:getManutencaoTable(
+      limit: $limit,
+      offset: $offset,
+      sortBy: $sortBy,
+      sortDirection: $sortDirection,
+      filters: $filters
+    ) {
+      # O backend deve retornar um array de objetos aqui
+      os
+      secretaria: department # Corrigindo para o nome de campo correto
+      placa: plate     # Corrigindo para o nome de campo correto
+      data: datetime     # Corrigindo para o nome de campo correto
+      categoriaOs: categoryOs
+      total: totalCost
+    }
+
+    # 4. Contagem Total de Itens para Paginação
+    TableCount(filters: $filters)
   }
-  abastecimentosCount(filters: $filters, tableFilters: $tableFilters)
-}
 `;
 
-export const GET_MANUTENCAO_KPIS_DATA_FILTERED_QUERY = `
-query GetManutencaoKpis($filters: ManutencaoFiltersInput) {
-  abastecimentoKpis(filters: $filters) {
-    totalCost
-    fuelConsumed
-    kilometersDriven
-    vehiclesCount
-    dailyAverageCost
-    suppliesCount
-    lastUpdate
-  }
-}
-`;
-
-export const GET_FILTER_OPTIONS_QUERY = `
-query GetFilterOptions($filters: ManutencaoFiltersOptionsInput) {
- departmentOptions(filters: $filters) { value, label }
- vehiclePlateOptions(filters: $filters) { value, label }
- vehicleModelOptions(filters: $filters) { value, label }
- gasStationCityOptions(filters: $filters) { value, label }
- gasStationNameOptions(filters: $filters) { value, label }
-}
-`;
-
-export const GET_CHART_DATA_FILTERED_QUERY = `
-query GetChartData($filters: ManutencaoFiltersInput) {
-  costByDepartment(filters: $filters) { department total }
-  costByPlate(filters: $filters) { plate total }
-  costOverTime(filters: $filters) { date total }
-  rankingByDate(filters: $filters) { date total }
-  rankingByPlate(filters: $filters) { plate total quantity }
-  rankingByDepartment(filters: $filters) { department total }
-}
-`;
 
 // =================================================
-// Queries para download de dados
+//      PAINEL DE MANUTENÇÃO - DASHBOARD
 // ================================================
 
-export const GET_ALL_MAUNTENCAO_DATA_QUERY = `
-  query DownloadManutencaos {
-    getManutencaosTable {
-      id
-      datetime
-      cost
-      fuelVolume
-      fuelType
-      driverName
-      department
-      vehicle {
-        plate
-        model
-        brand
+/**
+ * @description Query principal que busca todos os dados necessários para o dashboard de manutenção.
+ * Inclui KPIs, dados para gráficos, opções de filtros dinâmicos e a primeira página da tabela.
+ * O objetivo é carregar o estado inicial do painel com uma única requisição.
+ */
+export const GET_MANUTENCAO_DASHBOARD_DATA_QUERY_ /*by gemini*/ = `
+  query GetManutencaoDashboardData(
+    $filters: ManutencaoFiltersInput,
+    $limit: Int,
+    $offset: Int,
+    $sortBy: String,
+    $sortDirection: String
+  ) {
+    # 1. KPIs
+    kpis: manutencaoKpis(filters: $filters) {
+      totalCost
+      serviceOrderCount
+      averageCostPerServiceOrder
+      lastUpdate
+    }
+
+    # 2. Dados para Gráficos
+    charts: manutencaoCharts(filters: $filters) {
+      costBySecretaria { name: secretaria, value: total }
+      costByTipoManutencao { name: categoriaOs, value: total }
+    }
+
+    # 3. Opções para os Filtros
+    filterOptions {
+      secretarias { value: id, label: nome }
+      categoriasOs { value: id, label: nome }
+      placas { value: placa, label: placa }
+    }
+
+    # 4. Dados da Tabela (paginados)
+    tableData: getManutencoesTable(
+      limit: $limit,
+      offset: $offset,
+      sortBy: $sortBy,
+      sortDirection: $sortDirection,
+      filters: $filters
+    ) {
+      rows {
+        os
+        secretaria
+        placa
+        data
+        categoriaOs
+        total
       }
-      gasStation {
-        name
-        city
-      }
+      totalCount
     }
   }
 `;
 
-export const GET_VEHICLE_SUMMARY_QUERY = `
-  query GetVehicleSummary {
-    vehicleSummary {
-      department
+
+// =================================================
+//      FONTES DE DADOS (DATA SOURCES)
+// ================================================
+
+/**
+ * @description Query para baixar o relatório completo e detalhado das manutenções.
+ */
+export const DOWNLOAD_ALL_MANUTENCOES_QUERY_by_gemini = `
+  query DownloadAllManutencoes {
+    getAllManutencoes {
+      id
+      os
+      data
+      placa
+      kmHorimetro
+      estabelecimento
+      cidade
+      tipoOs
+      categoriaOs
+      total
+      secretaria
+      # Adicionar outros campos detalhados conforme necessário
+    }
+  }
+`;
+
+/**
+ * @description Query para baixar um resumo de custos por veículo.
+ */
+export const DOWNLOAD_VEHICLE_SUMMARY_QUERY = `
+  query DownloadVehicleSummary {
+    getManutencaoVehicleSummary {
+      placa
+      modelo
+      marca
+      secretaria
       totalCost
-      supplyCount
-      vehicle {
-        plate
-        model
-        brand
-      }
+      serviceOrderCount
     }
   }
 `;

@@ -1,154 +1,105 @@
 import type { ReactNode } from 'react';
-import { useEffect, useMemo, useState } from 'react';
-import { useQuery } from 'urql';
-
+import { useMemo } from 'react';
 import { PaginationControls } from '../../../../../components/PaginationControls/PaginationControls';
 import { TableSection } from '../../../../../components/TableSection/TableSection';
-import type { TableColumn, TableDataItem } from '../../../../../types/tables';
-import { useManutencaoData } from '../hooks/useManutencaoData';
+import type { TableColumn, TableDataItem, SortConfig } from '../../../../../types/tables';
 
 // =================================================================
-// FUNÇÕES HELPER (Sem alterações)
+// FUNÇÕES HELPER E DEFINIÇÃO DE COLUNAS
 // =================================================================
-const getNestedValue = (obj: any, path: string): any => {
-  return path.split('.').reduce((acc, part) => acc && acc[part], obj);
+
+// Função para formatar a célula permanece a mesma
+const formatCell = (value: any, dataType?: string): ReactNode => {
+    if (value === null || typeof value === 'undefined') return 'N/A';
+    switch (dataType) {
+        case 'CURRENCY':
+            return `R$ ${Number(value).toFixed(2).replace('.', ',')}`;
+        case 'DATE':
+            // Ajuste para formatar a data corretamente
+            return new Date(value).toLocaleDateString('pt-BR', { timeZone: 'UTC' });
+        default:
+            return value;
+    }
 };
 
-const formatCell = (item: TableDataItem, accessor: string, dataType: string): ReactNode => {
-  const value = getNestedValue(item, accessor);
-  if (value === null || typeof value === 'undefined') return 'N/A';
-  switch (dataType) {
-    case 'CURRENCY':
-      return `R$ ${Number(value).toFixed(2).replace('.', ',')}`;
-    case 'DATETIME':
-      return new Date(value).toLocaleString('pt-BR');
-    case 'STATUS_TAG':
-      return <span className={`status-${value}`}>{value}</span>;
-    default:
-      return value;
-  }
-};
-
-const GET_TABLE_CONFIG_QUERY = `
-  query GetManutencaosTableConfig {
-    abastecimentosColumns {
-      headerLabel
-      accessor
-      isSortable
-      dataType
-      isFilterable
-      filterKey
-    }
-  }
-`;
-
+// Colunas definidas estaticamente com base na sua solicitação
+const columns: TableColumn<TableDataItem>[] = [
+    { header: 'OS', accessor: 'os', sortable: true },
+    { header: 'Secretaria', accessor: 'secretaria', sortable: true },
+    { header: 'Placa', accessor: 'placa', sortable: true },
+    { header: 'Data', accessor: 'data', sortable: true, render: (item) => formatCell(item.data, 'DATE') },
+    { header: 'Categoria', accessor: 'categoriaOs', sortable: true },
+    { header: 'Custo Total', accessor: 'total', sortable: true, render: (item) => formatCell(item.total, 'CURRENCY') },
+];
 
 // =================================================================
-// COMPONENTE PRINCIPAL (Lógica de Filtros Corrigida)
+// PROPS DO COMPONENTE
 // =================================================================
-export const ManutencaoTable = ({ filters: generalFilters }: { filters: any }) => {
-  const [itemsPerPage, setItemsPerPage] = useState(10);
-  const [columnFilters, setColumnFilters] = useState<{ [key: string]: string }>({});
-  const [debouncedColumnFilters, setDebouncedColumnFilters] = useState<{ [key: string]: string }>({});
 
-  // Efeito de Debounce para os filtros de coluna
-  useEffect(() => {
-    const handler = setTimeout(() => {
-      setDebouncedColumnFilters(columnFilters);
-    }, 500);
-    return () => clearTimeout(handler);
-  }, [columnFilters]);
+interface ManutencaoTableProps {
+  data: TableDataItem[];
+  totalCount: number;
+  pagination: {
+    currentPage: number;
+    itemsPerPage: number;
+  };
+  onPaginationChange: (pagination: { currentPage: number; itemsPerPage: number; }) => void;
+  sort: SortConfig<TableDataItem>;
+  onSortChange: (sort: SortConfig<TableDataItem>) => void;
+  isLoading: boolean;
+}
 
-  // Busca a configuração das colunas da API
-  const [configResult] = useQuery({ query: GET_TABLE_CONFIG_QUERY });
-  const { data: configData, fetching: isLoadingConfig } = configResult;
+// =================================================================
+// COMPONENTE PRINCIPAL
+// =================================================================
+export const ManutencaoTable = ({
+  data,
+  totalCount,
+  pagination,
+  onPaginationChange,
+  sort,
+  onSortChange,
+  isLoading
+}: ManutencaoTableProps) => {
 
-  // Combina os filtros gerais com os filtros de coluna, traduzindo as chaves.
-  const combinedFilters = useMemo(() => {
-    const translatedColumnFilters: { [key: string]: any } = {};
-    const columnConfig = configData?.abastecimentosColumns || [];
+  const totalPages = useMemo(() => {
+    return Math.ceil(totalCount / pagination.itemsPerPage);
+  }, [totalCount, pagination.itemsPerPage]);
 
-    // Itera sobre os filtros de coluna que o usuário digitou
-    for (const accessor in debouncedColumnFilters) {
-      const value = debouncedColumnFilters[accessor];
-      if (value) { // Apenas se houver um valor
-        // Encontra a configuração da coluna correspondente
-        const config = columnConfig.find((c: any) => c.accessor === accessor);
-        
-        // Usa o `filterKey` fornecido pela API. Se não existir, usa o `accessor`.
-        const keyForApi = config?.filterKey || accessor;
-        translatedColumnFilters[keyForApi] = value;
-      }
+  const handlePageChange = (newPage: number) => {
+    onPaginationChange({ ...pagination, currentPage: newPage });
+  };
+
+  const handleItemsPerPageChange = (newItemsPerPage: number) => {
+    onPaginationChange({ currentPage: 1, itemsPerPage: newItemsPerPage });
+  };
+
+  const handleSort = (key: keyof TableDataItem) => {
+    let direction: 'ascending' | 'descending' = 'ascending';
+    if (sort.key === key && sort.direction === 'ascending') {
+        direction = 'descending';
     }
-
-    return {
-      ...generalFilters,
-      ...translatedColumnFilters,
-    };
-  }, [generalFilters, debouncedColumnFilters, configData]);
-
-  // Hook que busca os dados, agora com os filtros corretos
-  const {
-    processedData,
-    sortConfig,
-    currentPage,
-    totalPages,
-    totalItems,
-    isLoading: isLoadingData,
-    handleSort,
-    onPageChange,
-  } = useManutencaoData({ filters: combinedFilters, itemsPerPage });
-
-  // Handlers (sem alterações)
-  const handleItemsPerPageChange = (value: number) => {
-    setItemsPerPage(Math.max(1, value));
-    onPageChange(1);
-  };
-  
-  const handleColumnFilterChange = (accessor: keyof TableDataItem, value: string) => {
-    setColumnFilters(prev => ({
-      ...prev,
-      [accessor as string]: value,
-    }));
+    onSortChange({ key, direction });
   };
 
-  // Memoização das colunas para a UI (sem alterações)
-  const columns = useMemo((): TableColumn<TableDataItem>[] => {
-    if (!configData?.abastecimentosColumns) return [];
-    return configData.abastecimentosColumns.map((col: any) => ({
-      header: col.headerLabel,
-      accessor: col.accessor,
-      sortable: col.isSortable,
-      isFilterable: col.isFilterable || true,
-      render: (item: TableDataItem) => formatCell(item, col.accessor, col.dataType),
-    }));
-  }, [configData]);
-
-  const isLoading = isLoadingConfig || isLoadingData;
-
-  if (isLoadingConfig) {
-    return <div className='inline-flex items-center justify-center w-full bg-white p-4 md:p-6 rounded-lg shadow-md mb-6'>Carregando configuração...</div>;
-  }
 
   return (
     <div className="shadow-md rounded-lg">
       <TableSection
-        title="Últimos Manutencaos"
+        title="Ordens de Serviço Recentes"
         columns={columns}
-        data={processedData || []}
+        data={data}
         isLoading={isLoading}
-        sortConfig={sortConfig}
+        sortConfig={sort}
         onSort={handleSort}
-        filterValues={columnFilters}
-        onFilterChange={handleColumnFilterChange}
       />
       <PaginationControls
-        currentPage={currentPage}
+        currentPage={pagination.currentPage}
         totalPages={totalPages}
-        onPageChange={onPageChange}
-        itemsPerPage={itemsPerPage}
+        onPageChange={handlePageChange}
+        itemsPerPage={pagination.itemsPerPage}
         onItemsPerPageChange={handleItemsPerPageChange}
-        totalItems={totalItems || 0}
+        totalItems={totalCount}
       />
     </div>
   );

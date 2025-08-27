@@ -1,105 +1,64 @@
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 import { DashboardPanelTemplate } from '../../../../templates/DashboardPanelTemplate';
-
 import { ManutencaoFilters } from './components/ManutencaoFilters';
 import { ManutencaoTable } from './components/ManutencaoTable';
+import { useManutencaoDashboardData } from './hooks/useManutencaoDashboardData';
 import { initialFilterValues } from './data/filters.config';
-import { useChartData } from './hooks/useChartData';
-import { useKpiData } from './hooks/useKpiData';
-
-// Função auxiliar para formatar a data no padrão YYYY-MM-DD para o input 'date'
-const formatDateForInput = (dateString: string | Date): string => {
-  if (!dateString) return '';
-  const date = new Date(dateString);
-  // Pega o ano, mês e dia em UTC para evitar deslocamento por fuso horário
-  const year = date.getUTCFullYear();
-  const month = String(date.getUTCMonth() + 1).padStart(2, '0');
-  const day = String(date.getUTCDate()).padStart(2, '0');
-  return `${year}-${month}-${day}`;
-};
+// Adicione a importação dos tipos aqui
+import type { SortConfig, TableDataItem } from '../../../../types/tables';
 
 const DashboardManutencao = () => {
   const [filters, setFilters] = useState(initialFilterValues);
-  const hasInitialized = useRef(false);
-
-  const { kpiData, lastUpdate } = useKpiData({ filters });
-  const { chartConfig } = useChartData({ filters });
-
-  useEffect(() => {
-    // Roda apenas se 'lastUpdate' existir E se a inicialização ainda não ocorreu
-    if (lastUpdate && !hasInitialized.current) {
-      const currentYear = new Date().getFullYear();
-      const firstDayOfYear = formatDateForInput(new Date(currentYear, 0, 1));
-      const lastUpdateDate = formatDateForInput(lastUpdate);
-
-      setFilters({
-        ...initialFilterValues,
-        startDate: firstDayOfYear,
-        endDate: lastUpdateDate,
-      });
-
-      // Marca como inicializado para não executar novamente
-      hasInitialized.current = true;
-    }
-  }, [lastUpdate]); // A dependência continua a mesma, mas a lógica interna impede re-execução
-
-  useEffect(() => {
-    console.log('%c[DASHBOARD] 2. Estado de filtros foi atualizado (pai):', 'color: green; font-weight: bold;', filters);
-  }, [filters]);
+  const [pagination, setPagination] = useState({ currentPage: 1, itemsPerPage: 10 });
   
+  // CORREÇÃO: Tipando explicitamente o estado 'sort'
+  const [sort, setSort] = useState<SortConfig<TableDataItem>>({ key: 'data', direction: 'descending' });
+
+  // ✨ ÚNICA CHAMADA PARA BUSCAR TODOS OS DADOS! ✨
+  const {
+    kpiData,
+    chartConfig,
+    filterOptions,
+    tableData,
+    lastUpdate,
+    isLoading,
+  } = useManutencaoDashboardData({ filters, pagination, sort });
+  console.log('data from useManutencaoDashboardData:', { kpiData, chartConfig, filterOptions, tableData, lastUpdate, isLoading });
+
+  // Handlers para filtros
+
   const handleApplyFilters = (newFilters: any) => {
     setFilters(newFilters);
+    setPagination(prev => ({ ...prev, currentPage: 1 })); // Reseta a paginação ao aplicar filtros
   };
 
   const handleClearFilters = () => {
-    if (lastUpdate) {
-        const currentYear = new Date().getFullYear();
-        const firstDayOfYear = formatDateForInput(new Date(currentYear, 0, 1));
-        const lastUpdateDate = formatDateForInput(lastUpdate);
-        setFilters({
-            ...initialFilterValues,
-            startDate: firstDayOfYear,
-            endDate: lastUpdateDate,
-        });
-    } else {
-        setFilters(initialFilterValues);
-    }
+    setFilters(initialFilterValues);
+    setPagination(prev => ({ ...prev, currentPage: 1 }));
   };
-
-  const phaseData: { [key: string]: 'done' | 'in-progress' | 'pending' } = {
-    "KPI's": 'pending',
-    'Filtros': 'pending',
-    'Gráficos': 'pending',
-    'Tabela de Ranking': 'pending',
-    'Responsividade': 'pending',
-    'Filtros por Coluna': 'pending'
-  };
-
-  // if all done panelStatus will receive false
-  const showPanelStatus = !Object.values(phaseData).every((phase) => phase === 'done');
-
 
   return (
     <DashboardPanelTemplate
-      mockData={true}
-      panelStatus={showPanelStatus}
-      panelStatusPhasesData={phaseData}
       title="Manutenção de Veículos"
       description="Visualize e filtre os dados de gastos com manutenção de veículos."
       lastUpdate={lastUpdate}
+      isLoading={isLoading} // Adiciona um estado de loading geral
       kpiData={kpiData}
       chartConfig={chartConfig}
-      filtersComponent={
-        <>
-          <ManutencaoFilters
-            initialValues={filters}
-            onApply={handleApplyFilters}
-            onClear={handleClearFilters}
-          />
-        </>
-      }
-      tableComponent={<ManutencaoTable filters={filters} />}
-    />
+      filtersComponent={<ManutencaoFilters
+        initialValues={filters}
+        options={filterOptions} // Passa as opções para o componente de filtro
+        onApply={handleApplyFilters}
+        onClear={handleClearFilters}
+        isLoading={isLoading} />}
+      tableComponent={<ManutencaoTable
+        data={tableData.rows}
+        totalCount={tableData.totalCount}
+        pagination={pagination}
+        onPaginationChange={setPagination}
+        sort={sort} // Agora o tipo corresponde
+        onSortChange={setSort} // E o setter também
+        isLoading={isLoading} />} mockData={false} panelStatus={false} panelStatusPhasesData={{}}    />
   );
 };
 

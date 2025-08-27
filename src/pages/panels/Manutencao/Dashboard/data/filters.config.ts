@@ -1,64 +1,17 @@
-// src/pages/DashboardManutencao/data/filters.config.ts
-
 import type { FilterConfig } from '../../../../../types/filters';
 
-// Esta é a configuração ESTRUTURAL dos filtros.
+// CORREÇÃO: Os 'id's agora correspondem ao que o backend espera.
 export const baseFilterConfig: FilterConfig[] = [
-  {
-    id: 'startDate',
-    label: 'Data Inicial',
-    type: 'date',
-  },
-  {
-    id: 'endDate',
-    label: 'Data Final',
-    type: 'date',
-  },
-  {
-    id: 'department',
-    label: 'Departamento',
-    type: 'select',
-    placeholder: 'Todos os departamentos',
-    options: [], // As opções serão preenchidas dinamicamente
-  },
-  {
-    id: 'vehiclePlate',
-    label: 'Placa do Veículo',
-    type: 'select',
-    placeholder: 'Todas as placas',
-    options: [], // As opções serão preenchidas dinamicamente
-  },
-  {
-    id: 'vehicleModel',
-    label: 'Modelo do Veículo',
-    type: 'select',
-    placeholder: 'Todos os modelos',
-    options: [], // As opções serão preenchidas dinamicamente
-  },
-  {
-    id: 'gasStationCity',
-    label: 'Cidade do Posto',
-    type: 'select',
-    placeholder: 'Todas as cidades',
-    options: [], // As opções serão preenchidas dinamicamente
-  },
-  {
-    id: 'gasStationName',
-    label: 'Nome do Posto',
-    type: 'select',
-    placeholder: 'Todos os postos',
-    options: [], // As opções serão preenchidas dinamicamente
-  },
-
+  { id: 'date', label: 'Período', type: 'date' }, // Usaremos 'date-range' para o objeto
+  { id: 'department', label: 'Secretaria', type: 'select', options: [] },
+  { id: 'categoryOs', label: 'Categoria OS', type: 'select', options: [] },
+  { id: 'plate', label: 'Placa', type: 'select', options: [] },
 ];
 
-// Mantenha os valores iniciais
+// CORREÇÃO: Os nomes das chaves agora correspondem aos 'id's.
 export const initialFilterValues = {
-  startDate: '',
-  endDate: '',
+  dateRange: { startDate: '', endDate: '' },
   department: '',
-  vehiclePlate: '',
-  vehicleModel: '',
-  gasStationCity: '',
-  gasStationName: ''
+  categoryOs: '',
+  plate: '',
 };
