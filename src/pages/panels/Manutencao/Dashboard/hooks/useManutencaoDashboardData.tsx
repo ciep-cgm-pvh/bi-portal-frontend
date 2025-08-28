@@ -8,6 +8,11 @@ import { GET_MANUTENCAO_DASHBOARD_DATA_QUERY } from '../../queries/ManutencaoQue
 const formatCurrency = (value: number) =>
   new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value || 0);
 
+const sortKeyMapping: { [key: string]: string } = {
+  data: 'datetime',
+  total: 'totalCost',
+};
+
 /**
  * @description Hook centralizado para buscar e processar todos os dados do dashboard de Manutenção.
  * Executa uma única query para obter KPIs, dados de gráficos, opções de filtros e dados da tabela.
@@ -19,16 +24,22 @@ export const useManutencaoDashboardData = ({ filters, pagination, sort }: any) =
   //console.log('Fetching Manutencao dashboard data with filters:', filters, 'pagination:', pagination, 'sort:', sort);
   // 2. USE A FUNÇÃO PARA PREPARAR OS FILTROS
 
-  const [result] = useQuery({
-    query: GET_MANUTENCAO_DASHBOARD_DATA_QUERY,
-    variables: {
+  const queryVariables = useMemo(() => {
+    // Traduz a chave de ordenação, se necessário. Caso contrário, usa a chave original.
+    const sortByBackend = sortKeyMapping[sort.key] || sort.key;
+
+    return {
       filters,
       limit: pagination.itemsPerPage,
       offset: (pagination.currentPage - 1) * pagination.itemsPerPage,
-      sortBy: sort.key,
+      sortBy: sortByBackend,
       sortDirection: sort.direction,
-    },
-    requestPolicy: 'cache-and-network',
+    };
+  }, [filters, pagination, sort]);
+
+  const [result] = useQuery({
+    query: GET_MANUTENCAO_DASHBOARD_DATA_QUERY,
+    variables: queryVariables, 
   });
   // console.log('Manutencao dashboard query result:', result);
   

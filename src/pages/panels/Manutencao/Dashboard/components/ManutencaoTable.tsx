@@ -1,39 +1,33 @@
+// Local: src/pages/panels/Manutencao/Dashboard/components/ManutencaoTable.tsx
+
 import type { ReactNode } from 'react';
-import { useMemo } from 'react';
+// 1. Importe o useState
+import { useMemo, useState } from 'react';
 import { PaginationControls } from '../../../../../components/PaginationControls/PaginationControls';
 import { TableSection } from '../../../../../components/TableSection/TableSection';
 import type { TableColumn, TableDataItem, SortConfig } from '../../../../../types/tables';
 
-// =================================================================
-// FUNÇÕES HELPER E DEFINIÇÃO DE COLUNAS
-// =================================================================
-
-// Função para formatar a célula permanece a mesma
+// Funções Helper e Colunas (sem alterações)
 const formatCell = (value: any, dataType?: string): ReactNode => {
     if (value === null || typeof value === 'undefined') return 'N/A';
     switch (dataType) {
         case 'CURRENCY':
             return `R$ ${Number(value).toFixed(2).replace('.', ',')}`;
         case 'DATE':
-            // Ajuste para formatar a data corretamente
             return new Date(value).toLocaleDateString('pt-BR', { timeZone: 'UTC' });
         default:
             return value;
     }
 };
 
-// Colunas definidas estaticamente com base na sua solicitação
 const columns: TableColumn<TableDataItem>[] = [
-    { header: 'OS', accessor: 'os', sortable: true },
-    { header: 'Secretaria', accessor: 'secretaria', sortable: true },
-    { header: 'Placa', accessor: 'placa', sortable: true },
+    { header: 'OS', accessor: 'os', sortable: true, isFilterable: true },
+    { header: 'Secretaria', accessor: 'secretaria', sortable: true, isFilterable: true },
+    { header: 'Placa', accessor: 'placa', sortable: true, isFilterable: true },
     { header: 'Data', accessor: 'data', sortable: true, render: (item) => formatCell(item.data, 'DATE') },
-    { header: 'Categoria', accessor: 'categoriaOs', sortable: true },
+    { header: 'Categoria', accessor: 'categoriaOs', sortable: true, isFilterable: true },
     { header: 'Custo Total', accessor: 'total', sortable: true, render: (item) => formatCell(item.total, 'CURRENCY') },
 ];
-
-// =================================================================
-// PROPS DO COMPONENTE
 // =================================================================
 
 interface ManutencaoTableProps {
@@ -49,9 +43,6 @@ interface ManutencaoTableProps {
   isLoading: boolean;
 }
 
-// =================================================================
-// COMPONENTE PRINCIPAL
-// =================================================================
 export const ManutencaoTable = ({
   data,
   totalCount,
@@ -62,6 +53,30 @@ export const ManutencaoTable = ({
   isLoading
 }: ManutencaoTableProps) => {
 
+  // 2. Adicione um estado para os filtros de coluna
+  const [columnFilters, setColumnFilters] = useState<{ [key: string]: string }>({});
+
+  // 3. Crie um handler para atualizar os filtros de coluna
+  const handleColumnFilterChange = (accessor: keyof TableDataItem, value: string) => {
+    setColumnFilters(prev => ({
+      ...prev,
+      [accessor as string]: value,
+    }));
+  };
+
+  // 4. Filtre os dados localmente com base nos filtros de coluna
+  const filteredData = useMemo(() => {
+    return data.filter(item => {
+      return Object.entries(columnFilters).every(([key, value]) => {
+        if (!value) return true; // Se o filtro estiver vazio, não filtra
+        const itemValue = item[key];
+        return String(itemValue).toLowerCase().includes(value.toLowerCase());
+      });
+    });
+  }, [data, columnFilters]);
+
+
+  // O resto da lógica permanece o mesmo
   const totalPages = useMemo(() => {
     return Math.ceil(totalCount / pagination.itemsPerPage);
   }, [totalCount, pagination.itemsPerPage]);
@@ -82,16 +97,19 @@ export const ManutencaoTable = ({
     onSortChange({ key, direction });
   };
 
-
   return (
     <div className="shadow-md rounded-lg">
       <TableSection
         title="Ordens de Serviço Recentes"
         columns={columns}
-        data={data}
+        // 5. Passe os dados filtrados para a tabela
+        data={filteredData}
         isLoading={isLoading}
         sortConfig={sort}
         onSort={handleSort}
+        // 6. Passe as props de filtro para o TableSection
+        filterValues={columnFilters}
+        onFilterChange={handleColumnFilterChange}
       />
       <PaginationControls
         currentPage={pagination.currentPage}

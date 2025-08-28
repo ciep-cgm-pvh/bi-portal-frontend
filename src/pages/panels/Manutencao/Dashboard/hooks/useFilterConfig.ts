@@ -12,10 +12,13 @@ import { baseFilterConfig } from '../data/filters.config';
  * @returns A configuração completa para o componente de filtros, com opções atualizadas.
  */
 export const useFiltersConfig = (activeFilters: any) => {
+  const queryVariables = useMemo(() => {
+    return { filters: activeFilters };
+  }, [activeFilters]);
+
   const [ result ] = useQuery({
     query: GET_MANUTENCAO_FILTER_OPTIONS_QUERY,
-    variables: { filters: activeFilters },
-    requestPolicy: 'cache-and-network', // Garante que os dados sejam buscados quando as variáveis mudam
+    variables: queryVariables,
   });
 
   const { data, fetching: isLoading } = result;
