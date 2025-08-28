@@ -1,8 +1,8 @@
 import { Bar, BarChart, CartesianGrid, Cell, Legend, Line, LineChart, Pie, PieChart as RechartsPieChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
+import useIsMobile from '../../hooks/useIsMobile';
 import type { BarChartConfig, ChartConfig, LineChartConfig, PieChartConfig, RankingTableConfig } from '../../types/charts';
 import { ChartCard } from '../Charts/ChartCard/ChartCard';
 import { RankingTable } from '../Rankingtable/RankingTable';
-import useIsMobile from '../../hooks/useIsMobile';
 
 // --- HELPERS (No changes) ---
 const formatCurrency = (value: number) =>
@@ -28,11 +28,35 @@ const formatAxisCurrency = (value: number): string => {
   }
   return `R$ ${value}`;
 };
+const processBarData = (data: any[], categoryKey: string, dataKey: string) => {
+  if (data.length <= 10) {
+    return data;
+  }
 
+  // Sort data by value in descending order to find the top items
+  const sortedData = [...data].sort((a, b) => b[dataKey] - a[dataKey]);
+
+  // Get the top 9
+  const top9 = sortedData.slice(0, 9);
+
+  // Sum the values of all other items
+  const othersSum = sortedData.slice(9).reduce((acc, item) => acc + item[dataKey], 0);
+
+  // Create the 'Outros' slice if there's a sum
+  if (othersSum > 0) {
+    const othersSlice = {
+      [categoryKey]: 'Outros',
+      [dataKey]: othersSum,
+    };
+    return [...top9, othersSlice];
+  }
+
+  return top9;
+};
 const renderBarChart = (chart: BarChartConfig, currencyAxis: boolean = false) => (
   <ResponsiveContainer width="100%" height="100%">
-    <BarChart 
-      data={chart.data.slice().reverse()} // <-- 1. REVERTE A ORDEM PARA EXIBIR O MAIOR EM CIMA
+    <BarChart
+      data={processBarData(chart.data, chart.config.categoryKey, chart.config.dataKey).slice()} // <-- 1. REVERTE A ORDEM PARA EXIBIR O MAIOR EM CIMA
       layout="vertical"
       margin={{ top: 5, right: 30, left: 20, bottom: 5 }} // Ajuste de margem
     >
@@ -140,9 +164,37 @@ const renderPieChart = (chart: PieChartConfig) => {
 /**
  * Renders a Line Chart.
  */
+const processLineChartData = (data: any[], categoryKey: string, dataKey: string) => {
+  // Show only the top 9 + others to not overload the chart
+  if (data.length <= 10) {
+    return data;
+  }
+
+  // Sort data by value in descending order to find the top items
+  const sortedData = [...data].sort((a, b) => b[dataKey] - a[dataKey]);
+
+  // Get the top 9
+  const top9 = sortedData.slice(0, 9);
+
+  // Sum the values of all other items
+  const othersSum = sortedData.slice(9).reduce((acc, item) => acc + item[dataKey], 0);
+
+  // Create the 'Outros' slice if there's a sum
+  if (othersSum > 0) {
+    const othersSlice = {
+      [categoryKey]: 'Outros',
+      [dataKey]: othersSum,
+    };
+    return [...top9, othersSlice];
+  }
+
+  return top9;
+};
+
 const renderLineChart = (chart: LineChartConfig) => (
+  
   <ResponsiveContainer width="100%" height="100%">
-    <LineChart data={chart.data}>
+    <LineChart data={processLineChartData(chart.data, chart.config.categoryKey, chart.config.dataKey)}>
       <CartesianGrid strokeDasharray="3 3" />
       <XAxis 
         dataKey={chart.config.categoryKey}
