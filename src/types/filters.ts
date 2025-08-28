@@ -4,6 +4,11 @@ export interface FilterOption {
   label: string;
 }
 
+export type DateRangeValue = {
+  from?: string; // Usamos '?' para indicar que podem ser opcionais inicialmente
+  to?: string;
+};
+
 // Define a configuração para um único filtro
 export interface FilterConfig {
   id: string; // Identificador único, ex: 'status' ou 'vehicleId'
@@ -15,5 +20,5 @@ export interface FilterConfig {
 
 // Define o formato do objeto que guarda os valores de todos os filtros
 export type FilterValues = {
-  [ key: string ]: string | number;
+  [ key: string ]: string | number | DateRangeValue;
 };

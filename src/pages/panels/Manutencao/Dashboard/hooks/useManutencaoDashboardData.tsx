@@ -30,7 +30,7 @@ export const useManutencaoDashboardData = ({ filters, pagination, sort }: any) =
     },
     requestPolicy: 'cache-and-network',
   });
-  console.log('Manutencao dashboard query result:', result);
+  // console.log('Manutencao dashboard query result:', result);
   
 
   const { data, fetching: isLoading, error } = result;
@@ -46,7 +46,7 @@ export const useManutencaoDashboardData = ({ filters, pagination, sort }: any) =
     return [
       { title: 'Custo Total', value: formatCurrency(kpis.totalCost), icon: <DollarSign className="size-5 text-green-500" /> },
       { title: 'Nº de Ordens de Serviço', value: kpis.serviceOrderCount?.toLocaleString('pt-BR'), icon: <Wrench className="size-5 text-blue-500" /> },
-      { title: 'Custo Médio por OS', value: formatCurrency(kpis.averageCostPerServiceOrder), icon: <DollarSign className="size-5 text-yellow-500" /> },
+      { title: 'Custo Médio por OS', value: formatCurrency(kpis.averageCostPerOs), icon: <DollarSign className="size-5 text-yellow-500" /> },
     ];
   }, [data?.kpis]);
 

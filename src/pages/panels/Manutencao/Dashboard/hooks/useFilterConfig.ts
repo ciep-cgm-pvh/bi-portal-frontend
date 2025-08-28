@@ -16,11 +16,11 @@ export const useFiltersConfig = (options: any): FilterConfig[] => {
     return baseFilterConfig.map(filter => {
       switch (filter.id) {
         case 'secretaria':
-          return { ...filter, options: options.secretarias || [] };
+          return { ...filter, options: options.department || [] };
         case 'categoriaOs':
-          return { ...filter, options: options.categoriasOs || [] };
+          return { ...filter, options: options.categoryOs || [] };
         case 'placa':
-          return { ...filter, options: options.placas || [] };
+          return { ...filter, options: options.plate || [] };
         default:
           return filter;
       }

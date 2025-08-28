@@ -1,11 +1,11 @@
-import { Filter, X, Check } from 'lucide-react';
-import type { FilterConfig, FilterValues } from '../../types/filters';
+import { Check, Filter, X } from 'lucide-react';
+import type { DateRangeValue, FilterConfig, FilterValues } from '../../types/filters';
 
 // Definindo as props que o componente vai receber
 interface FiltersSectionProps {
   config: FilterConfig[]; // A estrutura dos filtros
   values: FilterValues; // Os valores atuais
-  onChange: (id: string, value: string | number) => void; // Função para atualizar um valor
+  onChange: (id: string, value: string | number | DateRangeValue) => void;
   onApply: () => void; // Função para o botão "Aplicar"
   onClear: () => void; // Função para o botão "Limpar"
 }
@@ -30,7 +30,7 @@ export const FiltersSection = ({ config, values, onChange, onApply, onClear }: F
             {filter.type === 'select' && (
               <select
                 id={filter.id}
-                value={values[filter.id] || ''}
+                value={values[filter.id] as string|| ''}
                 onChange={(e) => onChange(filter.id, e.target.value)}
                 className="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
               >
@@ -43,26 +43,52 @@ export const FiltersSection = ({ config, values, onChange, onApply, onClear }: F
               </select>
             )}
 
-            {filter.type === 'date' && (
-              <input
-                type="date"
-                id={filter.id}
-                value={values[filter.id] || ''}
-                onChange={(e) => onChange(filter.id, e.target.value)}
-                className="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
-              />
-            )}
-            
             {filter.type === 'text' && (
               <input
                 type="text"
                 id={filter.id}
                 placeholder={filter.placeholder || 'Digite...'}
-                value={values[filter.id] || ''}
+                value={values[filter.id] as string|| ''}
                 onChange={(e) => onChange(filter.id, e.target.value)}
                 className="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
               />
             )}
+
+            {filter.type === 'date' && (
+              <input
+                type="date"
+                id={filter.id}
+                value={values[filter.id] as string|| ''}
+                onChange={(e) => onChange(filter.id, e.target.value)}
+                className="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+              />
+            )}
+
+            {filter.type === 'daterange' && (() => {
+              // Garantimos que o valor seja um objeto para evitar erros
+              const currentValue = (values[filter.id] || {}) as DateRangeValue;
+
+              return (
+                <>
+                  <input
+                    type="date"
+                    id={`${filter.id}-from`}
+                    value={currentValue.from || ''}
+                    onChange={(e) => onChange(filter.id, { ...currentValue, from: e.target.value })}
+                    className="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 mb-2"
+                  />
+                  <input
+                    type="date"
+                    id={`${filter.id}-to`}
+                    value={currentValue.to || ''}
+                    onChange={(e) => onChange(filter.id, { ...currentValue, to: e.target.value })}
+                    className="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                  />
+                </>
+              )
+            })()
+          }
+
         {/*  Outro tipo de 'input' pode ser adicionado aqui */}
 
           </div>
