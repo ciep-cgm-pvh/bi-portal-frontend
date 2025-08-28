@@ -1,48 +1,46 @@
+// Em src/pages/panels/Manutencao/Dashboard/hooks/useFilterConfig.ts
+
 import { useMemo } from 'react';
+import { useQuery } from 'urql';
 import type { FilterConfig } from '../../../../../types/filters';
-import { baseFilterConfig } from '../data/filters.config'; // Supondo que você tenha um arquivo base
+import { GET_MANUTENCAO_FILTER_OPTIONS_QUERY } from '../../queries/ManutencaoQueries';
+import { baseFilterConfig } from '../data/filters.config';
 
 /**
- * @description Hook para construir a configuração dos filtros a partir de opções dinâmicas.
- * Não faz fetch de dados, apenas processa as opções recebidas.
- * @param options - As opções dinâmicas (ex: secretarias, placas) vindas da API.
- * @returns A configuração completa para o componente de filtros.
+ * @description Hook para buscar e construir a configuração dos filtros de Manutenção.
+ * @param activeFilters - Os filtros atualmente selecionados/digitados pelo usuário.
+ * @returns A configuração completa para o componente de filtros, com opções atualizadas.
  */
-export const useFiltersConfig = (options: any): FilterConfig[] => {
-  const filterConfig = useMemo((): FilterConfig[] => {
-    if (!options) return baseFilterConfig;
+export const useFiltersConfig = (activeFilters: any) => {
+  const [ result ] = useQuery({
+    query: GET_MANUTENCAO_FILTER_OPTIONS_QUERY,
+    variables: { filters: activeFilters },
+    requestPolicy: 'cache-and-network', // Garante que os dados sejam buscados quando as variáveis mudam
+  });
 
-    // Mapeia as opções recebidas para a configuração base de filtros
+  const { data, fetching: isLoading } = result;
+
+  const filterConfig = useMemo((): FilterConfig[] => {
+    const options = data?.filterOptions;
+    if (!options) {
+      // Retorna a config base com arrays vazios enquanto carrega ou se não houver dados
+      return baseFilterConfig.map(fc => ({ ...fc, options: [] }));
+    }
+
+    // Mapeia as opções recebidas da API para a configuração base de filtros
     return baseFilterConfig.map(filter => {
       switch (filter.id) {
-        case 'secretaria':
+        case 'department':
           return { ...filter, options: options.department || [] };
-        case 'categoriaOs':
+        case 'categoryOs':
           return { ...filter, options: options.categoryOs || [] };
-        case 'placa':
+        case 'plate':
           return { ...filter, options: options.plate || [] };
         default:
           return filter;
       }
     });
-  }, [options]);
+  }, [ data ]);
 
-  return filterConfig;
+  return { filterConfig, isLoading };
 };
-
-// É importante também ter um 'baseFilterConfig' em 'data/filters.config.ts'
-/* Exemplo para src/pages/panels/Manutencao/Dashboard/data/filters.config.ts
-export const baseFilterConfig: FilterConfig[] = [
-  { id: 'periodo', label: 'Período', type: 'date-range' },
-  { id: 'secretaria', label: 'Secretaria', type: 'select', options: [] },
-  { id: 'categoriaOs', label: 'Categoria OS', type: 'select', options: [] },
-  { id: 'placa', label: 'Placa', type: 'select', options: [] },
-];
-
-export const initialFilterValues = {
-  periodo: { startDate: '', endDate: '' },
-  secretaria: '',
-  categoriaOs: '',
-  placa: '',
-};
-*/

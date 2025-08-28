@@ -74,6 +74,32 @@ export const GET_MANUTENCAO_DASHBOARD_DATA_QUERY = `
   totalCount: TableCount(filters: $filters)
 }
 `;
+// =================================================
+//      Dynamic Filters
+// ================================================
+
+/**
+ * @description Query para buscar as opções dinâmicas para os filtros do dashboard de manutenção.
+ * É chamada toda vez que um filtro é alterado para atualizar as opções dos outros.
+ */
+export const GET_MANUTENCAO_FILTER_OPTIONS_QUERY = `
+  query GetManutencaoFilterOptions($filters: ManutencaoFiltersInput) {
+    filterOptions: FilterOptions(filters: $filters) {
+      department {
+        value
+        label
+      }
+      categoryOs {
+        value
+        label
+      }
+      plate {
+        value
+        label
+      }
+    }
+  }
+`;
 
 
 // =================================================

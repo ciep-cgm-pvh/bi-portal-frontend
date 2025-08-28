@@ -18,12 +18,12 @@ const DashboardManutencao = () => {
   const {
     kpiData,
     chartConfig,
-    filterOptions,
+    //filterOptions,
     tableData,
     lastUpdate,
     isLoading,
   } = useManutencaoDashboardData({ filters, pagination, sort });
-  console.log('data from useManutencaoDashboardData:', { kpiData, chartConfig, filterOptions, tableData, lastUpdate, isLoading });
+  //console.log('data from useManutencaoDashboardData:', { kpiData, chartConfig, tableData, lastUpdate, isLoading });
 
   // Handlers para filtros
 
@@ -47,7 +47,7 @@ const DashboardManutencao = () => {
       chartConfig={chartConfig}
       filtersComponent={<ManutencaoFilters
         initialValues={filters}
-        options={filterOptions} // Passa as opções para o componente de filtro
+        //options={filterOptions} // Passa as opções para o componente de filtro
         onApply={handleApplyFilters}
         onClear={handleClearFilters}
         isLoading={isLoading} />}
