@@ -54,11 +54,12 @@ export const baseFilterConfig: FilterConfig[] = [
 
 // Mantenha os valores iniciais
 export const initialFilterValues = {
-  startDate: '',
-  endDate: '',
+  startDate: '2025-01-01', // YYYY-MM-DD
+  endDate: '2025-06-30', // YYYY-MM-DD
   department: '',
   vehiclePlate: '',
   vehicleModel: '',
   gasStationCity: '',
-  gasStationName: ''
+  gasStationName: '',
+  excludePostoInterno: true
 };

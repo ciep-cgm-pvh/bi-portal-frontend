@@ -53,7 +53,7 @@ const GET_ABASTECIMENTO_QUERY = `
     department
   }
 
-  abastecimentosCount(filters: $filters tableFilters: $tableFilters)
+  abastecimentosCount(filters: $filters, tableFilters: $tableFilters)
 }
 `;
 

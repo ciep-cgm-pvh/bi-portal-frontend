@@ -8,8 +8,11 @@ export const prepareGqlFilters = (raw: any) => {
   if (raw.startDate && raw.endDate) {
     filters.dateRange = {
       from: new Date(raw.startDate).toISOString(),
-      to: new Date(raw.endDate).toISOString(),
+      to: new Date(raw.endDate).toISOString()
     };
+    console.log("dates_raw", raw.startDate, raw.endDate);
+    console.log("dates", filters.dateRange.from, filters.dateRange.to);
+
   }
 
   const TABLE_ONLY = new Set([ 'datetime', 'cost', 'fuelVolume' ]);

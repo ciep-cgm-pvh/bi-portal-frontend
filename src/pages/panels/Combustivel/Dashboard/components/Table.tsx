@@ -88,6 +88,8 @@ export const AbastecimentoTable = ({ filters: generalFilters }: { filters: any }
   }, [generalFilters, debouncedColumnFilters, configData]);
 
   // Hook que busca os dados, agora com os filtros corretos
+  console.log('%c[TABLE] 1. Combinando filtros gerais e de coluna para a tabela:', 'color: blue; font-weight: bold;', combinedFilters);
+  
   const {
     processedData,
     sortConfig,
@@ -98,6 +100,8 @@ export const AbastecimentoTable = ({ filters: generalFilters }: { filters: any }
     handleSort,
     onPageChange,
   } = useAbastecimentoData({ filters: combinedFilters, itemsPerPage });
+  console.log('%c[TABLE] 4. Dados processados para a tabela:', 'color: blue; font-weight: bold;', processedData);
+  
 
   // Handlers (sem alterações)
   const handleItemsPerPageChange = (value: number) => {

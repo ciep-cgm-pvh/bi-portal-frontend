@@ -35,6 +35,8 @@ export const useKpiData = ({ filters }: { filters: any }) => {
     query: GET_ABASTECIMENTO_KPIS_QUERY, 
     variables: { filters: gqlFilters }, 
   });
+  console.log('lastUpdate', result.data?.abastecimentoKpis?.lastUpdate);
+  
   const { data, fetching: isLoading, error } = result;
 
   // 3. Transforme os dados brutos no formato esperado pelo componente

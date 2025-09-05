@@ -111,21 +111,49 @@ export const GET_MANUTENCAO_FILTER_OPTIONS_QUERY = `
  */
 export const DOWNLOAD_ALL_MANUTENCOES_QUERY_by_gemini = `
   query DownloadAllManutencoes {
-    getAllManutencoes {
+    getManutencao {
       id
       os
-      data
-      placa
+      datetime
+      plate
+      numCard
+      prefixo
+      typeFrota
+      brand
+      model
+      year
+      patrimony
       kmHorimetro
       estabelecimento
-      cidade
-      tipoOs
-      categoriaOs
-      total
+      city
+      uf
+      cnpj
+      department
+      typeOs
+      categoryOs
+      nomeAprovador
+      cpfAprovador
+      nfPecas
+      nfMdo
+      nfConjugada
+      declaracao
+      correcao
+      condutorEntregou
+      condutorRetirou
+      responsavelTecnico
+      totalMdo
+      discountTaxaMdo
+      mdoDiscount
+      totalPecas
+      discountTaxaPecas
+      pecasWithDiscount
+      totalWithoutDiscount
+      totalCost
+      client
       secretaria
-      # Adicionar outros campos detalhados conforme necessário
+      period
+      archive
     }
-  }
 `;
 
 /**
