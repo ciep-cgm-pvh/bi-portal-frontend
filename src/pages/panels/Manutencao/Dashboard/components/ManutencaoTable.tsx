@@ -5,7 +5,7 @@ import type { ReactNode } from 'react';
 import { useMemo, useState } from 'react';
 import { PaginationControls } from '../../../../../components/PaginationControls/PaginationControls';
 import { TableSection } from '../../../../../components/TableSection/TableSection';
-import type { TableColumn, TableDataItem, SortConfig } from '../../../../../types/tables';
+import type { SortConfig, TableColumn, TableDataItem } from '../../../../../types/tables';
 
 // Funções Helper e Colunas (sem alterações)
 const formatCell = (value: any, dataType?: string): ReactNode => {
@@ -24,9 +24,9 @@ const columns: TableColumn<TableDataItem>[] = [
     { header: 'OS', accessor: 'os', sortable: true, isFilterable: true },
     { header: 'Secretaria', accessor: 'secretaria', sortable: true, isFilterable: true },
     { header: 'Placa', accessor: 'placa', sortable: true, isFilterable: true },
-    { header: 'Data', accessor: 'data', sortable: true, render: (item) => formatCell(item.data, 'DATE') },
+    { header: 'Data', accessor: 'data', sortable: true, isFilterable: true,render: (item) => formatCell(item.data, 'DATE') },
     { header: 'Categoria', accessor: 'categoriaOs', sortable: true, isFilterable: true },
-    { header: 'Custo Total', accessor: 'total', sortable: true, render: (item) => formatCell(item.total, 'CURRENCY') },
+    { header: 'Custo Total', accessor: 'total', sortable: true, isFilterable: true, render: (item) => formatCell(item.total, 'CURRENCY') },
 ];
 // =================================================================
 
@@ -67,13 +67,32 @@ export const ManutencaoTable = ({
   // 4. Filtre os dados localmente com base nos filtros de coluna
   const filteredData = useMemo(() => {
     return data.filter(item => {
-      return Object.entries(columnFilters).every(([key, value]) => {
-        if (!value) return true; // Se o filtro estiver vazio, não filtra
-        const itemValue = item[key];
-        return String(itemValue).toLowerCase().includes(value.toLowerCase());
-      });
+        return Object.entries(columnFilters).every(([key, value]) => {
+            if (!value) return true; // Se o filtro estiver vazio, não filtra
+
+            const originalItemValue = item[key];
+            let valueToCompare = originalItemValue; // Por padrão, usamos o valor original
+
+            // --- A SUA IDEIA EM AÇÃO ---
+            // Se a coluna for 'data' e tiver um valor, formate o dado original
+            // para DD/MM/YYYY antes de fazer a comparação.
+            if (key === 'data' && originalItemValue) {
+                valueToCompare = new Date(originalItemValue).toLocaleDateString('pt-BR', {
+                    timeZone: 'UTC' // Importante para evitar erros de um dia por causa do fuso
+                });
+            }
+
+            if(key === 'total' && originalItemValue !== null && originalItemValue !== undefined) {
+                // Formata o valor como moeda brasileira
+                valueToCompare = `R$ ${Number(originalItemValue).toFixed(2).replace('.', ',')}`;
+            }
+            // ---------------------------
+
+            // A lógica de busca genérica agora funciona para a data formatada!
+            return String(valueToCompare).toLowerCase().includes(value.toLowerCase());
+        });
     });
-  }, [data, columnFilters]);
+}, [data, columnFilters]);
 
 
   // O resto da lógica permanece o mesmo
