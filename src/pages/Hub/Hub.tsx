@@ -1,5 +1,6 @@
-import {ArrowRight, Menu, X} from "lucide-react";
+import { ArrowRight, Menu, X } from "lucide-react";
 import { useState } from "react";
+import { BsStars } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
 import getHubCardsData from '../../data/HubCardsData';
 import getHubNavLinks from '../../data/HubNavLinks';
@@ -232,7 +233,11 @@ function DashboardCard({
         <CardContent className="flex flex-col flex-grow">
           <div className="flex-grow">
             <div className="flex items-center justify-between mb-4">
-              <h3 className={`text-lg ${isInternalRoute ? 'font-extrabold text-gray-600' : 'font-bold text-gray-600'}`}>{title}</h3>
+              <h3 className={`text-lg flex ${isInternalRoute ? 'font-bold text-gray-600' : 'font-bold text-gray-600'}`}>
+                {title} {isInternalRoute && (<span className="ml-2">
+                <BsStars className="size-6 gemini-stars" />
+              </span>)}
+              </h3>
               {icon}
             </div>
             <p className="text-sm text-gray-600">{description}</p>

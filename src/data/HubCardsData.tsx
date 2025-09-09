@@ -16,29 +16,31 @@ import type { HubCardInterface } from '../interfaces/hubCardInterface';
 * Cada card representa um painel específico e mantém o link direto
 * para o relatório correspondente no Looker Studio.
 */
-const HubCardsData: HubCardInterface[] = [
+const HubCardsDataV2: HubCardInterface[] = [
+  // {
+  //   title: "Diárias",
+  //   description: "Painel com dados de concessão de diárias.",
+  //   route: "/painel/diarias/home",
+  //   icon: <TicketsPlane className="text-orange-400 w-6 h-6" />,
+  //   type: "demonstracão",
+  // },
   {
-    title: "Diárias (demo)",
-    description: "Painel com dados de concessão de diárias.",
-    route: "/painel/diarias/home",
-    icon: <TicketsPlane className="text-orange-400 w-6 h-6" />,
-    type: "demonstracão",
-  },
-  {
-    title: "Manutenção (demo)",
+    title: "Manutenção",
     description: "Painel com dados de manutenção de frota.",
     route: "/painel/manutencao/home",
     icon: <Wrench className="text-slate-700 w-6 h-6" />,
-    type: "demonstracão",
+    type: "Frota",
   },
   {
-    title: "Abastecimento (demo)",
+    title: "Abastecimento",
     description: "Painel com dados de abastecimento de frota.",
     route: "/painel/abastecimento/home",
     icon: <Fuel className="text-orange-400 w-6 h-6" />,
-    type: "demonstracão",
+    type: "Frota",
   },
+]
 
+const HubCardsData: HubCardInterface[] = [
   {
     title: "Diárias",
     description: "Painel com dados de diárias concedidas.",
@@ -62,21 +64,21 @@ const HubCardsData: HubCardInterface[] = [
     icon: <Banknote className="text-green-700 w-6 h-6" />,
     type: "Financeiro",
   },
-  {
-    title: "Manutenção",
-    description: "Painel de manutenção da frota.",
-    // route: "https://lookerstudio.google.com/u/0/reporting/a41d513b-d75c-40bd-93e3-8f53825a1966/page/inJJF/edit",
-    route: "https://dashboard-geral.vercel.app/paineis/manutencao",
-    icon: <Wrench className="text-slate-700 w-6 h-6" />,
-    type: "Frota",
-  },
-  {
-    title: "Abastecimento",
-    description: "Painel com dados de abastecimento.",
-    route: "https://lookerstudio.google.com/reporting/1630a802-c80f-4231-9fe8-226a207b9b8a",
-    icon: <Fuel className="text-orange-400 w-6 h-6" />,
-    type: "Frota",
-  },
+  // {
+  //   title: "Manutenção",
+  //   description: "Painel de manutenção da frota.",
+  //   // route: "https://lookerstudio.google.com/u/0/reporting/a41d513b-d75c-40bd-93e3-8f53825a1966/page/inJJF/edit",
+  //   route: "https://dashboard-geral.vercel.app/paineis/manutencao",
+  //   icon: <Wrench className="text-slate-700 w-6 h-6" />,
+  //   type: "Frota",
+  // },
+  // {
+  //   title: "Abastecimento",
+  //   description: "Painel com dados de abastecimento.",
+  //   route: "https://lookerstudio.google.com/reporting/1630a802-c80f-4231-9fe8-226a207b9b8a",
+  //   icon: <Fuel className="text-orange-400 w-6 h-6" />,
+  //   type: "Frota",
+  // },
 ];
 
 const HubExternalCardsData = [
@@ -102,11 +104,12 @@ const HubExternalCardsData = [
   },
 ]
 
+// adiciona cards externos ao final
+HubCardsData.push(...HubCardsDataV2);
+HubCardsData.push(...HubExternalCardsData);
+
 // organiza por ordem alfabética
 HubCardsData.sort((a, b) => a.title.localeCompare(b.title));
-
-// adiciona cards externos ao final
-HubCardsData.push(...HubExternalCardsData);
 
 export default function getHubCardsData() {
   return HubCardsData;
