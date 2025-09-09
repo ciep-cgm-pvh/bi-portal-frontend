@@ -1,6 +1,20 @@
 /*  ---------- Tailwind section ----------  */
 @import "tailwindcss";
 
+/* Adicione este código ao seu arquivo CSS global */
+
+@keyframes gemini-colors {
+  0% { color: #4dc7ff; } /* Azul Google */
+  25% { color: #DB4437; } /* Vermelho Google */
+  50% { color: #F4B400; } /* Amarelo Google */
+  75% { color: #16eb84; } /* Verde Google */
+  100% { color: #4dc7ff; } /* Volta ao Azul */
+}
+
+.gemini-stars {
+  animation: gemini-colors 4s infinite linear;
+}
+
 /* Tailwind custom colors */
 @theme {
   --breakpoint-2xs: 24rem;
@@ -11,6 +25,9 @@
   
   --color-official-yellow: #F6D02F;
   --color-official-blue: #0071CE;
+  --color-official-blue-dark: #004681;
+  --color-official-green: #6bbf55;
+  --color-official-green-dark:#457837;
   --color-official-white: #ffffff;
   --color-official-black: #000000;
   --color-official-blue-active: #001A58;

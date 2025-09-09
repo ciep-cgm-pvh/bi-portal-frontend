@@ -14,11 +14,11 @@ export default function LayoutBase() {
   const isMobile =  useIsMobile()
 
 
-  const screenMode = ['bg-slate-900', 'bg-white'];
+  const screenMode = ['bg-slate-900', 'bg-blue-50'];
 
 
   return (
-    <div className={`flex flex-col min-h-screen ${screenMode[0]}`}>
+    <div className={`flex flex-col min-h-screen ${screenMode[1]}`}>
       {isMobile ? (
         <NavBarMobile isOpen={isOpen} setIsOpen={externalSetIsOpen} />
       ) : (
@@ -29,10 +29,7 @@ export default function LayoutBase() {
           isMobile ? "mt-4 mx-5 mb-8" : isOpen ? "ml-[314px] mr-10" : "ml-24 mr-14"
         }`}
       >
-        {/* Red Label at the top page with a message explaining there is not a real data, just random data sample */}
-        <div className='bg-red-500 text-white p-4 rounded-md mb-4'>
-          <h1 className='text-center font-bold'>Atenção: Esta página contém dados fictícios para demonstração de layout da página.</h1>
-        </div>
+        
         <Outlet context={isMobile as boolean}/>
       </main>
     </div>
