@@ -2,11 +2,12 @@ import { useState } from 'react';
 
 import { filterConfiguration, initialFilterValues } from '../data/filters.config';
 import FiltersSection from '../../../../../components/FiltersSection/FiltersSection';
+import type { DateRangeValue } from '../../../../../types/filters';
 
 export const Filters = () => {
   const [filterValues, setFilterValues] = useState(initialFilterValues);
   
-  const handleFilterChange = (id: string, value: string | number) => {
+  const handleFilterChange = (id: string, value: string | number | DateRangeValue) => {
     console.log(`Filtro '${id}' alterado para:`, value);
     setFilterValues((prevValues) => ({
       ...prevValues,

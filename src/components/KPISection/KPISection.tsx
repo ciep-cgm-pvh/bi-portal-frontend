@@ -23,7 +23,7 @@ const KPICard = ({ icon, title, value, theme }: { icon: JSX.Element, title: stri
         white: { bg: 'bg-white', text: 'text-gray-900' },
     };
 
-    const selectedTheme = themes[theme] || themes.white;
+    const selectedTheme = theme ? themes[theme] : themes.white;
 
     return (
         <div className="bg-white p-4 rounded-2xl shadow-sm flex items-center space-x-4">
@@ -40,4 +40,3 @@ const KPICard = ({ icon, title, value, theme }: { icon: JSX.Element, title: stri
 };
 
 export { KPICard, KPISection };
-
