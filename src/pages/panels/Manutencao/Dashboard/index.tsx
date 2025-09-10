@@ -39,6 +39,18 @@ const DashboardManutencao = () => {
     sort,
   });
 
+  // pass latUpdate as dateRange.to for last update using setGenralFilters
+  useEffect(() => {
+    if (lastUpdate) {
+      setGeneralFilters(prev => ({
+        ...prev,
+        dateRange: {
+          ...prev.dateRange,
+          to: lastUpdate,
+        },
+      }));
+    }
+  }, [lastUpdate]);
 
   // Handlers para filtros GERAIS (sem alterações)
   const handleApplyFilters = useCallback((newFilters: any) => {
