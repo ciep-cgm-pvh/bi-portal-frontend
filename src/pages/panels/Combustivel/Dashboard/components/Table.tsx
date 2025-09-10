@@ -1,3 +1,5 @@
+// Local: [seu-projeto]/AbastecimentoTable.tsx
+
 import type { ReactNode } from 'react';
 import { useEffect, useMemo, useState } from 'react';
 import { useQuery } from 'urql';
@@ -7,27 +9,7 @@ import { TableSection } from '../../../../../components/TableSection/TableSectio
 import type { TableColumn, TableDataItem } from '../../../../../types/tables';
 import { useAbastecimentoData } from '../hooks/useAbastecimentoData';
 
-// =================================================================
-// FUNÇÕES HELPER (Sem alterações)
-// =================================================================
-const getNestedValue = (obj: any, path: string): any => {
-  return path.split('.').reduce((acc, part) => acc && acc[part], obj);
-};
-
-const formatCell = (item: TableDataItem, accessor: string, dataType: string): ReactNode => {
-  const value = getNestedValue(item, accessor);
-  if (value === null || typeof value === 'undefined') return 'N/A';
-  switch (dataType) {
-    case 'CURRENCY':
-      return `R$ ${Number(value).toFixed(2).replace('.', ',')}`;
-    case 'DATETIME':
-      return new Date(value).toLocaleString('pt-BR');
-    case 'STATUS_TAG':
-      return <span className={`status-${value}`}>{value}</span>;
-    default:
-      return value;
-  }
-};
+// --- Helpers e Configurações (movidos para fora do componente) ---
 
 const GET_TABLE_CONFIG_QUERY = `
   query GetAbastecimentosTableConfig {
@@ -42,40 +24,76 @@ const GET_TABLE_CONFIG_QUERY = `
   }
 `;
 
+/**
+ * Acessa um valor aninhado em um objeto com base em um caminho de string (ex: 'veiculo.placa').
+ */
+const getNestedValue = (obj: any, path: string): any => {
+  return path.split('.').reduce((acc, part) => acc && acc[part], obj);
+};
 
-// =================================================================
-// COMPONENTE PRINCIPAL (Lógica de Filtros Corrigida)
-// =================================================================
-export const AbastecimentoTable = ({ filters: generalFilters }: { filters: any }) => {
+/**
+ * Formata o valor da célula com base no tipo de dado especificado pela API.
+ */
+const formatCell = (item: TableDataItem, accessor: string, dataType: string): ReactNode => {
+  const value = getNestedValue(item, accessor);
+  if (value === null || typeof value === 'undefined') return 'N/A';
+
+  switch (dataType) {
+    case 'CURRENCY':
+      return `R$ ${Number(value).toFixed(2).replace('.', ',')}`;
+    case 'DATETIME':
+      return new Date(value).toLocaleString('pt-BR');
+    case 'STATUS_TAG':
+      // Exemplo de como você poderia renderizar uma tag de status
+      return <span className={`status-${String(value).toLowerCase()}`}>{value}</span>;
+    default:
+      return value;
+  }
+};
+
+// --- Interface de Props ---
+
+interface AbastecimentoTableProps {
+  filters: Record<string, any>; // Filtros gerais passados de um componente pai
+}
+
+// --- Componente Principal ---
+
+export const AbastecimentoTable = ({ filters: generalFilters }: AbastecimentoTableProps) => {
+  // --- Estados ---
   const [itemsPerPage, setItemsPerPage] = useState(10);
-  const [columnFilters, setColumnFilters] = useState<{ [key: string]: string }>({});
-  const [debouncedColumnFilters, setDebouncedColumnFilters] = useState<{ [key: string]: string }>({});
+  const [columnFilters, setColumnFilters] = useState<Record<string, string>>({});
+  const [debouncedColumnFilters, setDebouncedColumnFilters] = useState<Record<string, string>>({});
 
-  // Efeito de Debounce para os filtros de coluna
+  // --- Efeitos ---
+
+  // Efeito para aplicar debounce aos filtros das colunas, evitando requisições excessivas à API.
   useEffect(() => {
     const handler = setTimeout(() => {
       setDebouncedColumnFilters(columnFilters);
-    }, 500);
+    }, 500); // Aguarda 500ms após o usuário parar de digitar
+
     return () => clearTimeout(handler);
   }, [columnFilters]);
 
-  // Busca a configuração das colunas da API
+  // --- Queries da API ---
+
+  // Busca a configuração das colunas da tabela (cabeçalhos, tipos, etc.)
   const [configResult] = useQuery({ query: GET_TABLE_CONFIG_QUERY });
   const { data: configData, fetching: isLoadingConfig } = configResult;
 
-  // Combina os filtros gerais com os filtros de coluna, traduzindo as chaves.
+  // --- Memos (Lógica de Negócio) ---
+
+  // Combina os filtros gerais (do pai) com os filtros específicos de cada coluna.
   const combinedFilters = useMemo(() => {
-    const translatedColumnFilters: { [key: string]: any } = {};
+    const translatedColumnFilters: Record<string, any> = {};
     const columnConfig = configData?.abastecimentosColumns || [];
 
-    // Itera sobre os filtros de coluna que o usuário digitou
     for (const accessor in debouncedColumnFilters) {
       const value = debouncedColumnFilters[accessor];
-      if (value) { // Apenas se houver um valor
-        // Encontra a configuração da coluna correspondente
+      if (value) {
         const config = columnConfig.find((c: any) => c.accessor === accessor);
-        
-        // Usa o `filterKey` fornecido pela API. Se não existir, usa o `accessor`.
+        // Usa o 'filterKey' da API para a chave do filtro, garantindo que a API entenda a busca.
         const keyForApi = config?.filterKey || accessor;
         translatedColumnFilters[keyForApi] = value;
       }
@@ -87,9 +105,7 @@ export const AbastecimentoTable = ({ filters: generalFilters }: { filters: any }
     };
   }, [generalFilters, debouncedColumnFilters, configData]);
 
-  // Hook que busca os dados, agora com os filtros corretos
-  console.log('%c[TABLE] 1. Combinando filtros gerais e de coluna para a tabela:', 'color: blue; font-weight: bold;', combinedFilters);
-  
+  // Hook customizado que busca os dados de abastecimento já filtrados e paginados da API.
   const {
     processedData,
     sortConfig,
@@ -100,15 +116,28 @@ export const AbastecimentoTable = ({ filters: generalFilters }: { filters: any }
     handleSort,
     onPageChange,
   } = useAbastecimentoData({ filters: combinedFilters, itemsPerPage });
-  console.log('%c[TABLE] 4. Dados processados para a tabela:', 'color: blue; font-weight: bold;', processedData);
-  
 
-  // Handlers (sem alterações)
+  // Constrói as definições de coluna para a UI com base na resposta da API.
+  const columns = useMemo((): TableColumn<TableDataItem>[] => {
+    if (!configData?.abastecimentosColumns) return [];
+    return configData.abastecimentosColumns.map((col: any) => ({
+      header: col.headerLabel,
+      accessor: col.accessor,
+      sortable: col.isSortable,
+      isFilterable: col.isFilterable !== false, // É filtrável por padrão
+      render: (item: TableDataItem) => formatCell(item, col.accessor, col.dataType),
+    }));
+  }, [configData]);
+
+  const isLoading = isLoadingConfig || isLoadingData;
+
+  // --- Handlers ---
+
   const handleItemsPerPageChange = (value: number) => {
     setItemsPerPage(Math.max(1, value));
-    onPageChange(1);
+    onPageChange(1); // Volta para a primeira página ao mudar a quantidade de itens
   };
-  
+
   const handleColumnFilterChange = (accessor: keyof TableDataItem, value: string) => {
     setColumnFilters(prev => ({
       ...prev,
@@ -116,22 +145,14 @@ export const AbastecimentoTable = ({ filters: generalFilters }: { filters: any }
     }));
   };
 
-  // Memoização das colunas para a UI (sem alterações)
-  const columns = useMemo((): TableColumn<TableDataItem>[] => {
-    if (!configData?.abastecimentosColumns) return [];
-    return configData.abastecimentosColumns.map((col: any) => ({
-      header: col.headerLabel,
-      accessor: col.accessor,
-      sortable: col.isSortable,
-      isFilterable: col.isFilterable || true,
-      render: (item: TableDataItem) => formatCell(item, col.accessor, col.dataType),
-    }));
-  }, [configData]);
-
-  const isLoading = isLoadingConfig || isLoadingData;
+  // --- Renderização ---
 
   if (isLoadingConfig) {
-    return <div className='inline-flex items-center justify-center w-full bg-white p-4 md:p-6 rounded-lg shadow-md mb-6'>Carregando configuração...</div>;
+    return (
+      <div className='inline-flex items-center justify-center w-full bg-white p-4 md:p-6 rounded-lg shadow-md mb-6'>
+        Carregando configuração da tabela...
+      </div>
+    );
   }
 
   return (

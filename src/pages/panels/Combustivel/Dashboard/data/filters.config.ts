@@ -16,9 +16,9 @@ export const baseFilterConfig: FilterConfig[] = [
   },
   {
     id: 'department',
-    label: 'Departamento',
+    label: 'Unidade',
     type: 'select',
-    placeholder: 'Todos os departamentos',
+    placeholder: 'Todas as unidades',
     options: [], // As opções serão preenchidas dinamicamente
   },
   {

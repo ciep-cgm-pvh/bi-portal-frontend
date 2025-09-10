@@ -28,8 +28,9 @@ export const Table = () => {
       <PaginationControls
         currentPage={currentPage}
         totalPages={totalPages}
-        onPageChange={onPageChange}
-      />
+        onPageChange={onPageChange} itemsPerPage={0} onItemsPerPageChange={function (): void {
+          throw new Error('Function not implemented.');
+        } } totalItems={0}      />
     </>
   );
 };

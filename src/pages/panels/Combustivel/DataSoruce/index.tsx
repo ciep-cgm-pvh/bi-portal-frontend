@@ -5,20 +5,20 @@ const GET_ALL_ABASTECIMENTOS_DETALHADO_QUERY = `
   query DownloadAbastecimentos {
     getAbastecimentosTable {
       id
-      datetime
-      cost
-      fuelVolume
-      fuelType
-      driverName
-      department
-      vehicle {
-        plate
-        model
-        brand
+      data: datetime
+      custo: cost
+      quantidadeAbastecida: fuelVolume
+      tipoCombustivel: fuelType
+      motorista: driverName
+      departamento: department
+      veiculo: vehicle {
+        placa: plate
+        modelo: model
+        marca: brand
       }
-      gasStation {
-        name
-        city
+      posto:gasStation {
+        nome: name
+        cidade: city
       }
     }
   }
@@ -26,14 +26,14 @@ const GET_ALL_ABASTECIMENTOS_DETALHADO_QUERY = `
 
 const GET_VEHICLE_SUMMARY_QUERY = `
   query GetVehicleSummary {
-    vehicleSummary {
-      department
-      totalCost
-      supplyCount
-      vehicle {
-        plate
-        model
-        brand
+    vehicleSummary { 
+      departamento: department
+      custoTotal: totalCost
+      quantidadeAbastecimento: supplyCount
+      veiculo: vehicle {
+        placa: plate
+        modelo: model
+        marca: brand
       }
     }
   }

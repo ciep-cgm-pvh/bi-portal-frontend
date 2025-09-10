@@ -1,4 +1,4 @@
-
+// Local: src/pages/panels/Manutencao/queries/ManutencaoQueries.ts
 
 // =================================================
 //      PAINEL DE MANUTENÇÃO - DASHBOARD
@@ -16,6 +16,7 @@ export const GET_MANUTENCAO_DASHBOARD_DATA_QUERY = `
   $offset: Int
   $sortBy: String
   $sortDirection: String
+  $tableFilter: ManutencaoFilterTableInput
 ) {
   # 1. KPIs
   kpis: ManutencaoKpis(filters: $filters) {
@@ -60,18 +61,19 @@ export const GET_MANUTENCAO_DASHBOARD_DATA_QUERY = `
     sortBy: $sortBy
     sortDirection: $sortDirection
     filters: $filters
+    tableFilters: $tableFilter
   ) {
-    id # NOVO
+    id
     os
-    secretaria: department
-    placa: plate
-    data: datetime
-    categoriaOs: categoryOs
-    total: totalCost
+    department
+    plate
+    datetime
+    categoryOs
+    totalCost
   }
 
   # 5. Contagem Total de Itens para Paginação
-  totalCount: TableCount(filters: $filters)
+  totalCount: TableCount(filters: $filters tableFilters: $tableFilter)
 }
 `;
 // =================================================
