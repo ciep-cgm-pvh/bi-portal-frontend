@@ -1,61 +1,75 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import type { SortConfig, TableDataItem } from '../../../../types/tables';
 import { DashboardPanelTemplate } from '../../../../templates/DashboardPanelTemplate';
 import { ManutencaoFilters } from './components/ManutencaoFilters';
 import { ManutencaoTable } from './components/ManutencaoTable';
 import { initialFilterValues } from './data/filters.config';
 import { useManutencaoDashboardData } from './hooks/useManutencaoDashboardData';
-// Adicione a importação dos tipos aqui
-import type { SortConfig, TableDataItem } from '../../../../types/tables';
 
-let count_render = 0
-let count_initial_requests = 0
 const DashboardManutencao = () => {
-  count_render++;
-  console.log(`Render DashboardManutencao: ${count_render} vezes`);
-  const [filters, setFilters] = useState(initialFilterValues);
+  // --- Estados do Painel ---
+  const [generalFilters, setGeneralFilters] = useState(initialFilterValues);
+  const [columnFilters, setColumnFilters] = useState<Record<string, string>>({});
+  const [debouncedColumnFilters, setDebouncedColumnFilters] = useState<Record<string, string>>({});
   const [pagination, setPagination] = useState({ currentPage: 1, itemsPerPage: 10 });
-  
-  // CORREÇÃO: Tipando explicitamente o estado 'sort'
   const [sort, setSort] = useState<SortConfig<TableDataItem>>({ key: 'data', direction: 'descending' });
 
-  // ✨ ÚNICA CHAMADA PARA BUSCAR TODOS OS DADOS! ✨
+
+  // O efeito de debounce permanece o mesmo, está perfeito.
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedColumnFilters(columnFilters);
+      setPagination(p => ({ ...p, currentPage: 1 }));
+    }, 500);
+
+    return () => clearTimeout(handler);
+  }, [columnFilters]);
+
+  // 4. PASSE OS FILTROS SEPARADAMENTE PARA O HOOK
   const {
     kpiData,
     chartConfig,
-    //filterOptions,
     tableData,
     lastUpdate,
     isLoading,
-  } = useManutencaoDashboardData({ filters, pagination, sort });
-  if (!isLoading) {
-    count_initial_requests++;
-    console.log(`Initial data fetch completed ${count_initial_requests} times`);
-  }
-  //console.log('data from useManutencaoDashboardData:', { kpiData, chartConfig, tableData, lastUpdate, isLoading });
+  } = useManutencaoDashboardData({
+    filters: generalFilters,
+    tableFilter: debouncedColumnFilters,
+    pagination,
+    sort,
+  });
 
-  // Handlers para filtros
 
+  // Handlers para filtros GERAIS (sem alterações)
   const handleApplyFilters = useCallback((newFilters: any) => {
-    setFilters(newFilters);
+    setGeneralFilters(newFilters);
     setPagination(prev => ({ ...prev, currentPage: 1 }));
-  }, []); // Array de dependências vazio, pois a função não depende de nada externo que muda
+  }, []);
 
   const handleClearFilters = useCallback(() => {
-    setFilters(initialFilterValues);
+    setGeneralFilters(initialFilterValues);
     setPagination(prev => ({ ...prev, currentPage: 1 }));
-  }, []); // Array de dependências vazio
+  }, []);
 
-// 2. Memoize a instância do componente de filtros
+  // 5. CRIE O HANDLER PARA ATUALIZAR OS FILTROS DA COLUNA
+  const handleColumnFilterChange = useCallback((accessor: string, value: string) => {
+    // Atualiza o estado "ao vivo" dos filtros da coluna a cada tecla digitada
+    setColumnFilters(prev => ({
+      ...prev,
+      [accessor]: value,
+    }));
+  }, []);
+
+  // Memoização dos componentes (sem grandes alterações, apenas passando novas props)
   const filtersComponent = useMemo(() => (
     <ManutencaoFilters
-      initialValues={filters}
+      initialValues={generalFilters}
       onApply={handleApplyFilters}
       onClear={handleClearFilters}
-      isLoading={isLoading} 
+      isLoading={isLoading}
     />
-  ), [filters, isLoading, handleApplyFilters, handleClearFilters]);
+  ), [generalFilters, isLoading, handleApplyFilters, handleClearFilters]);
 
-  // 3. Memoize a instância do componente da tabela
   const tableComponent = useMemo(() => (
     <ManutencaoTable
       data={tableData.rows}
@@ -64,9 +78,12 @@ const DashboardManutencao = () => {
       onPaginationChange={setPagination}
       sort={sort}
       onSortChange={setSort}
-      isLoading={isLoading} 
+      isLoading={isLoading}
+      // 6. PASSE O ESTADO DO FILTRO E O HANDLER PARA A TABELA
+      filterValues={columnFilters} // Passa o estado "ao vivo" para os inputs da tabela
+      onFilterChange={handleColumnFilterChange as (accessor: keyof TableDataItem, value: string) => void} // Passa a função para a tabela chamar quando um filtro mudar
     />
-  ), [tableData, pagination, sort, isLoading]);
+  ), [tableData, pagination, sort, isLoading, columnFilters, handleColumnFilterChange]); // Adicione as novas dependências
 
   return (
     <DashboardPanelTemplate

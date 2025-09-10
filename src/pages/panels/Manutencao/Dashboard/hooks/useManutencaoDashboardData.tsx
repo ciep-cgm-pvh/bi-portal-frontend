@@ -9,8 +9,8 @@ const formatCurrency = (value: number) =>
   new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value || 0);
 
 const sortKeyMapping: { [key: string]: string } = {
-  data: 'datetime',
-  total: 'totalCost',
+  // data: 'datetime',
+  // total: 'totalCost',
 };
 
 /**
@@ -20,7 +20,7 @@ const sortKeyMapping: { [key: string]: string } = {
  * @param filters - O estado atual dos filtros aplicados no dashboard.
  * @returns Um objeto contendo todos os dados prontos para serem consumidos pelos componentes.
  */
-export const useManutencaoDashboardData = ({ filters, pagination, sort }: any) => {
+export const useManutencaoDashboardData = ({ filters, tableFilter, pagination, sort }: any) => {
   //console.log('Fetching Manutencao dashboard data with filters:', filters, 'pagination:', pagination, 'sort:', sort);
   // 2. USE A FUNÇÃO PARA PREPARAR OS FILTROS
 
@@ -30,6 +30,7 @@ export const useManutencaoDashboardData = ({ filters, pagination, sort }: any) =
 
     return {
       filters,
+      tableFilter,
       limit: pagination.itemsPerPage,
       offset: (pagination.currentPage - 1) * pagination.itemsPerPage,
       sortBy: sortByBackend,
@@ -39,10 +40,9 @@ export const useManutencaoDashboardData = ({ filters, pagination, sort }: any) =
 
   const [result] = useQuery({
     query: GET_MANUTENCAO_DASHBOARD_DATA_QUERY,
-    variables: queryVariables, 
+    variables: queryVariables,
   });
   // console.log('Manutencao dashboard query result:', result);
-  
 
   const { data, fetching: isLoading, error } = result;
 

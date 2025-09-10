@@ -1,3 +1,4 @@
+// Local: src/pages/panels/Combustivel/Dashboard/hooks/useAbastecimentoData.ts
 import { useEffect, useRef, useState } from 'react';
 import { useQuery } from 'urql';
 import type { SortConfig, TableDataItem } from '../../../../../types/tables';
