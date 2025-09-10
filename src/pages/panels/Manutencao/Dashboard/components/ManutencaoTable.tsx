@@ -44,7 +44,7 @@ const columns: TableColumn<TableDataItem>[] = [
         accessor: 'datetime',
         sortable: true,
         isFilterable: true,
-        render: (item) => formatCell(item.datetime, 'DATE')
+        render: (item) => item.datetime
     },
     { 
         header: 'Categoria',
