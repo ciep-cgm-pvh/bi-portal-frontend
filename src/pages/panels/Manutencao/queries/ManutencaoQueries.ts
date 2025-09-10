@@ -67,9 +67,9 @@ export const GET_MANUTENCAO_DASHBOARD_DATA_QUERY = `
     os
     department
     plate
-    dateRange: datetime
-    categoryOs: categoryOs
-    totalCost: totalCost
+    datetime
+    categoryOs
+    totalCost
   }
 
   # 5. Contagem Total de Itens para Paginação
