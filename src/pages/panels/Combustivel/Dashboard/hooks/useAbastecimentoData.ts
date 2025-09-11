@@ -99,15 +99,6 @@ export const useAbastecimentoData = ({ filters, itemsPerPage }: UseAbastecimento
 
   const { data: apiData, fetching: isLoading, error } = result;
   useEffect(() => {
-    // --- COLOQUE O LOG AQUI ---
-    console.log('%c[API Request] Enviando nova requisição com os filtros:', 'color: yellow; font-weight: bold;', {
-      filters: gqlFilters,
-      tableFilters: gqlTableFilters,
-      page: currentPage,
-      limit: itemsPerPage,
-      sort: sortConfig
-    });
-
     reexecuteQuery({ requestPolicy: 'network-only' });
   }, [ currentPage, sortConfig, filters, itemsPerPage, reexecuteQuery ]);
 

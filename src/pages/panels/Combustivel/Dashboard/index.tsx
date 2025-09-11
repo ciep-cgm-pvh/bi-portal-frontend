@@ -42,10 +42,6 @@ const DashboardCombustivel = () => {
       hasInitialized.current = true;
     }
   }, [lastUpdate]); // A dependência continua a mesma, mas a lógica interna impede re-execução
-
-  useEffect(() => {
-    console.log('%c[DASHBOARD] 2. Estado de filtros foi atualizado (pai):', 'color: green; font-weight: bold;', filters);
-  }, [filters]);
   
   const handleApplyFilters = (newFilters: any) => {
     setFilters(newFilters);

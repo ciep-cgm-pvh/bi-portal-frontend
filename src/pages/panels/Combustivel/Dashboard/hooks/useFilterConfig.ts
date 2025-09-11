@@ -16,8 +16,6 @@ const GET_FILTER_OPTIONS_QUERY = `
 `;
 
 export const useFiltersConfig = (activeFilters: Record<string, any>) => {
-  console.log('%c[HOOK-FILTERS] 3. Hook de filtros recebeu filtros ativos:', 'color: purple; font-weight: bold;', activeFilters);
-
   // 👇 INÍCIO DA CORREÇÃO 👇
   const filtersForOptionsQuery = useMemo(() => {
     // Cria uma cópia para não modificar o estado original
