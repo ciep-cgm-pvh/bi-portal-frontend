@@ -24,7 +24,7 @@ const HubCardsDataV2: HubCardInterface[] = [
   //   icon: <TicketsPlane className="text-orange-400 w-6 h-6" />,
   //   type: "demonstracão",
   // },
-  // {
+  {
     title: "Manutenção (demo)",
     description: "Painel com dados de manutenção de frota.",
     route: "/painel/manutencao/dashboard",
