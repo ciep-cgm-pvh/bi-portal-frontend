@@ -5,7 +5,7 @@ import {
   Fuel,
   TicketsPlane,
   TrafficCone,
-  //Wrench
+  Wrench
 } from 'lucide-react';
 
 import type { HubCardInterface } from '../interfaces/hubCardInterface';
