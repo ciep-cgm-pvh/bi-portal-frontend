@@ -3,7 +3,7 @@ import { Outlet } from "react-router-dom";
 import NavBarMobile from '../../components/NavBar/NavBarMobile';
 import SideBar from '../../components/SideBar/Sidebar';
 import useIsMobile from '../../hooks/useIsMobile';
-import { Analytics } from '@vercel/analytics/react';
+
 
 
 export default function LayoutBase() {
@@ -33,7 +33,7 @@ export default function LayoutBase() {
         
         <Outlet context={isMobile as boolean}/>
       </main>
-      <Analytics/> 
+      
     </div>
   );
 }
