@@ -15,9 +15,13 @@ interface TableSectionProps<T extends TableDataItem> {
   onFilterChange?: (accessor: keyof T, value: string) => void;
 }
 
+const getNestedValue = (obj: any, path: string): any => {
+  return path.split('.').reduce((acc, part) => acc && acc[part], obj);
+};
+
 export const TableSection = <T extends TableDataItem>({
   title,
-  columns,
+  columns = [],
   data,
   isLoading = false,
   emptyMessage = 'Nenhum resultado encontrado.',
@@ -40,7 +44,7 @@ export const TableSection = <T extends TableDataItem>({
   const hasFilters = columns.some(c => c.isFilterable);
 
   return (
-     <section className="bg-white px-4 pt-4 rounded-t-lg">
+    <section className="bg-white px-4 pt-4 rounded-t-lg">
       {title && <h2 className="text-xl font-bold text-gray-800 mb-4">{title}</h2>}
       <div className="overflow-x-auto">
         <table className="w-full text-left text-sm">
@@ -88,10 +92,10 @@ export const TableSection = <T extends TableDataItem>({
               <tr><td colSpan={columns.length} className="p-6 text-center text-gray-500">{emptyMessage}</td></tr>
             ) : (
               data.map((item) => (
-                <tr key={item.id} className="border-b border-gray-100 hover:bg-gray-50 transition-colors">
+                <tr key={(item.id)} className="border-b border-gray-100 hover:bg-gray-50 transition-colors">
                   {columns.map((column) => (
                     <td key={String(column.accessor)} className={`py-4 px-4 ${column.className || ''}`}>
-                      {column.render ? column.render(item) : item[column.accessor]}
+                      {column.render ? column.render(item) : getNestedValue(item, String(column.accessor))}
                     </td>
                   ))}
                 </tr>
