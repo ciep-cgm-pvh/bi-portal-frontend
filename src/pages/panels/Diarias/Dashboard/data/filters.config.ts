@@ -38,4 +38,4 @@ export const filterConfiguration: FilterConfig[] = [
   },
 ];
 
-export const initialFilterValues = { orgao: '', status: '', startDate: '', endDate: '' };
+export const initialFilterValues = { orgao: '', status: '', from: '', to: '' };

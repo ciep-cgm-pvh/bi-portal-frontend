@@ -4,33 +4,22 @@ import { useMemo } from 'react';
 import { useQuery } from 'urql';
 import type { FilterConfig } from '../../../../../types/filters';
 import { baseFilterConfig } from '../data/filters.config';
-
-const GET_FILTER_OPTIONS_QUERY = `
-  query GetFilterOptions($filters: AbastecimentoFiltersOptionsInput) {
-   departmentOptions(filters: $filters) { value, label }
-   vehiclePlateOptions(filters: $filters) { value, label }
-   vehicleModelOptions(filters: $filters) { value, label }
-   gasStationCityOptions(filters: $filters) { value, label }
-   gasStationNameOptions(filters: $filters) { value, label }
- }
-`;
+import { GET_COMBUSTIVEL_FILTER_OPTIONS_QUERY } from '../../queries/CombustivelQueries';
 
 export const useFiltersConfig = (activeFilters: Record<string, any>) => {
-  // 👇 INÍCIO DA CORREÇÃO 👇
   const filtersForOptionsQuery = useMemo(() => {
     // Cria uma cópia para não modificar o estado original
     const cleanedFilters = { ...activeFilters };
 
     // Remove as chaves que não fazem parte do tipo AbastecimentoFiltersOptionsInput
-    delete cleanedFilters.startDate;
-    delete cleanedFilters.endDate;
+    delete cleanedFilters.from;
+    delete cleanedFilters.to;
 
     return cleanedFilters;
   }, [ activeFilters ]);
-  // 👆 FIM DA CORREÇÃO 👆
   // 2. Use os filtros ativos como variáveis na query
   const [ result ] = useQuery({
-    query: GET_FILTER_OPTIONS_QUERY,
+    query: GET_COMBUSTIVEL_FILTER_OPTIONS_QUERY,
     // 2. Passe os filtros ativos como variáveis para a query
     variables: { filters: filtersForOptionsQuery }
   });
