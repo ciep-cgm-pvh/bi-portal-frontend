@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // Em src/pages/panels/Diarias/Dashboard/components/DiariasFilters.tsx
 
 import { useEffect, useState } from 'react';

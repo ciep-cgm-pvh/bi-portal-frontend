@@ -51,14 +51,12 @@ export const useDiariasDashboardData = ({ filters, tableFilter, pagination, sort
   const kpiData = useMemo(() => {
     const kpis = data?.kpis;
     if (!kpis) return [
-      { title: 'Custo Total', value: 'Carregando...', icon: <DollarSign className="size-5" /> },
+      { title: 'Total Concedido', value: 'Carregando...', icon: <DollarSign className="size-5" /> },
       { title: 'Nº de Ordens de Serviço', value: 'Carregando...', icon: <Wrench className="size-5" /> },
-      { title: 'Custo Médio por OS', value: 'Carregando...', icon: <DollarSign className="size-5" /> },
     ];
     return [
-      { title: 'Custo Total', value: formatCurrency(kpis.totalCost), icon: <DollarSign className="size-5 text-green-500" /> },
-      { title: 'Nº de Ordens de Serviço', value: kpis.serviceOrderCount?.toLocaleString('pt-BR'), icon: <Wrench className="size-5 text-blue-500" /> },
-      { title: 'Custo Médio por OS', value: formatCurrency(kpis.averageCostPerOs), icon: <DollarSign className="size-5 text-yellow-500" /> },
+      { title: 'Total Concedido', value: formatCurrency(kpis.totalCost), icon: <DollarSign className="size-5 text-green-500" /> },
+      { title: 'N° de Empenhos de Diárias', value: kpis.serviceOrderCount?.toLocaleString('pt-BR'), icon: <Wrench className="size-5 text-blue-500" /> },
     ];
   }, [data?.kpis]);
 

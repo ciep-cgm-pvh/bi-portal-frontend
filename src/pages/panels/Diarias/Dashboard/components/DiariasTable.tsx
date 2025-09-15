@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // Local: src/pages/panels/Diarias/Dashboard/components/DiariasTable.tsx
 
 import type { ReactNode } from 'react';

@@ -13,8 +13,7 @@ import DataSourceManutencao from '../pages/panels/Manutencao/DataSoruce';
 import HomeManutencao from '../pages/panels/Manutencao/Home';
 
 const navLinks: NavLinkInterface[] = [
-
-  // Agrupamento dos painéis
+  // Painel de Manutenção
   {
     title: "Início",
     path: "/painel/manutencao/home",
@@ -39,6 +38,9 @@ const navLinks: NavLinkInterface[] = [
     published: false,
     group: "manutencao",
   },
+
+
+  //Painel de Diarias
   {
     title: "Início",
     path: "/painel/diarias/home",
@@ -63,6 +65,8 @@ const navLinks: NavLinkInterface[] = [
     published: false,
     group: "diarias",
   },
+
+  //  Painel de Abastecimento
   {
     title: "Início",
     path: "/painel/abastecimento/home",

@@ -88,8 +88,8 @@ const DashboardDiarias = () => {
 
   return (
     <DashboardPanelTemplate
-      title="Manutenção de Veículos"
-      description="Visualize e filtre os dados de gastos com manutenção de veículos."
+      title="Diárias"
+      description="Visualize e filtre os dados de gastos com diárias."
       lastUpdate={lastUpdate}
       isLoading={isLoading}
       kpiData={kpiData}
