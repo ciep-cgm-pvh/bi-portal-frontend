@@ -12,6 +12,7 @@ export const GET_COMBUSTIVEL_DASHBOARD_DATA_QUERY = `
   query GetAbastecimentoDashboardData (
   $filters: AbastecimentoFiltersInput
   $limit: Int
+  $vehicleLimit: Int
   $offset: Int
   $sortBy: String
   $sortDirection: String
@@ -29,7 +30,7 @@ export const GET_COMBUSTIVEL_DASHBOARD_DATA_QUERY = `
   }
 
   # 2. Charts Data
-  costByVehicle(filters:$filters) {
+  costByVehicle(vehicleLimit: $vehicleLimit filters:$filters) {
     vehicle
     total
   }
@@ -55,6 +56,20 @@ export const GET_COMBUSTIVEL_DASHBOARD_DATA_QUERY = `
   }
   costOverTime(filters:$filters) {
     date
+    total
+  }
+  
+  rankingByDate(filters: $filters) {
+   	date
+  	total
+  }
+  rankingByPlate(filters: $filters) {
+   	plate
+    quantity
+  	total
+  }
+  rankingByDepartment(filters: $filters) {
+    department
     total
   }
   
@@ -107,25 +122,27 @@ export const GET_COMBUSTIVEL_DASHBOARD_DATA_QUERY = `
  */
 export const GET_COMBUSTIVEL_FILTER_OPTIONS_QUERY = `
 query GetAbastecimentoFiltersOptions($filters: AbastecimentoFiltersOptionsInput) {
-  departmentOptions(filters:$filters) {
-    value
-    label
-  }
-  vehiclePlateOptions(filters:$filters) {
-    value
-    label
-  }
-  vehicleModelOptions(filters:$filters) {
-    value
-    label
-  }
-  gasStationCityOptions(filters:$filters) {
-    value
-    label
-  }
-  gasStationNameOptions(filters:$filters) {
-    value
-    label
+  AbastecimentoFilterOptions(filters: $filters) {
+    departmentOptions {
+      value
+      label
+    }
+    vehiclePlateOptions{
+      value
+      label
+    }
+    vehicleModelOptions{
+      value
+      label
+    }
+    gasStationCityOptions{
+      value
+      label
+    }
+    gasStationNameOptions{
+      value
+      label
+    }
   }
 }
 `

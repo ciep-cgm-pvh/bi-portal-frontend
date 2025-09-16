@@ -61,6 +61,7 @@ export const useAbastecimentoDashboardData = ({ filters, tableFilters, paginatio
     return {
       filters: cleanedFilters,
       tableFilters: cleanedTableFilters,
+      vehicleLimit: 10, // Limite fixo para o gráfico de veículos
       limit: pagination.itemsPerPage,
       offset: (pagination.currentPage - 1) * pagination.itemsPerPage,
       sortBy: sortByBackend,
@@ -120,6 +121,37 @@ export const useAbastecimentoDashboardData = ({ filters, tableFilters, paginatio
       type: 'bar-vertical',
       data: data?.costByVehicle || [],
       config: { dataKey: 'total', categoryKey: 'vehicle', color: '#82ca9d' },
+    },
+    {
+      id: 'ranking-por-date',
+      title: 'Ranking por Data',
+      type: 'ranking-table',
+      data: data?.rankingByDate || [],
+      config:  { columns: [
+        { header: 'Data', accessor: 'date', className: 'text-left' },
+        { header: 'Total Gasto', accessor: 'total', className: 'text-right', render: (value) => formatCurrency(value)}
+      ]},
+    },
+    {
+      id: 'ranking-por-department',
+      title: 'Ranking por Secretaria',
+      type: 'ranking-table',
+      data: data?.rankingByDepartment || [],
+      config:  { columns: [
+        { header: 'Secretaria', accessor: 'department', className: 'text-left' },
+        { header: 'Total Gasto', accessor: 'total', className: 'text-right', render: (value) => formatCurrency(value)}
+      ]},
+    },
+    {
+      id: 'ranking-por-veiculo',
+      title: 'Ranking por Veículo',
+      type: 'ranking-table',
+      data: data?.rankingByPlate || [],
+      config:  { columns: [
+        { header: 'Placa', accessor: 'plate', className: 'text-left' },
+        { header: 'Qtde.', accessor: 'quantity', className: 'text-center' },
+        { header: 'Total Gasto', accessor: 'total', className: 'text-right', render: (value) => formatCurrency(value)}
+      ]},
     },
   ];
 }, [data?.costOverTime, data?.costByDepartment, data?.costByVehicle]);

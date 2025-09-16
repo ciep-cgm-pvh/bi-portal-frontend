@@ -28,25 +28,26 @@ export const useFiltersConfig = (activeFilters: Record<string, any>) => {
   const finalFilterConfig = useMemo((): FilterConfig[] => {
     let config = [ ...baseFilterConfig ];
 
-    if (data) {
+    if (data?.AbastecimentoFilterOptions) {
+      const options = data.AbastecimentoFilterOptions;
+
       config = config.map(filter => {
         switch (filter.id) {
           case 'department':
-            return { ...filter, options: data.departmentOptions };
+            return { ...filter, options: options.departmentOptions };
           case 'vehiclePlate':
-            return { ...filter, options: data.vehiclePlateOptions };
+            return { ...filter, options: options.vehiclePlateOptions };
           case 'vehicleModel':
-            return { ...filter, options: data.vehicleModelOptions };
+            return { ...filter, options: options.vehicleModelOptions };
           case 'gasStationCity':
-            return { ...filter, options: data.gasStationCityOptions };
+            return { ...filter, options: options.gasStationCityOptions };
           case 'gasStationName':
-            return { ...filter, options: data.gasStationNameOptions };
+            return { ...filter, options: options.gasStationNameOptions };
           default:
             return filter;
         }
       });
     }
-
     return config;
     // 3. Adicione `activeFilters` como dependência do useMemo
   }, [ data, activeFilters ]);
