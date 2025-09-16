@@ -49,16 +49,17 @@ export const useDiariasDashboardData = ({ filters, tableFilter, pagination, sort
 
   // Memoiza o processamento dos KPIs
   const kpiData = useMemo(() => {
-    const kpis = data?.kpis;
+    const kpis = data?.getDiariasKpi;
     if (!kpis) return [
       { title: 'Total Concedido', value: 'Carregando...', icon: <DollarSign className="size-5" /> },
       { title: 'Nº de Ordens de Serviço', value: 'Carregando...', icon: <Wrench className="size-5" /> },
     ];
     return [
-      { title: 'Total Concedido', value: formatCurrency(kpis.totalCost), icon: <DollarSign className="size-5 text-green-500" /> },
-      { title: 'N° de Empenhos de Diárias', value: kpis.serviceOrderCount?.toLocaleString('pt-BR'), icon: <Wrench className="size-5 text-blue-500" /> },
+      { title: 'Total Concedido', value: formatCurrency(kpis.totalGasto), icon: <DollarSign className="size-5 text-green-500" /> },
+      { title: 'N° de Empenhos de Diárias', value: kpis.totalDiarias?.toLocaleString('pt-BR'), icon: <Wrench className="size-5 text-blue-500" /> },
     ];
-  }, [data?.kpis]);
+  }, [data?.getDiariasKpi]);
+
 
   // Memoiza a configuração dos gráficos
   const chartConfig = useMemo((): ChartConfig[] => {

@@ -10,70 +10,65 @@
  * O objetivo é carregar o estado inicial do painel com uma única requisição.
  */
 export const GET_DIARIAS_DASHBOARD_DATA_QUERY = `
-  query GetManutencaoDashboardData(
-  $filters: ManutencaoFiltersInput
-  $limit: Int
-  $offset: Int
-  $sortBy: String
-  $sortDirection: String
-  $tableFilter: ManutencaoFilterTableInput
-) {
-  # 1. KPIs
-  kpis: ManutencaoKpis(filters: $filters) {
-    totalCost
-    serviceOrderCount
-    averageCostPerOs
-    lastUpdate
-  }
-
-  # 2. Dados para Gráficos
-  charts: ManutencaoCharts(filters: $filters) {
-    costByDepartment {
-      name: department
-      value: total
-    }
-    costByTypeOfManutencao {
-      name: categoryOs
-      value: total
-    }
-  }
-
-  # 3. Opções para os Filtros (NOVO)
-  filterOptions: FilterOptions {
-    department {
-      value
-      label
-    }
-    categoryOs {
-      value
-      label
-    }
-    plate {
-      value
-      label
-    }
-  }
-
-  # 4. Dados da Tabela (paginados e com novo campo 'id')
-  tableData: getManutencaoTable(
-    limit: $limit
-    offset: $offset
-    sortBy: $sortBy
-    sortDirection: $sortDirection
-    filters: $filters
-    tableFilters: $tableFilter
-  ) {
-    id
-    os
+  query Diarias{
+  getDiarias {
     department
-    plate
-    datetime
-    categoryOs
-    totalCost
+    budgetUnit
+    action
+    expensePlan
+    resourceSource
+    expenseType
+    payment
+    paymentDate
+    settlement
+    commitment
+    employee
+    history
+    processNumber
+    defaultDate
+    delayDays
+    approvedDate
+    canceledDate
+    amountToApprove
+    amountApproved
+    amountCanceled
+    amountGranted
+    balance
   }
-
-  # 5. Contagem Total de Itens para Paginação
-  totalCount: TableCount(filters: $filters tableFilters: $tableFilter)
+  getDiariasKpi {
+    totalGasto
+    totalDiarias
+  }
+  getDiariasCharts {
+    GastoMesDiaria {
+      month
+      total
+    }
+    OrgaoGastoDiaria {
+      name
+      total
+    }
+  }
+  getDiariasFiltersOptions {
+    department {
+			value
+      label
+    }
+    status {
+			value
+      label
+    }
+    processNumber {
+			value
+      label
+    }
+    paymentDate {
+			value
+      label
+    }
+  }
+  getDiariasTableCount
+  getDiariasLastUpdate
 }
 `;
 // =================================================
