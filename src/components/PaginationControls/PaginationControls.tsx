@@ -25,7 +25,7 @@ export const PaginationControls = ({
   // Efeito para debouncing: só atualiza o estado global após o usuário parar de digitar
   useEffect(() => {
     const handler = setTimeout(() => {
-      const numValue = parseInt(inputValue, 5);
+      const numValue = parseInt(inputValue, 10);
       // Atualiza apenas se o valor for um número válido, maior que zero e diferente do valor atual
       if (!isNaN(numValue) && numValue > 0 && numValue !== itemsPerPage) {
         onItemsPerPageChange(numValue);
@@ -61,6 +61,20 @@ export const PaginationControls = ({
     }
   };
 
+  const handleBlur = () => {
+    const numValue = parseInt(inputValue, 10);
+    if (!isNaN(numValue) && numValue > 0) {
+      if (numValue !== itemsPerPage) {
+        onItemsPerPageChange(numValue);
+      }
+    } else {
+      setInputValue(String(itemsPerPage)); // reseta se inválido
+    }
+  };
+
+  if (totalPages <= 1 && totalItems <= itemsPerPage) return null;
+
+
   return (
     <div className="flex flex-col sm:flex-row items-center justify-between text-sm text-gray-600 bg-white p-3 rounded-b-lg border-t border-gray-200">
       {/* Lado Esquerdo: Input de Itens por Página */}
@@ -72,6 +86,7 @@ export const PaginationControls = ({
           min="1"
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
+          onBlur={handleBlur}
           className="w-16 text-center p-1 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
         />
       </div>
