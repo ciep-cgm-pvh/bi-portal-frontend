@@ -1,16 +1,16 @@
-import type { FilterConfig } from '../../../../../types/filters';
+import type { FilterConfig } from "../../../../../types/filters";
 
-// CORREÇÃO: Os 'id's agora correspondem ao que o backend espera.
+// IDs alinhados com getDiariasFiltersOptions
 export const baseFilterConfig: FilterConfig[] = [
-  { id: 'dateRange', label: 'Período', type: 'daterange' }, // Usaremos 'date-range' para o objeto
-  { id: 'department', label: 'Secretaria', type: 'select', options: [] },
-  { id: 'categoryOs', label: 'Categoria OS', type: 'select', options: [] },
-  { id: 'plate', label: 'Placa', type: 'select', options: [] },
+  { id: "department", label: "Secretaria", type: "select", options: [] },
+  { id: "status", label: "Status", type: "select", options: [] },
+  { id: "processNumber", label: "Nº do Processo", type: "select", options: [] }, // pode trocar para 'text' se preferir digitação livre
+  { id: "paymentDate", label: "Período", type: "daterange" }, // usa from/to
 ];
 
 export const initialFilterValues = {
-  dateRange: { from: '2025-01-01', to: '2025-08-28' },
-  department: '',
-  categoryOs: '',
-  plate: '',
+  department: "",
+  status: "",
+  processNumber: "",
+  paymentDate: { from: "", to: "" }, // ISO 'YYYY-MM-DD' quando houver valor
 };

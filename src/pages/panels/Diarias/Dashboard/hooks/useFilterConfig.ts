@@ -4,44 +4,82 @@
 import { useMemo } from "react";
 import { useQuery } from "urql";
 import type { FilterConfig } from "../../../../../types/filters";
-import { GET_DIARIAS_FILTER_OPTIONS_QUERY } from "../../Queries/DiariasQueries";
+import { GET_DIARIAS_DASHBOARD_DATA_QUERY } from "../../Queries/DiariasQueries";
 import { baseFilterConfig } from "../data/filters.config";
 
 /**
- * @description Hook para buscar e construir a configuração dos filtros de Manutenção.
- * @param activeFilters - Os filtros atualmente selecionados/digitados pelo usuário.
- * @returns A configuração completa para o componente de filtros, com opções atualizadas.
+ * Hook para buscar e montar as opções de filtros do painel de DIÁRIAS.
+ * Espera que o backend retorne getDiariasFiltersOptions com:
+ * - department[{value,label}]
+ * - status[{value,label}]
+ * - processNumber[{value,label}]
+ * - paymentDate[{value,label}]
  */
 export const useFiltersConfig = (activeFilters: any) => {
-  const queryVariables = useMemo(() => {
-    return { filters: activeFilters };
-  }, [activeFilters]);
+  const variables = useMemo(
+    () => ({ filters: activeFilters }),
+    [activeFilters]
+  );
 
-  const [result] = useQuery({
-    query: GET_DIARIAS_FILTER_OPTIONS_QUERY,
-    variables: queryVariables,
+  const [{ data, fetching: isLoading }] = useQuery({
+    query: GET_DIARIAS_DASHBOARD_DATA_QUERY,
+    variables,
   });
 
-  const { data, fetching: isLoading } = result;
-
   const filterConfig = useMemo((): FilterConfig[] => {
-    const options = data?.filterOptions;
+    // Tenta primeiro a chave certa do backend
+    const options =
+      data?.getDiariasFiltersOptions ||
+      // fallback caso alguém tenha deixado "filterOptions" no servidor antigo
+      data?.filterOptions ||
+      null;
+
+    // Se ainda não veio nada, devolve a base zerada para não quebrar o UI
     if (!options) {
-      // Retorna a config base com arrays vazios enquanto carrega ou se não houver dados
       return baseFilterConfig.map((fc) => ({ ...fc, options: [] }));
     }
 
-    // Mapeia as opções recebidas da API para a configuração base de filtros
+    // Normaliza um array qualquer para [{value,label}]
+    const normalize = (list: any[] | undefined) => {
+      if (!Array.isArray(list)) return [];
+      return list
+        .filter(Boolean)
+        .map((opt: any) => {
+          if (
+            opt &&
+            typeof opt === "object" &&
+            "value" in opt &&
+            "label" in opt
+          ) {
+            return opt;
+          }
+          // Se o backend mandar string, vira { value: s, label: s }
+          if (typeof opt === "string" || typeof opt === "number") {
+            return { value: String(opt), label: String(opt) };
+          }
+          // Último caso: tenta extrair value/label “na marra”
+          return {
+            value: String(opt?.value ?? opt?.id ?? ""),
+            label: String(opt?.label ?? opt?.name ?? opt?.value ?? ""),
+          };
+        })
+        .filter((o: any) => o.value || o.label);
+    };
+
+    // Mapeia os IDs do baseFilterConfig para as coleções certas do backend
     return baseFilterConfig.map((filter) => {
       switch (filter.id) {
         case "department":
-          return { ...filter, options: options.department || [] };
-        case "categoryOs":
-          return { ...filter, options: options.categoryOs || [] };
-        case "plate":
-          return { ...filter, options: options.plate || [] };
+          return { ...filter, options: normalize(options.department) };
+        case "status":
+          return { ...filter, options: normalize(options.status) };
+        case "processNumber":
+          return { ...filter, options: normalize(options.processNumber) };
+        case "paymentDate":
+          return { ...filter, options: normalize(options.paymentDate) };
         default:
-          return filter;
+          // Se existir algum filtro “extra” na base, mantém como está
+          return { ...filter, options: filter.options ?? [] };
       }
     });
   }, [data]);

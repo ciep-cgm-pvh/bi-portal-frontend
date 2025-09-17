@@ -79,28 +79,6 @@ export const GET_DIARIAS_DASHBOARD_DATA_QUERY = `
  * @description Query para buscar as opções dinâmicas para os filtros do dashboard de manutenção.
  * É chamada toda vez que um filtro é alterado para atualizar as opções dos outros.
  */
-export const GET_DIARIAS_FILTER_OPTIONS_QUERY = `
-  query GetManutencaoFilterOptions($filters: ManutencaoFiltersInput) {
-    filterOptions: FilterOptions(filters: $filters) {
-      department {
-        value
-        label
-      }
-      categoryOs {
-        value
-        label
-      }
-      plate {
-        value
-        label
-      }
-    }
-  }
-`;
-
-// =================================================
-//      FONTES DE DADOS (DATA SOURCES)
-// ================================================
 
 /**
  * @description Query para baixar o relatório completo e detalhado das manutenções.
