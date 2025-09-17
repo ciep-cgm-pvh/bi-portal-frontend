@@ -30,47 +30,44 @@ export const GET_COMBUSTIVEL_DASHBOARD_DATA_QUERY = `
   }
 
   # 2. Charts Data
-  costByVehicle(vehicleLimit: $vehicleLimit filters:$filters) {
-    vehicle
-    total
-  }
-  costByDepartment(filters:$filters) {
-    department
-    total
-  }
-  costByCity(filters:$filters) {
-    city
-    total
-  }
-  costByGasStation(filters:$filters) {
-    name
-    total
-  }
-  costByPlate(filters:$filters) {
-    plate
-    total
-  }
-  costByDate(filters:$filters) {
-    date
-    total
-  }
-  costOverTime(filters:$filters) {
-    date
-    total
-  }
-  
-  rankingByDate(filters: $filters) {
-   	date
-  	total
-  }
-  rankingByPlate(filters: $filters) {
-   	plate
-    quantity
-  	total
-  }
-  rankingByDepartment(filters: $filters) {
-    department
-    total
+  getAbastecimentoCharts(vehicleLimit: $vehicleLimit filters: $filters) {
+    costByVehicle {
+      vehicle
+      total
+    }
+    costByDepartment{
+      department
+      total
+    }
+    costByCity{
+      city
+      total
+    }
+    costByPlate{
+      plate
+      total
+    }
+    costByDate{
+      date
+      total
+    }
+    costOverTime{
+      date
+      total
+    }
+    rankingByDate{
+      date
+      total
+    }
+    rankingByPlate{
+      plate
+      quantity
+      total
+    }
+    rankingByDepartment{
+      department
+      total
+    }
   }
   
   # 3. Dados da Tabela (paginados e com novo campo 'id')

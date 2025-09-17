@@ -105,28 +105,28 @@ export const useAbastecimentoDashboardData = ({ filters, tableFilters, paginatio
       id: 'custo-por-tempo',
       title: 'Gasto ao longo do tempo',
       type: 'line',
-      data: data?.costOverTime || [],
+      data: data?.getAbastecimentoCharts.costOverTime || [],
       config: { dataKey: 'total', categoryKey: 'date' },
     },
     {
       id: 'custo-por-secretaria',
       title: 'Gasto por Secretaria',
       type: 'pie',
-      data: data?.costByDepartment || [],
+      data: data?.getAbastecimentoCharts.costByDepartment || [],
       config: { dataKey: 'total', nameKey: 'department' },
     },
     {
       id: 'custo-por-veiculo',
       title: 'Gasto por Veículo',
       type: 'bar-vertical',
-      data: data?.costByVehicle || [],
+      data: data?.getAbastecimentoCharts.costByVehicle || [],
       config: { dataKey: 'total', categoryKey: 'vehicle', color: '#82ca9d' },
     },
     {
       id: 'ranking-por-date',
       title: 'Ranking por Data',
       type: 'ranking-table',
-      data: data?.rankingByDate || [],
+      data: data?.getAbastecimentoCharts.rankingByDate || [],
       config:  { columns: [
         { header: 'Data', accessor: 'date', className: 'text-left' },
         { header: 'Total Gasto', accessor: 'total', className: 'text-right', render: (value) => formatCurrency(value)}
@@ -136,7 +136,7 @@ export const useAbastecimentoDashboardData = ({ filters, tableFilters, paginatio
       id: 'ranking-por-department',
       title: 'Ranking por Secretaria',
       type: 'ranking-table',
-      data: data?.rankingByDepartment || [],
+      data: data?.getAbastecimentoCharts.rankingByDepartment || [],
       config:  { columns: [
         { header: 'Secretaria', accessor: 'department', className: 'text-left' },
         { header: 'Total Gasto', accessor: 'total', className: 'text-right', render: (value) => formatCurrency(value)}
@@ -146,7 +146,7 @@ export const useAbastecimentoDashboardData = ({ filters, tableFilters, paginatio
       id: 'ranking-por-veiculo',
       title: 'Ranking por Veículo',
       type: 'ranking-table',
-      data: data?.rankingByPlate || [],
+      data: data?.getAbastecimentoCharts.rankingByPlate || [],
       config:  { columns: [
         { header: 'Placa', accessor: 'plate', className: 'text-left' },
         { header: 'Qtde.', accessor: 'quantity', className: 'text-center' },
@@ -154,7 +154,7 @@ export const useAbastecimentoDashboardData = ({ filters, tableFilters, paginatio
       ]},
     },
   ];
-}, [data?.costOverTime, data?.costByDepartment, data?.costByVehicle]);
+}, [data?.getAbastecimentoCharts.costOverTime, data?.getAbastecimentoCharts.costByDepartment, data?.getAbastecimentoCharts.costByVehicle, data?.getAbastecimentoCharts.rankingByDate, data?.getAbastecimentoCharts.rankingByDepartment, data?.getAbastecimentoCharts.rankingByPlate]);
 
 
     // Extrai os dados da tabela e a contagem total
