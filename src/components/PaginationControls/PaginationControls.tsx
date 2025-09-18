@@ -17,9 +17,6 @@ export const PaginationControls = ({
   onItemsPerPageChange,
   totalItems,
 }: PaginationControlsProps) => {
-  // --- INÍCIO DAS ALTERAÇÕES ---
-
-  // Estado local para o valor do input, permitindo digitação livre
   const [inputValue, setInputValue] = useState(String(itemsPerPage));
 
   // Efeito para debouncing: só atualiza o estado global após o usuário parar de digitar
@@ -73,7 +70,6 @@ export const PaginationControls = ({
   };
 
   if (totalPages <= 1 && totalItems <= itemsPerPage) return null;
-
 
   return (
     <div className="flex flex-col sm:flex-row items-center justify-between text-sm text-gray-600 bg-white p-3 rounded-b-lg border-t border-gray-200">
