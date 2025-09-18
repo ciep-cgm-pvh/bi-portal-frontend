@@ -5,14 +5,11 @@ export const prepareGqlFilters = (raw: any) => {
   if (!raw) return { filters, tableFilters };
 
   // dateRange só no geral
-  if (raw.startDate && raw.endDate) {
+  if (raw.from && raw.to) {
     filters.dateRange = {
-      from: new Date(raw.startDate).toISOString(),
-      to: new Date(raw.endDate).toISOString()
+      from: new Date(raw.from).toISOString(),
+      to: new Date(raw.to).toISOString()
     };
-    console.log("dates_raw", raw.startDate, raw.endDate);
-    console.log("dates", filters.dateRange.from, filters.dateRange.to);
-
   }
 
   const TABLE_ONLY = new Set([ 'datetime', 'cost', 'fuelVolume' ]);
@@ -31,7 +28,7 @@ export const prepareGqlFilters = (raw: any) => {
     v === null || v === undefined || v === '' || (Array.isArray(v) && v.length === 0);
 
   for (const [ key, value ] of Object.entries(raw)) {
-    if (key === 'startDate' || key === 'endDate') continue;
+    if (key === 'from' || key === 'to') continue;
     if (isEmpty(value)) continue;
 
     if (TABLE_ONLY.has(key)) {

@@ -1,5 +1,4 @@
 // Em src/pages/panels/Manutencao/Dashboard/components/ManutencaoFilters.tsx
-
 import { useEffect, useState } from 'react';
 import FiltersSection from '../../../../../components/FiltersSection/FiltersSection';
 import { useFiltersConfig } from '../hooks/useFilterConfig';
@@ -18,12 +17,9 @@ export const ManutencaoFilters = ({
   isLoading,
 }: ManutencaoFiltersProps) => {
   const [draftFilters, setDraftFilters] = useState(initialValues);
-
-  // --- MUDANÇAS PRINCIPAIS AQUI ---
-  // 1. Chama o hook para buscar as opções dinâmicas com base nos filtros atuais
   const { filterConfig, isLoading: isLoadingConfig } = useFiltersConfig(draftFilters);
 
-  // 2. Sincroniza o estado interno se os valores iniciais mudarem (ex: ao limpar no pai)
+  // Sincroniza o estado interno se os valores iniciais mudarem (ex: ao limpar no pai)
   useEffect(() => {
     setDraftFilters(initialValues);
   }, [initialValues]);

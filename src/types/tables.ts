@@ -14,6 +14,8 @@ export interface TableColumn<T extends TableDataItem> {
   sortable?: boolean; // Adicionamos a opção de ser ordenável
   isFilterable?: boolean;
   render?: (item: T) => ReactNode;
+  dataType?: string;
+  filterKey?: string;
 }
 
 // Configuração para o estado de ordenação
