@@ -1,5 +1,4 @@
 // src/pages/DashboardCombustivel/components/Filters.tsx
-
 import { useEffect, useState } from 'react';
 import FiltersSection from '../../../../../components/FiltersSection/FiltersSection';
 import { useFiltersConfig } from '../hooks/useFilterConfig';
