@@ -99,6 +99,7 @@ const DashboardCombustivel = () => {
 
   const filterComponent = useMemo(() => (
     <AbastecimentoFilters
+      isLoading={isLoading}
       initialValues={generalFilters}
       onApply={handleApplyFilters}
       onClear={handleClearFilters}
