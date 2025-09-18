@@ -1,5 +1,4 @@
 // Em src/pages/panels/Manutencao/Dashboard/components/ManutencaoFilters.tsx
-
 import { useEffect, useState } from 'react';
 import FiltersSection from '../../../../../components/FiltersSection/FiltersSection';
 import { useFiltersConfig } from '../hooks/useFilterConfig';

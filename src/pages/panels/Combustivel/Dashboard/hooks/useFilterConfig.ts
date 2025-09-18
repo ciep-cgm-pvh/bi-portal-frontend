@@ -1,5 +1,4 @@
 // src/pages/DashboardCombustivel/hooks/useFiltersConfig.ts
-
 import { useMemo } from 'react';
 import { useQuery } from 'urql';
 import type { FilterConfig } from '../../../../../types/filters';
