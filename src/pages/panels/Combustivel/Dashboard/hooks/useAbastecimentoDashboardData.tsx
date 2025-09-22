@@ -24,21 +24,20 @@ export const useAbastecimentoDashboardData = ({ filters, tableFilters, paginatio
   const queryVariables = useMemo(() => {
     // Traduz a chave de ordenação, se necessário. Caso contrário, usa a chave original.
     const sortByBackend = sortKeyMapping[sort.key] || sort.key;
+
     const cleanedFilters = {
       dateRange: {
-        from: filters.from ?? "",
-        to: filters.to ?? "",
+        from: filters.from,
+        to: filters.to,
       },
-      fuelType: filters.fuelType ?? "",
-      vehiclePlate: filters.vehiclePlate ?? "",
-      vehicleBrand: filters.vehicleBrand ?? "",
-      vehicleModel: filters.vehicleModel ?? "",
-      driverName: filters.driverName ?? "",
-      department: filters.department ?? "",
-      gasStationCity: filters.gasStationCity ?? "",
-      gasStationName: filters.gasStationName ?? "",
+      vehiclePlate: filters.vehiclePlate,
+      vehicleModel: filters.vehicleModel,
+      department: filters.department,
+      gasStationCity: filters.gasStationCity,
+      gasStationName: filters.gasStationName,
       excludePostoInterno: Boolean(filters.excludePostoInterno),
     }
+
     const tableFilterKeyMap: Record<string, string> = {
       'vehicle.plate': 'vehiclePlate',
       'vehicle.brand': 'vehicleBrand',

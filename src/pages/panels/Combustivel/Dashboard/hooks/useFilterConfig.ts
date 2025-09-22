@@ -10,7 +10,14 @@ export const useFiltersConfig = (activeFilters: Record<string, any>) => {
     // Cria uma cópia para não modificar o estado original
     const cleanedFilters = { ...activeFilters };
 
-    // Remove as chaves que não fazem parte do tipo AbastecimentoFiltersOptionsInput
+    // Se houver from/to, agrupe em dateRange
+    if (cleanedFilters.from || cleanedFilters.to) {
+      cleanedFilters.dateRange = {
+        from: cleanedFilters.from,
+        to: cleanedFilters.to,
+      };
+    }
+
     delete cleanedFilters.from;
     delete cleanedFilters.to;
 
