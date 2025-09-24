@@ -6,12 +6,13 @@
  * @description Query principal que busca todos os dados necessários para o dashboard de abastecimento.
  * Inclui KPIs, dados para gráficos, opções de filtros dinâmicos e a primeira página da tabela.
  * O objetivo é carregar o estado inicial do painel com uma única requisição.
- */
+ */ 
 
 export const GET_COMBUSTIVEL_DASHBOARD_DATA_QUERY = `
   query GetAbastecimentoDashboardData (
   $filters: AbastecimentoFiltersInput
   $limit: Int
+  $vehicleLimit: Int
   $offset: Int
   $sortBy: String
   $sortDirection: String
@@ -29,33 +30,44 @@ export const GET_COMBUSTIVEL_DASHBOARD_DATA_QUERY = `
   }
 
   # 2. Charts Data
-  costByVehicle(filters:$filters) {
-    vehicle
-    total
-  }
-  costByDepartment(filters:$filters) {
-    department
-    total
-  }
-  costByCity(filters:$filters) {
-    city
-    total
-  }
-  costByGasStation(filters:$filters) {
-    name
-    total
-  }
-  costByPlate(filters:$filters) {
-    plate
-    total
-  }
-  costByDate(filters:$filters) {
-    date
-    total
-  }
-  costOverTime(filters:$filters) {
-    date
-    total
+  getAbastecimentoCharts(vehicleLimit: $vehicleLimit filters: $filters) {
+    costByVehicle {
+      vehicle
+      total
+    }
+    costByDepartment{
+      department
+      total
+    }
+    costByCity{
+      city
+      total
+    }
+    costByPlate{
+      plate
+      total
+    }
+    costByDate{
+      date
+      total
+    }
+    costOverTime{
+      date
+      total
+    }
+    rankingByDate{
+      date
+      total
+    }
+    rankingByPlate{
+      plate
+      quantity
+      total
+    }
+    rankingByDepartment{
+      department
+      total
+    }
   }
   
   # 3. Dados da Tabela (paginados e com novo campo 'id')
@@ -107,25 +119,27 @@ export const GET_COMBUSTIVEL_DASHBOARD_DATA_QUERY = `
  */
 export const GET_COMBUSTIVEL_FILTER_OPTIONS_QUERY = `
 query GetAbastecimentoFiltersOptions($filters: AbastecimentoFiltersOptionsInput) {
-  departmentOptions(filters:$filters) {
-    value
-    label
-  }
-  vehiclePlateOptions(filters:$filters) {
-    value
-    label
-  }
-  vehicleModelOptions(filters:$filters) {
-    value
-    label
-  }
-  gasStationCityOptions(filters:$filters) {
-    value
-    label
-  }
-  gasStationNameOptions(filters:$filters) {
-    value
-    label
+  AbastecimentoFilterOptions(filters: $filters) {
+    departmentOptions {
+      value
+      label
+    }
+    vehiclePlateOptions{
+      value
+      label
+    }
+    vehicleModelOptions{
+      value
+      label
+    }
+    gasStationCityOptions{
+      value
+      label
+    }
+    gasStationNameOptions{
+      value
+      label
+    }
   }
 }
 `

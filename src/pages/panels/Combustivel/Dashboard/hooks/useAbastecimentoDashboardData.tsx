@@ -24,21 +24,20 @@ export const useAbastecimentoDashboardData = ({ filters, tableFilters, paginatio
   const queryVariables = useMemo(() => {
     // Traduz a chave de ordenação, se necessário. Caso contrário, usa a chave original.
     const sortByBackend = sortKeyMapping[sort.key] || sort.key;
+
     const cleanedFilters = {
       dateRange: {
-        from: filters.from ?? "",
-        to: filters.to ?? "",
+        from: filters.from,
+        to: filters.to,
       },
-      fuelType: filters.fuelType ?? "",
-      vehiclePlate: filters.vehiclePlate ?? "",
-      vehicleBrand: filters.vehicleBrand ?? "",
-      vehicleModel: filters.vehicleModel ?? "",
-      driverName: filters.driverName ?? "",
-      department: filters.department ?? "",
-      gasStationCity: filters.gasStationCity ?? "",
-      gasStationName: filters.gasStationName ?? "",
+      vehiclePlate: filters.vehiclePlate,
+      vehicleModel: filters.vehicleModel,
+      department: filters.department,
+      gasStationCity: filters.gasStationCity,
+      gasStationName: filters.gasStationName,
       excludePostoInterno: Boolean(filters.excludePostoInterno),
     }
+
     const tableFilterKeyMap: Record<string, string> = {
       'vehicle.plate': 'vehiclePlate',
       'vehicle.brand': 'vehicleBrand',
@@ -53,7 +52,7 @@ export const useAbastecimentoDashboardData = ({ filters, tableFilters, paginatio
         const mappedKey = tableFilterKeyMap[key] || key;
         mapped[mappedKey] = value ?? '';
       });
-      return mapped;
+      return mapped; 
     }
 
     const cleanedTableFilters = mapTableFiltersForGraphQL(tableFilters);
@@ -61,6 +60,7 @@ export const useAbastecimentoDashboardData = ({ filters, tableFilters, paginatio
     return {
       filters: cleanedFilters,
       tableFilters: cleanedTableFilters,
+      vehicleLimit: 10, // Limite fixo para o gráfico de veículos
       limit: pagination.itemsPerPage,
       offset: (pagination.currentPage - 1) * pagination.itemsPerPage,
       sortBy: sortByBackend,
@@ -104,25 +104,56 @@ export const useAbastecimentoDashboardData = ({ filters, tableFilters, paginatio
       id: 'custo-por-tempo',
       title: 'Gasto ao longo do tempo',
       type: 'line',
-      data: data?.costOverTime || [],
+      data: data?.getAbastecimentoCharts.costOverTime || [],
       config: { dataKey: 'total', categoryKey: 'date' },
     },
     {
       id: 'custo-por-secretaria',
       title: 'Gasto por Secretaria',
       type: 'pie',
-      data: data?.costByDepartment || [],
+      data: data?.getAbastecimentoCharts.costByDepartment || [],
       config: { dataKey: 'total', nameKey: 'department' },
     },
     {
       id: 'custo-por-veiculo',
       title: 'Gasto por Veículo',
       type: 'bar-vertical',
-      data: data?.costByVehicle || [],
+      data: data?.getAbastecimentoCharts.costByVehicle || [],
       config: { dataKey: 'total', categoryKey: 'vehicle', color: '#82ca9d' },
     },
+    {
+      id: 'ranking-por-date',
+      title: 'Ranking por Data',
+      type: 'ranking-table',
+      data: data?.getAbastecimentoCharts.rankingByDate || [],
+      config:  { columns: [
+        { header: 'Data', accessor: 'date', className: 'text-left' },
+        { header: 'Total Gasto', accessor: 'total', className: 'text-right', render: (value) => formatCurrency(value)}
+      ]},
+    },
+    {
+      id: 'ranking-por-department',
+      title: 'Ranking por Secretaria',
+      type: 'ranking-table',
+      data: data?.getAbastecimentoCharts.rankingByDepartment || [],
+      config:  { columns: [
+        { header: 'Secretaria', accessor: 'department', className: 'text-left' },
+        { header: 'Total Gasto', accessor: 'total', className: 'text-right', render: (value) => formatCurrency(value)}
+      ]},
+    },
+    {
+      id: 'ranking-por-veiculo',
+      title: 'Ranking por Veículo',
+      type: 'ranking-table',
+      data: data?.getAbastecimentoCharts.rankingByPlate || [],
+      config:  { columns: [
+        { header: 'Placa', accessor: 'plate', className: 'text-left' },
+        { header: 'Qtde.', accessor: 'quantity', className: 'text-center' },
+        { header: 'Total Gasto', accessor: 'total', className: 'text-right', render: (value) => formatCurrency(value)}
+      ]},
+    },
   ];
-}, [data?.costOverTime, data?.costByDepartment, data?.costByVehicle]);
+}, [data?.getAbastecimentoCharts.costOverTime, data?.getAbastecimentoCharts.costByDepartment, data?.getAbastecimentoCharts.costByVehicle, data?.getAbastecimentoCharts.rankingByDate, data?.getAbastecimentoCharts.rankingByDepartment, data?.getAbastecimentoCharts.rankingByPlate]);
 
 
     // Extrai os dados da tabela e a contagem total

@@ -1,5 +1,4 @@
 // Em src/pages/panels/Manutencao/Dashboard/hooks/useFilterConfig.ts
-
 import { useMemo } from 'react';
 import { useQuery } from 'urql';
 import type { FilterConfig } from '../../../../../types/filters';
@@ -11,6 +10,7 @@ import { baseFilterConfig } from '../data/filters.config';
  * @param activeFilters - Os filtros atualmente selecionados/digitados pelo usuário.
  * @returns A configuração completa para o componente de filtros, com opções atualizadas.
  */
+
 export const useFiltersConfig = (activeFilters: any) => {
   const queryVariables = useMemo(() => {
     return { filters: activeFilters };
@@ -27,7 +27,7 @@ export const useFiltersConfig = (activeFilters: any) => {
     const options = data?.filterOptions;
     if (!options) {
       // Retorna a config base com arrays vazios enquanto carrega ou se não houver dados
-      return baseFilterConfig.map(fc => ({ ...fc, options: [] }));
+      return baseFilterConfig.map(fc => ({ ...fc, options: [] })); 
     }
 
     // Mapeia as opções recebidas da API para a configuração base de filtros

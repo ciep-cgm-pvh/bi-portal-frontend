@@ -23,7 +23,7 @@ const DashboardCombustivel = () => {
   const [generalFilters, setGeneralFilters] = useState(initialFilterValues);
   const [columnFilters, setColumnFilters] = useState<Record<string, string>>({});
   const [debouncedColumnFilters, setDebouncedColumnFilters] = useState<Record<string, string>>({});
-  const [pagination, setPagination] = useState({ currentPage: 1, itemsPerPage: 10 });
+  const [pagination, setPagination] = useState({ currentPage: 1, itemsPerPage: 5 });
   const [sort, setSort] = useState<SortConfig<TableDataItem>>({ key: 'data', direction: 'descending' });
   const hasInitialized = useRef(false);
 
@@ -88,7 +88,7 @@ const DashboardCombustivel = () => {
     } else {
         setGeneralFilters(initialFilterValues);
     }
-  };
+  }; 
 
   const handleColumnFilterChange = useCallback((accessor: string, value: string) => {
     setColumnFilters(prev => ({
@@ -99,6 +99,7 @@ const DashboardCombustivel = () => {
 
   const filterComponent = useMemo(() => (
     <AbastecimentoFilters
+      isLoading={isLoading}
       initialValues={generalFilters}
       onApply={handleApplyFilters}
       onClear={handleClearFilters}
