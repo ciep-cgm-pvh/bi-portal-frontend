@@ -52,7 +52,7 @@ export const useAbastecimentoDashboardData = ({ filters, tableFilters, paginatio
         const mappedKey = tableFilterKeyMap[key] || key;
         mapped[mappedKey] = value ?? '';
       });
-      return mapped;
+      return mapped; 
     }
 
     const cleanedTableFilters = mapTableFiltersForGraphQL(tableFilters);

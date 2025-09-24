@@ -6,7 +6,7 @@
  * @description Query principal que busca todos os dados necessários para o dashboard de abastecimento.
  * Inclui KPIs, dados para gráficos, opções de filtros dinâmicos e a primeira página da tabela.
  * O objetivo é carregar o estado inicial do painel com uma única requisição.
- */
+ */ 
 
 export const GET_COMBUSTIVEL_DASHBOARD_DATA_QUERY = `
   query GetAbastecimentoDashboardData (

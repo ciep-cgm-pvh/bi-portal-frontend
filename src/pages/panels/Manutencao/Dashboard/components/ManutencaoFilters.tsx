@@ -8,7 +8,7 @@ interface ManutencaoFiltersProps {
   onApply: (filters: any) => void;
   onClear: () => void;
   isLoading: boolean; // Recebe o loading principal para desabilitar o botão de aplicar
-}
+} 
 
 export const ManutencaoFilters = ({
   initialValues,

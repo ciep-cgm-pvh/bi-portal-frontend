@@ -27,7 +27,7 @@ export const useFiltersConfig = (activeFilters: any) => {
     const options = data?.filterOptions;
     if (!options) {
       // Retorna a config base com arrays vazios enquanto carrega ou se não houver dados
-      return baseFilterConfig.map(fc => ({ ...fc, options: [] }));
+      return baseFilterConfig.map(fc => ({ ...fc, options: [] })); 
     }
 
     // Mapeia as opções recebidas da API para a configuração base de filtros

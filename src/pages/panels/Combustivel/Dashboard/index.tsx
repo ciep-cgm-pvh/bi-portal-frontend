@@ -88,7 +88,7 @@ const DashboardCombustivel = () => {
     } else {
         setGeneralFilters(initialFilterValues);
     }
-  };
+  }; 
 
   const handleColumnFilterChange = useCallback((accessor: string, value: string) => {
     setColumnFilters(prev => ({
