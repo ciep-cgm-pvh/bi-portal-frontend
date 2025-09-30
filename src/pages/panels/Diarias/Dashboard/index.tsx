@@ -1,20 +1,105 @@
-// Importando os componentes e configs de DIÁRIAS
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import type { SortConfig, TableDataItem } from '../../../../types/tables';
 import { DashboardPanelTemplate } from '../../../../templates/DashboardPanelTemplate';
-import { Filters } from './components/Filters';
-import { Table } from './components/Table';
-import { kpiData } from './data/kpi.config';
-import { chartConfiguration } from './data/charts.config';
+import { DiariasFilters } from './components/DiariasFilters';
+import { DiariasTable } from './components/DiariasTable';
+import { initialFilterValues } from './data/filters.config';
+import { useDiariasDashboardData } from './hooks/useDiariasDashboardData';
 
 const DashboardDiarias = () => {
+  // --- Estados do Painel ---
+  const [generalFilters, setGeneralFilters] = useState(initialFilterValues);
+  const [columnFilters, setColumnFilters] = useState<Record<string, string>>({});
+  const [debouncedColumnFilters, setDebouncedColumnFilters] = useState<Record<string, string>>({});
+  const [pagination, setPagination] = useState({ currentPage: 1, itemsPerPage: 10 });
+  const [sort, setSort] = useState<SortConfig<TableDataItem>>({ key: 'data', direction: 'descending' });
+
+
+  // O efeito de debounce permanece o mesmo, está perfeito.
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedColumnFilters(columnFilters);
+      setPagination(p => ({ ...p, currentPage: 1 }));
+    }, 500);
+
+    return () => clearTimeout(handler);
+  }, [columnFilters]);
+
+  // 4. PASSE OS FILTROS SEPARADAMENTE PARA O HOOK
+  const {
+    kpiData,
+    chartConfig,
+    tableData,
+    lastUpdate,
+    isLoading,
+  } = useDiariasDashboardData({
+    filters: generalFilters,
+    tableFilter: debouncedColumnFilters,
+    pagination,
+    sort,
+  });
+
+
+  // Handlers para filtros GERAIS (sem alterações)
+  const handleApplyFilters = useCallback((newFilters: any) => {
+    setGeneralFilters(newFilters);
+    setPagination(prev => ({ ...prev, currentPage: 1 }));
+  }, []);
+
+  const handleClearFilters = useCallback(() => {
+    setGeneralFilters(initialFilterValues);
+    setPagination(prev => ({ ...prev, currentPage: 1 }));
+  }, []);
+
+  // 5. CRIE O HANDLER PARA ATUALIZAR OS FILTROS DA COLUNA
+  const handleColumnFilterChange = useCallback((accessor: string, value: string) => {
+    // Atualiza o estado "ao vivo" dos filtros da coluna a cada tecla digitada
+    setColumnFilters(prev => ({
+      ...prev,
+      [accessor]: value,
+    }));
+  }, []);
+
+  // Memoização dos componentes (sem grandes alterações, apenas passando novas props)
+  const filtersComponent = useMemo(() => (
+    <DiariasFilters
+      initialValues={generalFilters}
+      onApply={handleApplyFilters}
+      onClear={handleClearFilters}
+      isLoading={isLoading}
+    />
+  ), [generalFilters, isLoading, handleApplyFilters, handleClearFilters]);
+
+  const tableComponent = useMemo(() => (
+    <DiariasTable
+      data={tableData.rows}
+      totalCount={tableData.totalCount}
+      pagination={pagination}
+      onPaginationChange={setPagination}
+      sort={sort}
+      onSortChange={setSort}
+      isLoading={isLoading}
+      // 6. PASSE O ESTADO DO FILTRO E O HANDLER PARA A TABELA
+      filterValues={columnFilters} // Passa o estado "ao vivo" para os inputs da tabela
+      onFilterChange={handleColumnFilterChange as (accessor: keyof TableDataItem, value: string) => void} // Passa a função para a tabela chamar quando um filtro mudar
+    />
+  ), [tableData, pagination, sort, isLoading, columnFilters, handleColumnFilterChange]); // Adicione as novas dependências
+
   return (
     <DashboardPanelTemplate
       title="Diárias"
-      description="Acompanhe os gastos e solicitações de diárias."
-      lastUpdate="07/08/2025"
+      description="Visualize e filtre os dados de gastos com diárias."
+      lastUpdate={lastUpdate}
+      isLoading={isLoading}
       kpiData={kpiData}
-      chartConfig={chartConfiguration}
-      filtersComponent={<Filters />}
-      tableComponent={<Table />} mockData={false} panelStatus={false} panelStatusPhasesData={{}}    />
+      chartConfig={chartConfig}
+      filtersComponent={filtersComponent}
+      tableComponent={tableComponent}
+      mockData={false}
+      panelStatus={false}
+      panelStatusPhasesData={{}}
+    />
   );
 };
 

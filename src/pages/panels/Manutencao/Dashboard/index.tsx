@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import type { SortConfig, TableDataItem } from '../../../../types/tables';
 import { DashboardPanelTemplate } from '../../../../templates/DashboardPanelTemplate';

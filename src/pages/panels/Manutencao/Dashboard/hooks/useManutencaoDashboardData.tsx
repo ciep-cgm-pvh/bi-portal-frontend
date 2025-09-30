@@ -1,8 +1,9 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { DollarSign, Wrench } from 'lucide-react';
 import { useMemo } from 'react';
 import { useQuery } from 'urql';
 import type { ChartConfig } from '../../../../../types/charts';
-import { GET_MANUTENCAO_DASHBOARD_DATA_QUERY } from '../../queries/ManutencaoQueries';
+import { GET_MANUTENCAO_DASHBOARD_DATA_QUERY } from '../../Queries/ManutencaoQueries';
 
 // Helper para formatar moeda
 const formatCurrency = (value: number) =>
@@ -35,7 +36,7 @@ export const useManutencaoDashboardData = ({ filters, tableFilter, pagination, s
       sortBy: sortByBackend,
       sortDirection: sort.direction,
     };
-  }, [filters, pagination, sort]);
+  }, [filters, pagination.currentPage, pagination.itemsPerPage, sort.direction, sort.key, tableFilter]);
 
   const [result] = useQuery({
     query: GET_MANUTENCAO_DASHBOARD_DATA_QUERY,
@@ -69,23 +70,23 @@ export const useManutencaoDashboardData = ({ filters, tableFilter, pagination, s
         id: 'custo-por-secretaria',
         title: 'Custo por Secretaria',
         type: 'pie',
-        data: charts.costByDepartment  || [],
+        data: charts.costByDepartment || [],
         config: { dataKey: 'value', nameKey: 'name' },
       },
       {
         id: 'custo-por-tipo-manutencao',
         title: 'Custo por Tipo de Manutenção',
         type: 'bar-vertical',
-        data: charts.costByTypeOfManutencao  || [],
+        data: charts.costByTypeOfManutencao || [],
         config: { dataKey: 'value', categoryKey: 'name', color: '#82ca9d' },
       },
     ];
   }, [data?.charts]);
-  
+
   // Extrai os dados da tabela e a contagem total
   const tableData = useMemo(() => ({
-      rows: data?.tableData || [],
-      totalCount: data?.totalCount || 0,
+    rows: data?.tableData || [],
+    totalCount: data?.totalCount || 0,
   }), [data?.tableData, data?.totalCount]);
 
 
