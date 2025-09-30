@@ -6,15 +6,14 @@ import DashboardAbastecimento from '../pages/panels/Combustivel/Dashboard';
 import DataSourceAbastecimento from '../pages/panels/Combustivel/DataSoruce';
 import HomeAbastecimento from '../pages/panels/Combustivel/Home';
 import DashboardDiarias from '../pages/panels/Diarias/Dashboard';
-import DataSourceDiarias from '../pages/panels/Diarias/DataSource/DataSource';
-import HomeDiarias from '../pages/panels/Diarias/Home/Home';
+import DataSourceDiarias from '../pages/panels/Diarias/DataSoruce';
+import HomeDiarias from '../pages/panels/Diarias/Home';
 import DashboardManutencao from '../pages/panels/Manutencao/Dashboard';
 import DataSourceManutencao from '../pages/panels/Manutencao/DataSoruce';
 import HomeManutencao from '../pages/panels/Manutencao/Home';
 
 const navLinks: NavLinkInterface[] = [
-
-  // Agrupamento dos painéis
+  // Painel de Manutenção
   {
     title: "Início",
     path: "/painel/manutencao/home",
@@ -36,9 +35,12 @@ const navLinks: NavLinkInterface[] = [
     path: "/painel/manutencao/datasource",
     icon: <Database size={18} />,
     element: <DataSourceManutencao />,
-  published: false,   
-  group: "manutencao",
+    published: false,
+    group: "manutencao",
   },
+
+
+  //Painel de Diarias
   {
     title: "Início",
     path: "/painel/diarias/home",
@@ -60,9 +62,11 @@ const navLinks: NavLinkInterface[] = [
     path: "/painel/diarias/datasource",
     icon: <Database size={18} />,
     element: <DataSourceDiarias />,
-    published: false,   
+    published: false,
     group: "diarias",
   },
+
+  //  Painel de Abastecimento
   {
     title: "Início",
     path: "/painel/abastecimento/home",

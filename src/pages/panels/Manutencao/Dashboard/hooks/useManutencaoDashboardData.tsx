@@ -1,16 +1,17 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { DollarSign, Wrench } from 'lucide-react';
 import { useMemo } from 'react';
 import { useQuery } from 'urql';
 import type { ChartConfig } from '../../../../../types/charts';
-import { GET_MANUTENCAO_DASHBOARD_DATA_QUERY } from '../../queries/ManutencaoQueries';
+import { GET_MANUTENCAO_DASHBOARD_DATA_QUERY } from '../../Queries/ManutencaoQueries';
 
 // Helper para formatar moeda
 const formatCurrency = (value: number) =>
   new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value || 0);
 
 const sortKeyMapping: { [key: string]: string } = {
-  data: 'datetime',
-  total: 'totalCost',
+  // data: 'datetime',
+  // total: 'totalCost',
 };
 
 /**
@@ -20,8 +21,7 @@ const sortKeyMapping: { [key: string]: string } = {
  * @param filters - O estado atual dos filtros aplicados no dashboard.
  * @returns Um objeto contendo todos os dados prontos para serem consumidos pelos componentes.
  */
-export const useManutencaoDashboardData = ({ filters, pagination, sort }: any) => {
-  //console.log('Fetching Manutencao dashboard data with filters:', filters, 'pagination:', pagination, 'sort:', sort);
+export const useManutencaoDashboardData = ({ filters, tableFilter, pagination, sort }: any) => {
   // 2. USE A FUNÇÃO PARA PREPARAR OS FILTROS
 
   const queryVariables = useMemo(() => {
@@ -30,19 +30,18 @@ export const useManutencaoDashboardData = ({ filters, pagination, sort }: any) =
 
     return {
       filters,
+      tableFilter,
       limit: pagination.itemsPerPage,
       offset: (pagination.currentPage - 1) * pagination.itemsPerPage,
       sortBy: sortByBackend,
       sortDirection: sort.direction,
     };
-  }, [filters, pagination, sort]);
+  }, [filters, pagination.currentPage, pagination.itemsPerPage, sort.direction, sort.key, tableFilter]);
 
   const [result] = useQuery({
     query: GET_MANUTENCAO_DASHBOARD_DATA_QUERY,
-    variables: queryVariables, 
+    variables: queryVariables,
   });
-  // console.log('Manutencao dashboard query result:', result);
-  
 
   const { data, fetching: isLoading, error } = result;
 
@@ -71,23 +70,23 @@ export const useManutencaoDashboardData = ({ filters, pagination, sort }: any) =
         id: 'custo-por-secretaria',
         title: 'Custo por Secretaria',
         type: 'pie',
-        data: charts.costByDepartment  || [],
+        data: charts.costByDepartment || [],
         config: { dataKey: 'value', nameKey: 'name' },
       },
       {
         id: 'custo-por-tipo-manutencao',
         title: 'Custo por Tipo de Manutenção',
         type: 'bar-vertical',
-        data: charts.costByTypeOfManutencao  || [],
+        data: charts.costByTypeOfManutencao || [],
         config: { dataKey: 'value', categoryKey: 'name', color: '#82ca9d' },
       },
     ];
   }, [data?.charts]);
-  
+
   // Extrai os dados da tabela e a contagem total
   const tableData = useMemo(() => ({
-      rows: data?.tableData || [],
-      totalCount: data?.totalCount || 0,
+    rows: data?.tableData || [],
+    totalCount: data?.totalCount || 0,
   }), [data?.tableData, data?.totalCount]);
 
 

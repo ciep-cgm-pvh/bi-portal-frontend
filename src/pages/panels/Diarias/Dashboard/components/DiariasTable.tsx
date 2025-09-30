@@ -1,84 +1,87 @@
-// Local: src/pages/panels/Manutencao/Dashboard/components/ManutencaoTable.tsx
+/* eslint-disable @typescript-eslint/no-explicit-any */
+// Local: src/pages/panels/Diarias/Dashboard/components/DiariasTable.tsx
 
 import type { ReactNode } from 'react';
-// 1. Importe o useState
 import { useMemo } from 'react';
 import { PaginationControls } from '../../../../../components/PaginationControls/PaginationControls';
 import { TableSection } from '../../../../../components/TableSection/TableSection';
 import type { SortConfig, TableColumn, TableDataItem } from '../../../../../types/tables';
 
-// Funções Helper e Colunas (sem alterações)
-const formatCell = (value: any, dataType?: string): ReactNode => {
-    if (value === null || typeof value === 'undefined') return 'N/A';
-    switch (dataType) {
-        case 'CURRENCY':
-            return `R$ ${Number(value).toFixed(2).replace('.', ',')}`;
-        case 'DATE':
-            return new Date(value).toLocaleDateString('pt-BR', { timeZone: 'UTC' });
-        default:
-            return value;
-    }
+// Helpers
+const formatBRL = (v: any) =>
+  new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(Number(v || 0));
+
+const formatCell = (value: any, dataType?: 'CURRENCY' | 'DATE'): ReactNode => {
+  if (value === null || typeof value === 'undefined' || value === '') return 'N/A';
+  switch (dataType) {
+    case 'CURRENCY':
+      return formatBRL(value);
+    case 'DATE':
+      // paymentDate costuma vir como ISO; não invente timezone local aqui
+      return new Date(value).toLocaleDateString('pt-BR', { timeZone: 'UTC' });
+    default:
+      return value;
+  }
 };
 
+// Colunas para DIÁRIAS (acessores devem bater com getDiarias)
 const columns: TableColumn<TableDataItem>[] = [
-    { 
-        header: 'OS',
-        accessor: 'os',
-        sortable: true,
-        isFilterable: true,
-    },
-    { 
-        header: 'Secretaria',
-        accessor: 'department',
-        sortable: true,
-        isFilterable: true,
-    },
-    { 
-        header: 'Placa',
-        accessor: 'plate',
-        sortable: true,
-        isFilterable: true
-    },
-    { 
-        header: 'Data',
-        accessor: 'datetime',
-        sortable: true,
-        isFilterable: true,
-        render: (item) => item.datetime
-    },
-    { 
-        header: 'Categoria',
-        accessor: 'categoryOs',
-        sortable: true,
-        isFilterable: true,
-    },
-    { 
-        header: 'Custo Total',
-        accessor: 'totalCost',
-        sortable: true,
-        isFilterable: true,
-        render: (item) => formatCell(item.totalCost, 'CURRENCY')
-    },
+  {
+    header: 'Secretaria',
+    accessor: 'department',
+    sortable: true,
+    isFilterable: true,
+  },
+  {
+    header: 'Nº Processo',
+    accessor: 'processNumber',
+    sortable: true,
+    isFilterable: true,
+  },
+  {
+    header: 'Servidor',
+    accessor: 'employee',
+    sortable: true,
+    isFilterable: true,
+  },
+  {
+    header: 'Concedido',
+    accessor: 'amountGranted',
+    sortable: true,
+    isFilterable: true,
+    render: (item) => formatCell(item.amountGranted, 'CURRENCY'),
+  },
+  {
+    header: 'Aprovado',
+    accessor: 'amountApproved',
+    sortable: true,
+    isFilterable: true,
+    render: (item) => formatCell(item.amountApproved, 'CURRENCY'),
+  },
+  {
+    header: 'Histórico',
+    accessor: 'history',
+    sortable: false,
+    isFilterable: true,
+  },
 ];
-// =================================================================
 
-interface ManutencaoTableProps {
+interface DiariasTableProps {
   data: TableDataItem[];
   totalCount: number;
   pagination: {
     currentPage: number;
     itemsPerPage: number;
   };
-  onPaginationChange: (pagination: { currentPage: number; itemsPerPage: number; }) => void;
+  onPaginationChange: (pagination: { currentPage: number; itemsPerPage: number }) => void;
   sort: SortConfig<TableDataItem>;
   onSortChange: (sort: SortConfig<TableDataItem>) => void;
   isLoading: boolean;
-  // Adicione estas duas props
   filterValues: { [key: string]: string };
   onFilterChange: (accessor: keyof TableDataItem, value: string) => void;
 }
 
-export const ManutencaoTable = ({
+export const DiariasTable = ({
   data,
   totalCount,
   pagination,
@@ -87,13 +90,10 @@ export const ManutencaoTable = ({
   onSortChange,
   isLoading,
   filterValues,
-  onFilterChange
-}: ManutencaoTableProps) => {
-
-
-  // O resto da lógica permanece o mesmo
+  onFilterChange,
+}: DiariasTableProps) => {
   const totalPages = useMemo(() => {
-    return Math.ceil(totalCount / pagination.itemsPerPage);
+    return Math.ceil((totalCount || 0) / pagination.itemsPerPage);
   }, [totalCount, pagination.itemsPerPage]);
 
   const handlePageChange = (newPage: number) => {
@@ -107,7 +107,7 @@ export const ManutencaoTable = ({
   const handleSort = (key: keyof TableDataItem) => {
     let direction: 'ascending' | 'descending' = 'ascending';
     if (sort.key === key && sort.direction === 'ascending') {
-        direction = 'descending';
+      direction = 'descending';
     }
     onSortChange({ key, direction });
   };
@@ -115,14 +115,12 @@ export const ManutencaoTable = ({
   return (
     <div className="shadow-md rounded-lg">
       <TableSection
-        title="Ordens de Serviço Recentes"
+        title="Histórico de Diárias"
         columns={columns}
-        // 3. USE OS DADOS DIRETAMENTE DA PROP `data`
         data={data}
         isLoading={isLoading}
         sortConfig={sort}
         onSort={handleSort}
-        // 4. PASSE AS PROPS DE FILTRO RECEBIDAS
         filterValues={filterValues}
         onFilterChange={onFilterChange}
       />

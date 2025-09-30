@@ -5,20 +5,20 @@ import type { FilterConfig } from '../../../../../types/filters';
 // Esta é a configuração ESTRUTURAL dos filtros.
 export const baseFilterConfig: FilterConfig[] = [
   {
-    id: 'startDate',
+    id: 'from',
     label: 'Data Inicial',
     type: 'date',
   },
   {
-    id: 'endDate',
+    id: 'to',
     label: 'Data Final',
     type: 'date',
   },
   {
     id: 'department',
-    label: 'Departamento',
+    label: 'Unidade',
     type: 'select',
-    placeholder: 'Todos os departamentos',
+    placeholder: 'Todas as unidades',
     options: [], // As opções serão preenchidas dinamicamente
   },
   {
@@ -54,8 +54,8 @@ export const baseFilterConfig: FilterConfig[] = [
 
 // Mantenha os valores iniciais
 export const initialFilterValues = {
-  startDate: '2025-01-01', // YYYY-MM-DD
-  endDate: '2025-06-30', // YYYY-MM-DD
+  from: '2025-01-01', // YYYY-MM-DD
+  to: '2025-06-30', // YYYY-MM-DD
   department: '',
   vehiclePlate: '',
   vehicleModel: '',

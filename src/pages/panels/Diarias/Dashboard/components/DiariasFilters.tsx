@@ -1,25 +1,30 @@
-// Em src/pages/panels/Manutencao/Dashboard/components/ManutencaoFilters.tsx
+/* eslint-disable @typescript-eslint/no-explicit-any */
+// Em src/pages/panels/Diarias/Dashboard/components/DiariasFilters.tsx
+
 import { useEffect, useState } from 'react';
 import FiltersSection from '../../../../../components/FiltersSection/FiltersSection';
 import { useFiltersConfig } from '../hooks/useFilterConfig';
 
-interface ManutencaoFiltersProps {
+interface DiariasFiltersProps {
   initialValues: any;
   onApply: (filters: any) => void;
   onClear: () => void;
   isLoading: boolean; // Recebe o loading principal para desabilitar o botão de aplicar
 }
 
-export const ManutencaoFilters = ({
+export const DiariasFilters = ({
   initialValues,
   onApply,
   onClear,
   isLoading,
-}: ManutencaoFiltersProps) => {
+}: DiariasFiltersProps) => {
   const [draftFilters, setDraftFilters] = useState(initialValues);
+
+  // --- MUDANÇAS PRINCIPAIS AQUI ---
+  // 1. Chama o hook para buscar as opções dinâmicas com base nos filtros atuais
   const { filterConfig, isLoading: isLoadingConfig } = useFiltersConfig(draftFilters);
 
-  // Sincroniza o estado interno se os valores iniciais mudarem (ex: ao limpar no pai)
+  // 2. Sincroniza o estado interno se os valores iniciais mudarem (ex: ao limpar no pai)
   useEffect(() => {
     setDraftFilters(initialValues);
   }, [initialValues]);
