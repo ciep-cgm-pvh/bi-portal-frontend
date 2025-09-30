@@ -5,6 +5,7 @@ import SideBar from '../../components/SideBar/Sidebar';
 import useIsMobile from '../../hooks/useIsMobile';
 
 
+
 export default function LayoutBase() {
   const [isOpen, setIsOpen] = useState(true);
   const externalSetIsOpen = (state = !isOpen) => {
@@ -32,6 +33,7 @@ export default function LayoutBase() {
         
         <Outlet context={isMobile as boolean}/>
       </main>
+      
     </div>
   );
 }

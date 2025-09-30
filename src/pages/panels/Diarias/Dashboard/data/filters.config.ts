@@ -14,3 +14,4 @@ export const initialFilterValues = {
   processNumber: "",
   paymentDate: { from: "", to: "" }, // ISO 'YYYY-MM-DD' quando houver valor
 };
+

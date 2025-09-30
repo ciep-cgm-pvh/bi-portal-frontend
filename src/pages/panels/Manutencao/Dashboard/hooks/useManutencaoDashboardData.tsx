@@ -22,7 +22,6 @@ const sortKeyMapping: { [key: string]: string } = {
  * @returns Um objeto contendo todos os dados prontos para serem consumidos pelos componentes.
  */
 export const useManutencaoDashboardData = ({ filters, tableFilter, pagination, sort }: any) => {
-  //console.log('Fetching Manutencao dashboard data with filters:', filters, 'pagination:', pagination, 'sort:', sort);
   // 2. USE A FUNÇÃO PARA PREPARAR OS FILTROS
 
   const queryVariables = useMemo(() => {
@@ -43,7 +42,6 @@ export const useManutencaoDashboardData = ({ filters, tableFilter, pagination, s
     query: GET_MANUTENCAO_DASHBOARD_DATA_QUERY,
     variables: queryVariables,
   });
-  // console.log('Manutencao dashboard query result:', result);
 
   const { data, fetching: isLoading, error } = result;
 

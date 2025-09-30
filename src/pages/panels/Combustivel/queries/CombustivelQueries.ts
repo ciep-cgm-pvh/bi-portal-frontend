@@ -1,55 +1,82 @@
 // =================================================
-//      PAINEL DE MANUTENÇÃO - DASHBOARD
+//      PAINEL DE COMBUSTIVEL - DASHBOARD
 // ================================================
 
 /**
- * @description Query principal que busca todos os dados necessários para o dashboard de manutenção.
+ * @description Query principal que busca todos os dados necessários para o dashboard de abastecimento.
  * Inclui KPIs, dados para gráficos, opções de filtros dinâmicos e a primeira página da tabela.
  * O objetivo é carregar o estado inicial do painel com uma única requisição.
  */
+
 export const GET_COMBUSTIVEL_DASHBOARD_DATA_QUERY = `
-
-    # 1 Query para obter as opções de filtros dinâmicos da tabela
-    query GetAbastecimentosTableConfig {
-    abastecimentosColumns {
-      headerLabel
-      accessor
-      isSortable
-      dataType
-      isFilterable
-      filterKey
-    }
-  }
-
-    # 2 Query principal que busca todos os dados necessários para o dashboard
-query Abastecimentos(
-  $limit: Int,
-  $offset: Int,
-  $sortBy: String,
-  $sortDirection: String,
+  query GetAbastecimentoDashboardData (
   $filters: AbastecimentoFiltersInput
+  $limit: Int
+  $vehicleLimit: Int
+  $offset: Int
+  $sortBy: String
+  $sortDirection: String
   $tableFilters: AbastecimentoTableFiltersInput
 ) {
-  getAbastecimentos(filters: $filters) {
-    id
-    datetime
-    vehicle {
-      plate
-      model
-    }
-    gasStation {
-      name
-      city
-    }
-    department
+  # 1. KPIs
+  kpis: getAbastecimentoKpi(filters: $filters) {
+    fuelConsumed
+    totalCost
+    kilometersDriven
+    vehiclesCount
+    dailyAverageCost
+    suppliesCount
+    lastUpdate
   }
 
-  getAbastecimentosTable(
+  # 2. Charts Data
+  getAbastecimentoCharts(vehicleLimit: $vehicleLimit filters: $filters) {
+    costByVehicle {
+      vehicle
+      total
+    }
+    costByDepartment{
+      department
+      total
+    }
+    costByCity{
+      city
+      total
+    }
+    costByPlate{
+      plate
+      total
+    }
+    costByDate{
+      date
+      total
+    }
+    costOverTime{
+      date
+      total
+    }
+    rankingByDate{
+      date
+      total
+    }
+    rankingByPlate{
+      plate
+      quantity
+      total
+    }
+    rankingByDepartment{
+      department
+      total
+    }
+  }
+  
+  # 3. Dados da Tabela (paginados e com novo campo 'id')
+  tableData: getAbastecimentosTable(
     limit: $limit
-    offset: $offset
+  	offset: $offset
     sortBy: $sortBy
     sortDirection: $sortDirection
-    filters: $filters  
+    filters: $filters
     tableFilters: $tableFilters
   ) {
     id
@@ -68,40 +95,94 @@ query Abastecimentos(
       city
     }
     department
+    costCenter
   }
 
-  abastecimentosCount(filters: $filters, tableFilters: $tableFilters)
+  columns: getAbastecimentosColumns {
+    header
+    accessor
+    sortable
+    dataType
+    isFilterable
+    filterKey
+  }
+
+  totalCount: getAbastecimentosTableCount(
+    filters:$filters
+    tableFilters: $tableFilters
+  )
 }
-
-    # 3 Query para obter os dados para gráficos e KPIs
-query GetChartData($filters: AbastecimentoFiltersInput) {
-    costByDepartment(filters: $filters) { department total }
-    costByPlate(filters: $filters) { plate total }
-    costOverTime(filters: $filters) { date total }
-    rankingByDate(filters: $filters) { date total }
-    rankingByPlate(filters: $filters) { plate total quantity }
-    rankingByDepartment(filters: $filters) { department total }
-  }
-
-    # 4 Query para obter as opções de filtros dinâmicos
-   query GetFilterOptions($filters: AbastecimentoFiltersOptionsInput) {
-   departmentOptions(filters: $filters) { value, label }
-   vehiclePlateOptions(filters: $filters) { value, label }
-   vehicleModelOptions(filters: $filters) { value, label }
-   gasStationCityOptions(filters: $filters) { value, label }
-   gasStationNameOptions(filters: $filters) { value, label }
- }
-
-    # 5 Query para obter os KPIs
-query GetAbastecimentoKpis($filters: AbastecimentoFiltersInput) {
-    abastecimentoKpis(filters: $filters) {
-      totalCost
-      fuelConsumed
-      kilometersDriven
-      vehiclesCount
-      dailyAverageCost
-      suppliesCount
-      lastUpdate
+`
+/**
+ * @description Query para buscar as opções dinâmicas para os filtros do dashboard de manutenção.
+ * É chamada toda vez que um filtro é alterado para atualizar as opções dos outros.
+ */
+export const GET_COMBUSTIVEL_FILTER_OPTIONS_QUERY = `
+query GetAbastecimentoFiltersOptions($filters: AbastecimentoFiltersOptionsInput) {
+  AbastecimentoFilterOptions(filters: $filters) {
+    departmentOptions {
+      value
+      label
+    }
+    vehiclePlateOptions{
+      value
+      label
+    }
+    vehicleModelOptions{
+      value
+      label
+    }
+    gasStationCityOptions{
+      value
+      label
+    }
+    gasStationNameOptions{
+      value
+      label
     }
   }
-`;
+}
+`
+// =================================================
+//      FONTES DE DADOS (DATA SOURCES)
+// ================================================
+
+/**
+ * @description Query para baixar o relatório completo e detalhado dos abastecimentos.
+ */
+export const DOWNLOAD_ALL_COMBUSTIVEL_QUERY = `
+  query DownloadAllAbastecimento {
+  getAbastecimentos {
+    id
+    data: datetime
+    custo: cost
+    quantidadeAbastecida: fuelVolume
+    tipoCombustivel: fuelType
+    motorista: driverName
+    departamento: department
+    veiculo: vehicle {
+      placa: plate
+      modelo: model
+      marca: brand
+    }
+    posto:gasStation {
+      nome: name
+      cidade: city
+    }
+  }
+}`
+
+export const DOWNLOAD_VEHICLE_SUMMARY_QUERY = `
+query DownloadVehicleSummary {
+  getAbastecimentoVehicleSummary {
+    departamento: department
+    custoTotal: totalCost
+    quantidadeAbastecimento: supplyCount
+    veiculo: vehicle {
+      placa: plate
+      modelo: model
+      marca: brand
+    }
+  }
+} 
+`

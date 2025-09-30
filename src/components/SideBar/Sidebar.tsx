@@ -4,7 +4,6 @@ import { SideBarNav } from './SideBarNav';
 import TitleSidebar from "./TitleSidebar";
 
 export default function SideBar({isOpen, setIsOpen}: {isOpen: boolean, setIsOpen: (state: boolean) => void}) {
-  // console.log('SideBar received setIsOpen:', setIsOpen);
   return (
     <>
       <MenuButtonDesktop openSideBar={setIsOpen} />
