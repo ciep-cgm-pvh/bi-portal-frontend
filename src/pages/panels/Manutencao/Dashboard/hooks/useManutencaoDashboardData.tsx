@@ -3,7 +3,8 @@ import { DollarSign, Wrench } from 'lucide-react';
 import { useMemo } from 'react';
 import { useQuery } from 'urql';
 import type { ChartConfig } from '../../../../../types/charts';
-import { GET_MANUTENCAO_DASHBOARD_DATA_QUERY } from '../../Queries/ManutencaoQueries';
+import { GET_MANUTENCAO_DASHBOARD_DATA_QUERY } from '../../queries/ManutencaoQueries';
+
 
 // Helper para formatar moeda
 const formatCurrency = (value: number) =>
