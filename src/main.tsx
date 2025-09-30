@@ -1,3 +1,4 @@
+import { Analytics } from '@vercel/analytics/react';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import { cacheExchange, createClient, fetchExchange, Provider } from 'urql';
@@ -23,6 +24,7 @@ createRoot(document.getElementById('root')!).render(
   <BrowserRouter>
     <Provider value={client}>
       <App />
+      <Analytics />
     </Provider>
   </BrowserRouter>,
 )

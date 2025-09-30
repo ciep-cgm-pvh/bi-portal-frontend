@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import type { SortConfig, TableDataItem } from '../../../../types/tables';
 import { DashboardPanelTemplate } from '../../../../templates/DashboardPanelTemplate';
@@ -39,6 +40,18 @@ const DashboardManutencao = () => {
     sort,
   });
 
+  // pass latUpdate as dateRange.to for last update using setGenralFilters
+  useEffect(() => {
+    if (lastUpdate) {
+      setGeneralFilters(prev => ({
+        ...prev,
+        dateRange: {
+          ...prev.dateRange,
+          to: lastUpdate,
+        },
+      }));
+    }
+  }, [lastUpdate]);
 
   // Handlers para filtros GERAIS (sem alterações)
   const handleApplyFilters = useCallback((newFilters: any) => {
