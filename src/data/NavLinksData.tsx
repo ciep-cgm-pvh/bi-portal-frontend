@@ -5,9 +5,11 @@ import type { NavLinkInterface } from "../interfaces/navLinksInterface";
 import DashboardAbastecimento from '../pages/panels/Combustivel/Dashboard';
 import DataSourceAbastecimento from '../pages/panels/Combustivel/DataSoruce';
 import HomeAbastecimento from '../pages/panels/Combustivel/Home';
+
 import DashboardDiarias from '../pages/panels/Diarias/Dashboard';
 import DataSourceDiarias from '../pages/panels/Diarias/DataSoruce';
 import HomeDiarias from '../pages/panels/Diarias/Home';
+
 import DashboardManutencao from '../pages/panels/Manutencao/Dashboard';
 import DataSourceManutencao from '../pages/panels/Manutencao/DataSoruce';
 import HomeManutencao from '../pages/panels/Manutencao/Home';
