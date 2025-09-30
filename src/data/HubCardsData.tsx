@@ -42,11 +42,18 @@ const HubCardsDataV2: HubCardInterface[] = [
 
 const HubCardsData: HubCardInterface[] = [
   {
-    title: "Diárias",
+    title: "Diárias_Looker",
     description: "Painel com dados de diárias concedidas.",
     // route: "https://lookerstudio.google.com/reporting/613ae68b-beee-4091-9f6b-7aa1da14de8b/page/TAEHF",
     //route:"https://dashboard-geral.vercel.app/paineis/diarias",
     route: "https://lookerstudio.google.com/reporting/613ae68b-beee-4091-9f6b-7aa1da14de8b/page/TAEHF",
+    icon: <TicketsPlane className="text-orange-400 w-6 h-6" />,
+    type: "Gestão",
+  },
+  {
+    title: "Diárias",
+    description: "Painel com dados de diárias concedidas.",
+    route: "/painel/diarias/dashboard",
     icon: <TicketsPlane className="text-orange-400 w-6 h-6" />,
     type: "Gestão",
   },
@@ -89,7 +96,8 @@ const HubExternalCardsData = [
     icon: <FileCheck2 className="text-cyan-600 w-6 h-6" />,
     type: "Financeiro",
   },
-  {title: `Ouvidoria (SMTI)`,
+  {
+    title: `Ouvidoria (SMTI)`,
     description: "Painel com dados de manifestações da ouvidoria desenvolvido pela SMTI.",
     route: "https://ouvidoria.portovelho.ro.gov.br/painel-ouvidoria",
     icon: <BookUser className="text-red-500 w-6 h-6" />,
@@ -97,10 +105,10 @@ const HubExternalCardsData = [
   },
   {
     title: "Retomada de Obras da Educação (TCU)",
-        description: "O Tribunal de Contas da União (TCU) lançou o Painel que monitora o progresso das obras paralisadas no setor educacional que estão sendo retomadas em todo o país.",
-      route: "https://app.powerbi.com/view?r=eyJrIjoiM2NmMTdlYzctOTY3My00ZWZhLWI3ODQtN2YyZDEzNDY1MTk1IiwidCI6ImJmMTU4MTg4LTlhMTEtNDRjMi1iN2ZjLTIxZTg1NjEzYmEyNyJ9",
-      icon: <TrafficCone className="text-orange-400 w-6 h-6 min-w-6 min-h-6" />,
-      type: "Infraestrutura",
+    description: "O Tribunal de Contas da União (TCU) lançou o Painel que monitora o progresso das obras paralisadas no setor educacional que estão sendo retomadas em todo o país.",
+    route: "https://app.powerbi.com/view?r=eyJrIjoiM2NmMTdlYzctOTY3My00ZWZhLWI3ODQtN2YyZDEzNDY1MTk1IiwidCI6ImJmMTU4MTg4LTlhMTEtNDRjMi1iN2ZjLTIxZTg1NjEzYmEyNyJ9",
+    icon: <TrafficCone className="text-orange-400 w-6 h-6 min-w-6 min-h-6" />,
+    type: "Infraestrutura",
   },
 ]
 
