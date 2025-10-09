@@ -12,12 +12,11 @@ const formatBRL = (v: any) =>
   new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(Number(v || 0));
 
 const formatCell = (value: any, dataType?: 'CURRENCY' | 'DATE'): ReactNode => {
-  if (value === null || typeof value === 'undefined' || value === '') return 'N/A';
+  if (value === null ||  value === '') return 'N/A';
   switch (dataType) {
     case 'CURRENCY':
       return formatBRL(value);
     case 'DATE':
-      // paymentDate costuma vir como ISO; não invente timezone local aqui
       return new Date(value).toLocaleDateString('pt-BR', { timeZone: 'UTC' });
     default:
       return value;
@@ -52,16 +51,16 @@ const columns: TableColumn<TableDataItem>[] = [
     render: (item) => formatCell(item.amountGranted, 'CURRENCY'),
   },
   {
-    header: 'Aprovado',
-    accessor: 'amountApproved',
+    header: 'Data de aprovação',
+    accessor: 'paymentDate',
     sortable: true,
     isFilterable: true,
-    render: (item) => formatCell(item.amountApproved, 'CURRENCY'),
+    render: (item) => item.paymentDate,
   },
   {
-    header: 'Histórico',
-    accessor: 'history',
-    sortable: false,
+    header: 'Status',
+    accessor: 'status',
+    sortable: true,
     isFilterable: true,
   },
 ];
