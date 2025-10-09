@@ -51,18 +51,18 @@ const columns: TableColumn<TableDataItem>[] = [
     render: (item) => formatCell(item.amountGranted, 'CURRENCY'),
   },
   {
-    header: 'Data de aprovação',
+    header: 'Data de Pagamento',
     accessor: 'paymentDate',
     sortable: true,
     isFilterable: true,
     render: (item) => item.paymentDate,
   },
-  {
-    header: 'Status',
-    accessor: 'status',
-    sortable: true,
-    isFilterable: true,
-  },
+  // {
+  //   header: 'Status',
+  //   accessor: 'status',
+  //   sortable: true,
+  //   isFilterable: true,
+  // },
 ];
 
 interface DiariasTableProps {
