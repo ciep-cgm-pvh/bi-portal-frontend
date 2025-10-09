@@ -1,3 +1,5 @@
+// Local: src/pages/panels/Diarias/Dashboard/hooks/useDiariasDashboardData.tsx
+
 /* eslint-disable no-constant-binary-expression */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { DollarSign, Wrench } from 'lucide-react';
@@ -10,23 +12,43 @@ import { GET_DIARIAS_DASHBOARD_DATA_QUERY } from '../../Queries/DiariasQueries';
 const formatCurrency = (value: number) =>
   new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value || 0);
 
+// Mapeamento de chaves de ordenação
 const sortKeyMapping: { [key: string]: string } = {
-  // data: 'paymentDate',
-  // total: 'amountGranted',
+  data: 'paymentDate',
+  amountGranted: 'amountGranted',
+  employee: 'employee',
 };
 
 export const useDiariasDashboardData = ({ filters, tableFilter, pagination, sort }: any) => {
   // 1) Variáveis da query
   const queryVariables = useMemo(() => {
     const sortByBackend = sortKeyMapping[sort.key] || sort.key;
-    return {
-      filters,
-      tableFilter,
+
+    // Garantimos que 'filters' e 'tableFilters' são objetos
+    const safeFilters = filters || {};
+    const safeTableFilters = tableFilter || {};
+
+    // CORREÇÃO CRÍTICA: Removemos paymentDate do objeto de filtros ANTES de enviar.
+    // O servidor rejeita este campo no tipo DiariasFilters da Query Principal.
+    const filtersToSend = { ...safeFilters };
+    delete filtersToSend.paymentDate; // Remove o campo que o servidor rejeita
+
+    const variables = {
+      filters: filtersToSend, // ENVIAMOS O OBJETO FILTRADO
+      tableFilters: safeTableFilters,
       limit: pagination.itemsPerPage,
       offset: (pagination.currentPage - 1) * pagination.itemsPerPage,
       sortBy: sortByBackend,
       sortDirection: sort.direction,
     };
+
+    // LOG PARA DEBUG
+    console.log('--- DIARIAS QUERY PRINCIPAL ---');
+    console.log('QUERY:', GET_DIARIAS_DASHBOARD_DATA_QUERY);
+    console.log('VARIABLES:', variables);
+    console.log('-----------------------------');
+
+    return variables;
   }, [filters, pagination.currentPage, pagination.itemsPerPage, sort.direction, sort.key, tableFilter]);
 
   const [result] = useQuery({
@@ -86,9 +108,9 @@ export const useDiariasDashboardData = ({ filters, tableFilter, pagination, sort
 
   // 4) Tabela
   const tableData = useMemo(() => ({
-    rows: data?.getDiarias || [],
+    rows: data?.getDiariasTable || [],
     totalCount: data?.getDiariasTableCount || 0,
-  }), [data?.getDiarias, data?.getDiariasTableCount]);
+  }), [data?.getDiariasTable, data?.getDiariasTableCount]);
 
   // 5) Última atualização
   const lastUpdate = data?.getDiariasLastUpdate ?? null;
@@ -96,7 +118,6 @@ export const useDiariasDashboardData = ({ filters, tableFilter, pagination, sort
   return {
     kpiData,
     chartConfig,
-    filterOptions: data?.getDiariasFiltersOptions,
     tableData,
     lastUpdate,
     isLoading,

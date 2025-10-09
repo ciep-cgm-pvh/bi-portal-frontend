@@ -17,21 +17,14 @@ const formatCell = (value: any, dataType?: 'CURRENCY' | 'DATE'): ReactNode => {
     case 'CURRENCY':
       return formatBRL(value);
     case 'DATE':
-      // paymentDate costuma vir como ISO; não invente timezone local aqui
       return new Date(value).toLocaleDateString('pt-BR', { timeZone: 'UTC' });
     default:
       return value;
   }
 };
 
-// Colunas para DIÁRIAS (acessores devem bater com getDiarias)
+// Colunas para DIÁRIAS (acessores devem bater com getDiariasTable)
 const columns: TableColumn<TableDataItem>[] = [
-  {
-    header: 'Secretaria',
-    accessor: 'department',
-    sortable: true,
-    isFilterable: true,
-  },
   {
     header: 'Nº Processo',
     accessor: 'processNumber',
@@ -45,27 +38,36 @@ const columns: TableColumn<TableDataItem>[] = [
     isFilterable: true,
   },
   {
+    header: 'Secretaria',
+    accessor: 'department',
+    sortable: true,
+    isFilterable: true,
+  },
+  {
+    header: 'Status',
+    accessor: 'status',
+    sortable: true,
+    isFilterable: true,
+  },
+  {
     header: 'Concedido',
     accessor: 'amountGranted',
     sortable: true,
-    isFilterable: true,
+    isFilterable: false,
     render: (item) => formatCell(item.amountGranted, 'CURRENCY'),
   },
   {
-    header: 'Aprovado',
-    accessor: 'amountApproved',
+    header: 'Dt. Pagamento',
+    accessor: 'paymentDate',
     sortable: true,
-    isFilterable: true,
-    render: (item) => formatCell(item.amountApproved, 'CURRENCY'),
-  },
-  {
-    header: 'Histórico',
-    accessor: 'history',
-    sortable: false,
-    isFilterable: true,
+    isFilterable: false,
+    render: (item) => formatCell(item.paymentDate, 'DATE'),
   },
 ];
 
+// **********************************************
+// ********* INTERFACE QUE ESTAVA FALTANDO *******
+// **********************************************
 interface DiariasTableProps {
   data: TableDataItem[];
   totalCount: number;
@@ -80,6 +82,7 @@ interface DiariasTableProps {
   filterValues: { [key: string]: string };
   onFilterChange: (accessor: keyof TableDataItem, value: string) => void;
 }
+// **********************************************
 
 export const DiariasTable = ({
   data,

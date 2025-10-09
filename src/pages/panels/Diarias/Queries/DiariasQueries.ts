@@ -1,147 +1,116 @@
-// Local: src/pages/panels/Manutencao/queries/ManutencaoQueries.ts
+// Local: src/pages/panels/Diarias/Queries/DiariasQueries.ts
 
 // =================================================
-//      PAINEL DE MANUTENÇÃO - DASHBOARD
+//      PAINEL DE DIÁRIAS - DASHBOARD
 // ================================================
 
 /**
- * @description Query principal que busca todos os dados necessários para o dashboard de manutenção.
- * Inclui KPIs, dados para gráficos, opções de filtros dinâmicos e a primeira página da tabela.
- * O objetivo é carregar o estado inicial do painel com uma única requisição.
+ * @description Query principal (remove 'approvedDate' do getDiariasTable).
  */
 export const GET_DIARIAS_DASHBOARD_DATA_QUERY = `
-  query Diarias{
-  getDiarias {
-    department
-    budgetUnit
-    action
-    expensePlan
-    resourceSource
-    expenseType
-    payment
-    paymentDate
-    settlement
-    commitment
-    employee
-    history
-    processNumber
-    defaultDate
-    delayDays
-    approvedDate
-    canceledDate
-    amountToApprove
-    amountApproved
-    amountCanceled
-    amountGranted
-    balance
+  query Diarias(
+    $limit: Int
+    $offset: Int
+    $sortBy: String
+    $sortDirection: String
+    $filters: DiariasFilters
+    $tableFilters: DiariasTableFilters
+  ){
+    getDiariasTable(
+      limit: $limit
+      offset: $offset
+      sortBy: $sortBy
+      sortDirection: $sortDirection
+      filters: $filters
+      tableFilters: $tableFilters
+    ){
+      employee
+      department
+      # approvedDate REMOVIDO
+      amountGranted
+      status
+      paymentDate
+      processNumber
+    }
+
+    getDiariasTableCount(filters: $filters, tableFilters: $tableFilters)
+
+    getDiariasKpi(filters: $filters) {
+      totalGasto
+      totalDiarias
+    }
+
+    getDiariasCharts(filters: $filters) {
+      GastoMesDiaria {
+        month
+        total
+      }
+      OrgaoGastoDiaria {
+        name
+        total
+      }
+    }
+
+    getDiariasLastUpdate
   }
-  getDiariasKpi {
-    totalGasto
-    totalDiarias
-  }
-  getDiariasCharts {
-    GastoMesDiaria {
-      month
-      total
-    }
-    OrgaoGastoDiaria {
-      name
-      total
-    }
-  }
-  getDiariasFiltersOptions {
-    department {
-			value
-      label
-    }
-    status {
-			value
-      label
-    }
-    processNumber {
-			value
-      label
-    }
-    paymentDate {
-			value
-      label
-    }
-  }
-  getDiariasTableCount
-  getDiariasLastUpdate
-}
 `;
+
 // =================================================
 //      Dynamic Filters
 // ================================================
 
 /**
- * @description Query para buscar as opções dinâmicas para os filtros do dashboard de manutenção.
- * É chamada toda vez que um filtro é alterado para atualizar as opções dos outros.
+ * @description Query dedicada para buscar as opções dinâmicas (remove 'paymentDate').
  */
-
-/**
- * @description Query para baixar o relatório completo e detalhado das manutenções.
- */
-export const DOWNLOAD_ALL_DIARIAS_QUERY_by_gemini = `
-  query DownloadAllManutencoes {
-    getManutencao {
-      id
-      os
-      datetime
-      plate
-      numCard
-      prefixo
-      typeFrota
-      brand
-      model
-      year
-      patrimony
-      kmHorimetro
-      estabelecimento
-      city
-      uf
-      cnpj
-      department
-      typeOs
-      categoryOs
-      nomeAprovador
-      cpfAprovador
-      nfPecas
-      nfMdo
-      nfConjugada
-      declaracao
-      correcao
-      condutorEntregou
-      condutorRetirou
-      responsavelTecnico
-      totalMdo
-      discountTaxaMdo
-      mdoDiscount
-      totalPecas
-      discountTaxaPecas
-      pecasWithDiscount
-      totalWithoutDiscount
-      totalCost
-      client
-      secretaria
-      period
-      archive
+export const GET_DIARIAS_FILTER_OPTIONS_QUERY = `
+  query GetDiariasFiltersOptions($filters: DiariasFiltersOptions) {
+    getDiariasFiltersOptions(filters: $filters) {
+      department {
+        value
+        label
+      }
+      status {
+        value
+        label
+      }
+      processNumber {
+        value
+        label
+      }
+      # paymentDate REMOVIDO
     }
+  }
 `;
-
+// ... (DOWNLOAD_ALL_DIARIAS_QUERY permanece inalterado)
 /**
- * @description Query para baixar um resumo de custos por veículo.
+ * @description Query para baixar o relatório completo e detalhado das diárias.
+ * Mantemos os campos originais aqui, caso sejam usados no relatório.
  */
-export const DOWNLOAD_VEHICLE_SUMMARY_QUERY = `
-  query DownloadVehicleSummary {
-    getManutencaoVehicleSummary {
-      placa
-      modelo
-      marca
-      secretaria
-      totalCost
-      serviceOrderCount
+export const DOWNLOAD_ALL_DIARIAS_QUERY = `
+  query DownloadAllDiarias($filters: DiariasFilters) {
+    getDiarias(filters: $filters) {
+      department
+      budgetUnit
+      action
+      expensePlan
+      resourceSource
+      expenseType
+      payment
+      paymentDate
+      settlement
+      commitment
+      employee
+      history
+      processNumber
+      defaultDate
+      delayDays
+      approvedDate
+      canceledDate
+      amountToApprove
+      amountApproved
+      amountCanceled
+      amountGranted
+      balance
     }
   }
 `;
