@@ -1,10 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // Em src/pages/panels/Diarias/Dashboard/hooks/useFilterConfig.ts
-
 import { useMemo } from "react";
 import { useQuery } from "urql";
 import type { FilterConfig } from "../../../../../types/filters";
-
 import { baseFilterConfig } from "../data/filters.config";
 import { GET_DIARIAS_FILTER_OPTIONS_QUERY } from '../../Queries/DiariasQueries';
 
@@ -14,8 +12,8 @@ import { GET_DIARIAS_FILTER_OPTIONS_QUERY } from '../../Queries/DiariasQueries';
  * - department[{value,label}]
  * - status[{value,label}]
  * - processNumber[{value,label}]
- * - paymentDate[{value,label}]
  */
+
 export const useFiltersConfig = (activeFilters: any) => {
   const filtersForOptionsQuery = useMemo(() => {
     // Cria uma cópia para não modificar o estado original
@@ -38,7 +36,7 @@ export const useFiltersConfig = (activeFilters: any) => {
   const [ result ] = useQuery({
       query: GET_DIARIAS_FILTER_OPTIONS_QUERY,
       // 2. Passe os filtros ativos como variáveis para a query
-      variables: { filters: filtersForOptionsQuery }
+      variables: { filtersOptions: filtersForOptionsQuery }
   });
 
   const { data, fetching: isLoading, error } = result;
@@ -57,8 +55,6 @@ export const useFiltersConfig = (activeFilters: any) => {
             return { ...filter, options: (options.status) };
           case "processNumber":
             return { ...filter, options: (options.processNumber) };
-          case "paymentDate":
-            return { ...filter, options: (options.paymentDate) };
           default:
             // Se existir algum filtro “extra” na base, mantém como está
             return { ...filter, options: filter.options ?? [] };
