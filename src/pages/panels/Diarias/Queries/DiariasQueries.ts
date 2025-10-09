@@ -10,36 +10,46 @@
  * O objetivo é carregar o estado inicial do painel com uma única requisição.
  */
 export const GET_DIARIAS_DASHBOARD_DATA_QUERY = `
-  query Diarias{
-  getDiarias {
-    department
-    budgetUnit
-    action
-    expensePlan
-    resourceSource
-    expenseType
-    payment
-    paymentDate
-    settlement
-    commitment
+  query Diarias(
+  $limit: Int
+  $offset: Int
+  $sortBy: String
+  $sortDirection: String
+  $filters: DiariasFilters
+	$tableFilters: DiariasTableFilters
+){
+  getDiarias(filters: $filters) {
     employee
-    history
+    paymentDate
     processNumber
+    department
     defaultDate
-    delayDays
     approvedDate
     canceledDate
-    amountToApprove
-    amountApproved
-    amountCanceled
-    amountGranted
-    balance
   }
-  getDiariasKpi {
+
+  getDiariasTable(
+    limit: $limit
+    offset: $offset
+    sortBy: $sortBy
+    sortDirection: $sortDirection
+    filters: $filters
+    tableFilters: $tableFilters
+  ){
+    employee
+    department
+    amountGranted
+    status
+    paymentDate
+    processNumber
+  }
+
+  getDiariasKpi(filters: $filters) {
     totalGasto
     totalDiarias
   }
-  getDiariasCharts {
+
+  getDiariasCharts(filters: $filters) {
     GastoMesDiaria {
       month
       total
@@ -49,25 +59,7 @@ export const GET_DIARIAS_DASHBOARD_DATA_QUERY = `
       total
     }
   }
-  getDiariasFiltersOptions {
-    department {
-			value
-      label
-    }
-    status {
-			value
-      label
-    }
-    processNumber {
-			value
-      label
-    }
-    paymentDate {
-			value
-      label
-    }
-  }
-  getDiariasTableCount
+  getDiariasTableCount(filters: $filters tableFilters: $tableFilters)
   getDiariasLastUpdate
 }
 `;
@@ -79,6 +71,26 @@ export const GET_DIARIAS_DASHBOARD_DATA_QUERY = `
  * @description Query para buscar as opções dinâmicas para os filtros do dashboard de manutenção.
  * É chamada toda vez que um filtro é alterado para atualizar as opções dos outros.
  */
+
+export const GET_DIARIAS_FILTER_OPTIONS_QUERY = `
+  query GetDiariasFilterOptions($filtersOptions: DiariasFiltersOptions) {
+    getDiariasFiltersOptions(filters: $filtersOptions) {
+      department {
+        value
+        label
+      }
+      status {
+        value
+        label
+      }
+      processNumber {
+        value
+        label
+      }
+    }
+  }
+`;
+
 
 /**
  * @description Query para baixar o relatório completo e detalhado das manutenções.

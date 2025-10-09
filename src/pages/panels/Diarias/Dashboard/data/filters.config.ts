@@ -12,6 +12,6 @@ export const initialFilterValues = {
   department: "",
   status: "",
   processNumber: "",
-  paymentDate: { from: "", to: "" }, // ISO 'YYYY-MM-DD' quando houver valor
+  paymentDate: { from: "2025-01-01", to: "2025-06-30" }, // ISO 'YYYY-MM-DD' quando houver valor
 };
 
