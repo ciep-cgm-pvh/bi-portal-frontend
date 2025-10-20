@@ -35,7 +35,7 @@ export const useAbastecimentoDashboardData = ({ filters, tableFilters, paginatio
       department: filters.department,
       gasStationCity: filters.gasStationCity,
       gasStationName: filters.gasStationName,
-      excludePostoInterno: Boolean(filters.excludePostoInterno),
+      excludePostoInterno: filters.excludePostoInterno,
     }
 
     const tableFilterKeyMap: Record<string, string> = {
@@ -74,6 +74,11 @@ export const useAbastecimentoDashboardData = ({ filters, tableFilters, paginatio
   });
   
   const { data, fetching: isLoading, error } = result;
+
+  if (isLoading) console.log('Buscando dados...');
+else if (error) console.error('Erro na query:', error);
+else console.log('Dados recebidos:', data);
+
 
   const kpiData = useMemo(() => {
     const kpis = data?.kpis;
@@ -118,8 +123,8 @@ export const useAbastecimentoDashboardData = ({ filters, tableFilters, paginatio
       id: 'custo-por-veiculo',
       title: 'Gasto por Veículo',
       type: 'bar-vertical',
-      data: data?.getAbastecimentoCharts.costByVehicle || [],
-      config: { dataKey: 'total', categoryKey: 'vehicle', color: '#82ca9d' },
+      data: data?.getAbastecimentoCharts.costByPlate || [],
+      config: { dataKey: 'total', categoryKey: 'plate', color: '#82ca9d' },
     },
     {
       id: 'ranking-por-date',
