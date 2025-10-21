@@ -75,11 +75,6 @@ export const useAbastecimentoDashboardData = ({ filters, tableFilters, paginatio
   
   const { data, fetching: isLoading, error } = result;
 
-  if (isLoading) console.log('Buscando dados...');
-else if (error) console.error('Erro na query:', error);
-else console.log('Dados recebidos:', data);
-
-
   const kpiData = useMemo(() => {
     const kpis = data?.kpis;
     if (!kpis) return [
