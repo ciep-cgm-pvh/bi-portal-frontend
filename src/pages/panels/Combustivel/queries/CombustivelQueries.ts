@@ -6,7 +6,7 @@
  * @description Query principal que busca todos os dados necessários para o dashboard de abastecimento.
  * Inclui KPIs, dados para gráficos, opções de filtros dinâmicos e a primeira página da tabela.
  * O objetivo é carregar o estado inicial do painel com uma única requisição.
- */
+ */ 
 
 export const GET_COMBUSTIVEL_DASHBOARD_DATA_QUERY = `
   query GetAbastecimentoDashboardData (
@@ -22,33 +22,18 @@ export const GET_COMBUSTIVEL_DASHBOARD_DATA_QUERY = `
   kpis: getAbastecimentoKpi(filters: $filters) {
     fuelConsumed
     totalCost
-    kilometersDriven
     vehiclesCount
-    dailyAverageCost
-    suppliesCount
     lastUpdate
   }
 
   # 2. Charts Data
   getAbastecimentoCharts(vehicleLimit: $vehicleLimit filters: $filters) {
-    costByVehicle {
-      vehicle
-      total
-    }
     costByDepartment{
       department
       total
     }
-    costByCity{
-      city
-      total
-    }
     costByPlate{
       plate
-      total
-    }
-    costByDate{
-      date
       total
     }
     costOverTime{
@@ -69,7 +54,7 @@ export const GET_COMBUSTIVEL_DASHBOARD_DATA_QUERY = `
       total
     }
   }
-  
+
   # 3. Dados da Tabela (paginados e com novo campo 'id')
   tableData: getAbastecimentosTable(
     limit: $limit
@@ -95,7 +80,6 @@ export const GET_COMBUSTIVEL_DASHBOARD_DATA_QUERY = `
       city
     }
     department
-    costCenter
   }
 
   columns: getAbastecimentosColumns {
@@ -153,7 +137,6 @@ query GetAbastecimentoFiltersOptions($filters: AbastecimentoFiltersOptionsInput)
 export const DOWNLOAD_ALL_COMBUSTIVEL_QUERY = `
   query DownloadAllAbastecimento {
   getAbastecimentos {
-    id
     data: datetime
     custo: cost
     quantidadeAbastecida: fuelVolume

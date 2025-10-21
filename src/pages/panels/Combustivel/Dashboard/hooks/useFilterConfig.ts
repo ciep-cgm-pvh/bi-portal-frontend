@@ -3,7 +3,7 @@ import { useMemo } from 'react';
 import { useQuery } from 'urql';
 import type { FilterConfig } from '../../../../../types/filters';
 import { baseFilterConfig } from '../data/filters.config';
-import { GET_COMBUSTIVEL_FILTER_OPTIONS_QUERY } from '../../queries/CombustivelQueries';
+import { GET_COMBUSTIVEL_FILTER_OPTIONS_QUERY } from '../../queries/CombustivelQueries'; 
 
 export const useFiltersConfig = (activeFilters: Record<string, any>) => {
   const filtersForOptionsQuery = useMemo(() => {

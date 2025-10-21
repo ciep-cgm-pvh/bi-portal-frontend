@@ -86,7 +86,7 @@ export const useDiariasDashboardData = ({ filters, tableFilter, pagination, sort
 
   // 4) Tabela
   const tableData = useMemo(() => ({
-    rows: data?.getDiarias || [],
+    rows: data?.getDiariasTable || [],
     totalCount: data?.getDiariasTableCount || 0,
   }), [data?.getDiarias, data?.getDiariasTableCount]);
 

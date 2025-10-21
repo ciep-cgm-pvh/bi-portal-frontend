@@ -58,7 +58,7 @@ const DashboardCombustivel = () => {
     if (lastUpdate && !hasInitialized.current) {
       const currentYear = new Date().getFullYear();
       const firstDayOfYear = formatDateForInput(new Date(currentYear, 0, 1));
-      const lastUpdateDate = formatDateForInput(lastUpdate);
+      const lastUpdateDate = lastUpdate;
 
       setGeneralFilters({
         ...initialFilterValues,
@@ -88,7 +88,7 @@ const DashboardCombustivel = () => {
     } else {
         setGeneralFilters(initialFilterValues);
     }
-  };
+  }; 
 
   const handleColumnFilterChange = useCallback((accessor: string, value: string) => {
     setColumnFilters(prev => ({

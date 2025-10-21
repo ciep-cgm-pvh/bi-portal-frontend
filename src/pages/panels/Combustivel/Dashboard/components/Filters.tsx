@@ -8,7 +8,7 @@ interface AbastecimentoFiltersProps {
   onClear: () => void;
   initialValues: any;
   isLoading: boolean;
-}
+} 
 
 export const AbastecimentoFilters = ({initialValues, onApply, onClear, isLoading }: AbastecimentoFiltersProps) => {
   // Use o hook para obter a configuração dinâmica

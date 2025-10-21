@@ -1,11 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // Em src/pages/panels/Diarias/Dashboard/hooks/useFilterConfig.ts
-
 import { useMemo } from "react";
 import { useQuery } from "urql";
 import type { FilterConfig } from "../../../../../types/filters";
-import { GET_DIARIAS_DASHBOARD_DATA_QUERY } from "../../Queries/DiariasQueries";
 import { baseFilterConfig } from "../data/filters.config";
+import { GET_DIARIAS_FILTER_OPTIONS_QUERY } from '../../Queries/DiariasQueries';
 
 /**
  * Hook para buscar e montar as opções de filtros do painel de DIÁRIAS.
@@ -13,76 +12,62 @@ import { baseFilterConfig } from "../data/filters.config";
  * - department[{value,label}]
  * - status[{value,label}]
  * - processNumber[{value,label}]
- * - paymentDate[{value,label}]
  */
+
 export const useFiltersConfig = (activeFilters: any) => {
-  const variables = useMemo(
-    () => ({ filters: activeFilters }),
-    [activeFilters]
-  );
+  const filtersForOptionsQuery = useMemo(() => {
+    // Cria uma cópia para não modificar o estado original
+    const cleanedFilters = { ...activeFilters };
 
-  const [{ data, fetching: isLoading }] = useQuery({
-    query: GET_DIARIAS_DASHBOARD_DATA_QUERY,
-    variables,
-  });
-
-  const filterConfig = useMemo((): FilterConfig[] => {
-    // Tenta primeiro a chave certa do backend
-    const options =
-      data?.getDiariasFiltersOptions ||
-      // fallback caso alguém tenha deixado "filterOptions" no servidor antigo
-      data?.filterOptions ||
-      null;
-
-    // Se ainda não veio nada, devolve a base zerada para não quebrar o UI
-    if (!options) {
-      return baseFilterConfig.map((fc) => ({ ...fc, options: [] }));
+    // Se houver from/to, agrupe em dateRange
+    if (cleanedFilters.from || cleanedFilters.to) {
+      cleanedFilters.dateRange = {
+        from: cleanedFilters.from,
+        to: cleanedFilters.to,
+      };
     }
 
-    // Normaliza um array qualquer para [{value,label}]
-    const normalize = (list: any[] | undefined) => {
-      if (!Array.isArray(list)) return [];
-      return list
-        .filter(Boolean)
-        .map((opt: any) => {
-          if (
-            opt &&
-            typeof opt === "object" &&
-            "value" in opt &&
-            "label" in opt
-          ) {
-            return opt;
-          }
-          // Se o backend mandar string, vira { value: s, label: s }
-          if (typeof opt === "string" || typeof opt === "number") {
-            return { value: String(opt), label: String(opt) };
-          }
-          // Último caso: tenta extrair value/label “na marra”
-          return {
-            value: String(opt?.value ?? opt?.id ?? ""),
-            label: String(opt?.label ?? opt?.name ?? opt?.value ?? ""),
-          };
-        })
-        .filter((o: any) => o.value || o.label);
-    };
+    delete cleanedFilters.from;
+    delete cleanedFilters.to;
 
-    // Mapeia os IDs do baseFilterConfig para as coleções certas do backend
-    return baseFilterConfig.map((filter) => {
-      switch (filter.id) {
-        case "department":
-          return { ...filter, options: normalize(options.department) };
-        case "status":
-          return { ...filter, options: normalize(options.status) };
-        case "processNumber":
-          return { ...filter, options: normalize(options.processNumber) };
-        case "paymentDate":
-          return { ...filter, options: normalize(options.paymentDate) };
-        default:
-          // Se existir algum filtro “extra” na base, mantém como está
-          return { ...filter, options: filter.options ?? [] };
-      }
-    });
-  }, [data]);
+    return cleanedFilters;
+  }, [ activeFilters ]);
 
-  return { filterConfig, isLoading };
+  const [ result ] = useQuery({
+      query: GET_DIARIAS_FILTER_OPTIONS_QUERY,
+      // 2. Passe os filtros ativos como variáveis para a query
+      variables: { filtersOptions: filtersForOptionsQuery }
+  });
+
+  const { data, fetching: isLoading, error } = result;
+  
+  const finalFilterConfig = useMemo((): FilterConfig[] => {
+    let config = [ ...baseFilterConfig ];
+
+    if (data?.getDiariasFiltersOptions) {
+      const options = data.getDiariasFiltersOptions;
+
+      config = config.map(filter => {
+        switch (filter.id) {
+          case "department":
+            return { ...filter, options: (options.department) };
+          case "status":
+            return { ...filter, options: (options.status) };
+          case "processNumber":
+            return { ...filter, options: (options.processNumber) };
+          default:
+            // Se existir algum filtro “extra” na base, mantém como está
+            return { ...filter, options: filter.options ?? [] };
+        }
+      });
+    }
+    return config;
+    // 3. Adicione `activeFilters` como dependência do useMemo
+  }, [ data, activeFilters ]);
+
+  return {
+    filterConfig: finalFilterConfig,
+    isLoading,
+    error,
+  };
 };
