@@ -17,9 +17,13 @@ const urls = {
 const client = createClient({
   url: process.env.NODE_ENV === 'PRODUCTION' ? urls.production : urls.developer,
   exchanges: [
-    cacheExchange, // Primeiro, tenta responder do cache
-    fetchExchange, // Depois, envia a requisição pela rede
+    cacheExchange,
+    fetchExchange,
   ],
+  // ADICIONE ESTA OPÇÃO ABAIXO
+  fetchOptions: {
+    credentials: 'include', // ou 'same-origin' se preferir
+  },
 });
 createRoot(document.getElementById('root')!).render(
   <BrowserRouter>
