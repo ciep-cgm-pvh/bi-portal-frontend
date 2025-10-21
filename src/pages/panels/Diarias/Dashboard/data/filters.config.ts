@@ -1,41 +1,17 @@
-import type { FilterConfig } from '../../../../../types/filters';
+import type { FilterConfig } from "../../../../../types/filters";
 
-
-export const filterConfiguration: FilterConfig[] = [
-  // diarias -> Nº Processo	Órgão	Data Pagamento	Funcionário	Valor Concedido	Situação
-
-  {
-    id: 'orgao',
-    label: 'Órgão',
-    type: 'select',
-    placeholder: 'Todos os órgãos',
-    options: [
-      { value: 'orgao1', label: 'Órgão 1' },
-      { value: 'orgao2', label: 'Órgão 2' },
-      { value: 'orgao3', label: 'Órgão 3' },
-    ],
-  },
-  {
-    id: 'status',
-    label: 'Status',
-    type: 'select',
-    placeholder: 'Todos os status',
-    options: [
-      { value: 'aprovado', label: 'Aprovado' },
-      { value: 'pendente', label: 'Pendente' },
-      { value: 'rejeitado', label: 'Rejeitado' },
-    ],
-  },
-  {
-    id: 'startDate',
-    label: 'Data Inicial',
-    type: 'date',
-  },
-  {
-    id: 'endDate',
-    label: 'Data Final',
-    type: 'date',
-  },
+// IDs alinhados com getDiariasFiltersOptions
+export const baseFilterConfig: FilterConfig[] = [
+  { id: "department", label: "Secretaria", type: "select", options: [] },
+  { id: "status", label: "Status", type: "select", options: [] },
+  { id: "processNumber", label: "Nº do Processo", type: "select", options: [] }, // pode trocar para 'text' se preferir digitação livre
+  { id: "dateRange", label: "Período", type: "daterange" }, // usa from/to
 ];
 
-export const initialFilterValues = { orgao: '', status: '', from: '', to: '' };
+export const initialFilterValues = {
+  department: "",
+  status: "",
+  processNumber: "",
+  dateRange: { from: "2025-01-01", to: "2025-06-30" }, // ISO 'YYYY-MM-DD' quando houver valor
+};
+

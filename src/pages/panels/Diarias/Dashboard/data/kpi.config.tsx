@@ -1,6 +1,7 @@
-import { DollarSign, OptionIcon } from 'lucide-react';
+import { FuelIcon } from 'lucide-react';
 
 export const kpiData = [
-  { title: 'Valor Total Concedido', value: 'R$ 3.469.542,92', icon: <DollarSign /> },
-  { title: 'Total de Processos', value: '2338', icon: <OptionIcon /> },
+  { title: 'Gastos Totais', value: 'R$ 10.000,00', icon: <FuelIcon /> },
+  { title: 'Média Diária', value: 'R$ 500,00', icon: <FuelIcon /> },
+  { title: 'Abastecimentos', value: '20', icon: <FuelIcon /> },
 ];
