@@ -5,21 +5,26 @@ import { cacheExchange, createClient, fetchExchange, Provider } from 'urql';
 import App from './App.tsx';
 import './styles/index.css';
 
-const urls ={
+const urls = {
   local: 'http://localhost:3000/graphql',
   localNetwork: 'http://10.148.2.210:3000/graphql',
-  production: 'https://bi-portal-api.vercel.app/graphql' 
-}
+  production: 'https://bi-portal-api.vercel.app/graphql',
+  // Corrigido: Adicionado '/graphql' ao final da URL
+  developer: 'https://bi-portal-api-clara.vercel.app/graphql', 
+};
 
 // Crie o cliente, apontando para a URL do seu backend GraphQL
 const client = createClient({
-  url: process.env.NODE_ENV === 'PRODUCTION' ? urls.production : urls.local,
+  url: process.env.NODE_ENV === 'PRODUCTION' ? urls.production : urls.developer,
   exchanges: [
-    cacheExchange, // Primeiro, tenta responder do cache
-    fetchExchange, // Depois, envia a requisição pela rede
+    cacheExchange,
+    fetchExchange,
   ],
+  // ADICIONE ESTA OPÇÃO ABAIXO
+  fetchOptions: {
+    credentials: 'include', // ou 'same-origin' se preferir
+  },
 });
-
 createRoot(document.getElementById('root')!).render(
   <BrowserRouter>
     <Provider value={client}>
