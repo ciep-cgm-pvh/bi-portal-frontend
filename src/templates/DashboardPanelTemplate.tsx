@@ -135,36 +135,21 @@ export const DashboardPanelTemplate = ({
       )}
 
       {/* Conteúdo do Painel */}
-      <div className="flex flex-col gap-6">
-        <Header
-          title={title}
-          description={description}
-          onBackToHub={() => navigate('/hub')}
-          lastUpdate={formattedLastUpdate}
-        />
-        <KPISection>
-          {kpiData.map((kpi, index) => <KPICard key={index} {...kpi} />)}
-        </KPISection>
-        {filtersComponent}
-        <ChartsSection charts={chartConfig} />
-        {tableComponent}
+        <div className="flex flex-col gap-6">
+          <Header
+            title={title}
+            description={description}
+            onBackToHub={() => navigate('/hub')}
+            lastUpdate={formattedLastUpdate}
+          />
+          <KPISection>
+            {kpiData.map((kpi, index) => <KPICard key={index} {...kpi} />)}
+          </KPISection>
+          {filtersComponent}
+          <ChartsSection charts={chartConfig} />
+          {tableComponent}
+        </div>
       </div>
-    </div>
-      {/* <Header
-        title={title}
-        description={description}
-        onBackToHub={() => navigate('/hub')}
-        lastUpdate={formattedLastUpdate}
-      />
-      <KPISection>
-        {kpiData.map((kpi, index) => <KPICard key={index} {...kpi} />)}
-      </KPISection>
-
-      {filtersComponent}
-
-      <ChartsSection charts={chartConfig} />
-
-      {tableComponent} */}
     </div>
   );
 };
