@@ -61,5 +61,5 @@ export const initialFilterValues = {
   vehicleModel: '',
   gasStationCity: '',
   gasStationName: '',
-  excludePostoInterno: "externo"
+  excludePostoInterno: "todos"
 };
