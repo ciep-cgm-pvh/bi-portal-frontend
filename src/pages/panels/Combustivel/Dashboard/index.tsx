@@ -46,6 +46,7 @@ const DashboardCombustivel = () => {
     lastUpdate,
     columns,
     isLoading,
+    error,
   } = useAbastecimentoDashboardData({
     filters: generalFilters,
     tableFilters: debouncedColumnFilters,
@@ -53,12 +54,17 @@ const DashboardCombustivel = () => {
     sort,
   });
 
+  if (error) {
+    console.error('Erro ao carregar dados do dashboard:', error);
+  }
+
   useEffect(() => {
     // Roda apenas se 'lastUpdate' existir E se a inicialização ainda não ocorreu
     if (lastUpdate && !hasInitialized.current) {
       const currentYear = new Date().getFullYear();
       const firstDayOfYear = formatDateForInput(new Date(currentYear, 0, 1));
-      const lastUpdateDate = lastUpdate;
+      const lastUpdateDate = formatDateForInput(lastUpdate);
+      console.log(lastUpdateDate)
 
       setGeneralFilters({
         ...initialFilterValues,
@@ -80,6 +86,7 @@ const DashboardCombustivel = () => {
         const currentYear = new Date().getFullYear();
         const firstDayOfYear = formatDateForInput(new Date(currentYear, 0, 1));
         const lastUpdateDate = formatDateForInput(lastUpdate);
+        console.log(lastUpdateDate)
         setGeneralFilters({
             ...initialFilterValues,
             from: firstDayOfYear,
@@ -99,7 +106,7 @@ const DashboardCombustivel = () => {
 
   const filterComponent = useMemo(() => (
     <AbastecimentoFilters
-      isLoading={isLoading}
+      isLoading={isLoading.loadingKpi}
       initialValues={generalFilters}
       onApply={handleApplyFilters}
       onClear={handleClearFilters}
@@ -115,7 +122,7 @@ const DashboardCombustivel = () => {
       onPaginationChange={setPagination}
       sort={sort}
       onSortChange={setSort}
-      isLoading={isLoading}
+      isLoading={isLoading.loadingTable}
       filterValues={columnFilters} 
       onFilterChange={handleColumnFilterChange as (accessor: keyof TableDataItem, value: string) => void}
     />
@@ -133,6 +140,7 @@ const DashboardCombustivel = () => {
       chartConfig={chartConfig}
       filtersComponent={filterComponent}
       tableComponent={tableComponent}
+
     />
   );
 };
