@@ -166,7 +166,6 @@ query DownloadVehicleSummary {
   getAbastecimentoVehicleSummary {
     departamento: department
     custoTotal: totalCost
-    quantidadeAbastecimento: supplyCount
     veiculo: vehicle {
       placa: plate
       modelo: model
