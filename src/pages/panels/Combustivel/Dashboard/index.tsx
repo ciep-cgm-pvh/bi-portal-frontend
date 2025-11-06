@@ -64,7 +64,6 @@ const DashboardCombustivel = () => {
       const currentYear = new Date().getFullYear();
       const firstDayOfYear = formatDateForInput(new Date(currentYear, 0, 1));
       const lastUpdateDate = formatDateForInput(lastUpdate);
-      console.log(lastUpdateDate)
 
       setGeneralFilters({
         ...initialFilterValues,
@@ -86,7 +85,7 @@ const DashboardCombustivel = () => {
         const currentYear = new Date().getFullYear();
         const firstDayOfYear = formatDateForInput(new Date(currentYear, 0, 1));
         const lastUpdateDate = formatDateForInput(lastUpdate);
-        console.log(lastUpdateDate)
+
         setGeneralFilters({
             ...initialFilterValues,
             from: firstDayOfYear,
