@@ -164,50 +164,64 @@ const renderPieChart = (chart: PieChartConfig) => {
 /**
  * Renders a Line Chart.
  */
+// processLineChartData: mantém ordem cronológica e coloca "Outros" como primeiro
 const processLineChartData = (data: any[], categoryKey: string, dataKey: string) => {
-  // Show only the top 9 + others to not overload the chart
-  if (data.length <= 10) {
-    return data;
-  }
+  if (!Array.isArray(data) || data.length === 0) return [];
+  if (data.length <= 10) return data;
 
-  // Sort data by value in descending order to find the top items
-  const sortedData = [...data].sort((a, b) => b[dataKey] - a[dataKey]);
+  // Garante ordem cronológica
+  const sorted = [...data].sort((a, b) => String(a[categoryKey]).localeCompare(String(b[categoryKey])));
 
-  // Get the top 9
-  const top9 = sortedData.slice(0, 9);
+  const excessCount = sorted.length - 10;
+  const othersSum = sorted
+    .slice(0, excessCount)
+    .reduce((acc, item) => acc + Number(item[dataKey] || 0), 0);
 
-  // Sum the values of all other items
-  const othersSum = sortedData.slice(9).reduce((acc, item) => acc + item[dataKey], 0);
+  const othersItem = {
+    [categoryKey]: 'Outros',
+    [dataKey]: othersSum,
+  };
 
-  // Create the 'Outros' slice if there's a sum
-  if (othersSum > 0) {
-    const othersSlice = {
-      [categoryKey]: 'Outros',
-      [dataKey]: othersSum,
-    };
-    return [...top9, othersSlice];
-  }
-
-  return top9;
+  const visible = sorted.slice(excessCount);
+  return [othersItem, ...visible];
 };
 
-const renderLineChart = (chart: LineChartConfig) => (
-  
-  <ResponsiveContainer width="100%" height="100%">
-    <LineChart data={processLineChartData(chart.data, chart.config.categoryKey, chart.config.dataKey)}>
-      <CartesianGrid strokeDasharray="3 3" />
-      <XAxis 
-        dataKey={chart.config.categoryKey}
-        tickFormatter={chart.config.tickFormatter}
-        interval={Math.ceil(chart.data.length / 10)}
-        tick={{ fontSize: 12 }}
-      />
-      <YAxis tickFormatter={(value) => `R$ ${new Intl.NumberFormat('pt-BR').format(value)}`} tick={{ fontSize: 12 }} />
-      <Tooltip formatter={(value: number) => [formatCurrency(value), 'Total']} />
-      <Line type="monotone" dataKey={chart.config.dataKey} stroke={chart.config.color || '#82ca9d'} strokeWidth={2} dot={{ r: 4 }} activeDot={{ r: 6 }} />
-    </LineChart>
-  </ResponsiveContainer>
-);
+const renderLineChart = (chart: LineChartConfig) => {
+  const processedData = processLineChartData(
+    chart.data,
+    chart.config.categoryKey,
+    chart.config.dataKey
+  );
+
+  return (
+    <ResponsiveContainer width="100%" height="100%">
+      <LineChart data={processedData}>
+        <CartesianGrid strokeDasharray="3 3" />
+        <XAxis
+          dataKey={chart.config.categoryKey}
+          tickFormatter={undefined}
+          interval={"preserveStartEnd"}
+          tick={{ fontSize: 12 }}
+        />
+        <YAxis
+          tickFormatter={(value) =>
+            `R$ ${new Intl.NumberFormat('pt-BR').format(value)}`
+          }
+          tick={{ fontSize: 12 }}
+        />
+        <Tooltip formatter={(value: number) => [formatCurrency(value), 'Total']} />
+        <Line
+          type="monotone"
+          dataKey={chart.config.dataKey}
+          stroke={chart.config.color || '#82ca9d'}
+          strokeWidth={2}
+          dot={{ r: 4 }}
+          activeDot={{ r: 6 }}
+        />
+      </LineChart>
+    </ResponsiveContainer>
+  );
+};
 
 /**
  * Renders a Ranking Table.
