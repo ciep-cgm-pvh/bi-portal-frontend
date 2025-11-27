@@ -24,13 +24,13 @@ const HubCardsDataDeveloper: HubCardInterface[] = [
     icon: <TicketsPlane className="text-orange-400 w-6 h-6" />,
     type: "demonstracão",
   },
-  {
-    title: "Manutenção (demo)",
-    description: "Painel com dados de manutenção de frota.",
-    route: "/painel/manutencao/dashboard",
-    icon: <Wrench className="text-slate-700 w-6 h-6" />,
-    type: "Frota",
-  },
+  // {
+  //   title: "Manutenção (demo)",
+  //   description: "Painel com dados de manutenção de frota.",
+  //   route: "/painel/manutencao/dashboard",
+  //   icon: <Wrench className="text-slate-700 w-6 h-6" />,
+  //   type: "Frota",
+  // },
   {
     title: "Abastecimento",
     description: "Painel com dados de abastecimento de frota.",
@@ -61,14 +61,14 @@ const HubCardsDataDeveloper: HubCardInterface[] = [
     icon: <Banknote className="text-green-700 w-6 h-6" />,
     type: "Financeiro",
   },
-  // {
-  //   title: "Manutenção",
-  //   description: "Painel de manutenção da frota.",
-  //   // route: "https://lookerstudio.google.com/u/0/reporting/a41d513b-d75c-40bd-93e3-8f53825a1966/page/inJJF/edit",
-  //   route: "https://dashboard-geral.vercel.app/paineis/manutencao",
-  //   icon: <Wrench className="text-slate-700 w-6 h-6" />,
-  //   type: "Frota",
-  // },
+  {
+    title: "Manutenção",
+    description: "Painel de manutenção da frota.",
+    route: "https://lookerstudio.google.com/u/0/reporting/a41d513b-d75c-40bd-93e3-8f53825a1966/page/inJJF/edit",
+    // route: "https://dashboard-geral.vercel.app/paineis/manutencao",
+    icon: <Wrench className="text-slate-700 w-6 h-6" />,
+    type: "Frota",
+  },
   // {
   //   title: "Abastecimento",
   //   description: "Painel com dados de abastecimento.",
