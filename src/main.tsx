@@ -13,6 +13,12 @@ const urls = {
   developer: 'https://bi-portal-api-clara.vercel.app/graphql', 
 };
 
+if (import.meta.env.MODE === "production") {
+  document.title = "Painéis CGM";
+} else {
+  document.title = "Developer - Painéis CGM";
+}
+
 // Crie o cliente, apontando para a URL do seu backend GraphQL
 const client = createClient({
   url: process.env.NODE_ENV === 'PRODUCTION' ? urls.production : urls.developer,
