@@ -13,7 +13,7 @@ const urls = {
   developer: 'https://bi-portal-api-clara.vercel.app/graphql', 
 };
 
-if (import.meta.env.MODE === "production") {
+if (import.meta.env.MODE === "PRODUCTION") {
   document.title = "Painéis CGM";
 } else {
   document.title = "Developer - Painéis CGM";
