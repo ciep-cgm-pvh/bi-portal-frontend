@@ -1,5 +1,5 @@
-import Router from './routes/Router';
 import { cacheExchange, createClient, fetchExchange, Provider } from 'urql';
+import Router from './routes/Router';
 
 const urls = {
   local: 'http://localhost:3000/graphql',
@@ -13,9 +13,13 @@ const urls = {
 const client = createClient({
   url: import.meta.env.VITE_ENV === 'PRODUCTION' ? urls.production : urls.local,
   exchanges: [
-    cacheExchange, // Primeiro, tenta responder do cache
-    fetchExchange, // Depois, envia a requisição pela rede
+    cacheExchange,
+    fetchExchange,
   ],
+  // ADICIONE ESTA OPÇÃO ABAIXO
+  fetchOptions: {
+    credentials: 'include', // ou 'same-origin' se preferir
+  },
 });
 
 function App() {
