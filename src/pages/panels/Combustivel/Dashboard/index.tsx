@@ -6,24 +6,14 @@ import { AbastecimentoTable } from './components/Table';
 import { initialFilterValues } from './data/filters.config';
 import type { SortConfig, TableDataItem } from '../../../../types/tables';
 import { useAbastecimentoDashboardData } from './hooks/useAbastecimentoDashboardData';
-
-// Função auxiliar para formatar a data no padrão YYYY-MM-DD para o input 'date'
-const formatDateForInput = (dateString: string | Date): string => {
-  if (!dateString) return '';
-  const date = new Date(dateString);
-  // Pega o ano, mês e dia em UTC para evitar deslocamento por fuso horário
-  const year = date.getUTCFullYear();
-  const month = String(date.getUTCMonth() + 1).padStart(2, '0');
-  const day = String(date.getUTCDate()).padStart(2, '0');
-  return `${year}-${month}-${day}`;
-};
+import { formatDateForInput } from '../../../../utils/helpers';
 
 const DashboardCombustivel = () => {
   // --- Estados do Painel ---
   const [generalFilters, setGeneralFilters] = useState(initialFilterValues);
   const [columnFilters, setColumnFilters] = useState<Record<string, string>>({});
   const [debouncedColumnFilters, setDebouncedColumnFilters] = useState<Record<string, string>>({});
-  const [pagination, setPagination] = useState({ currentPage: 1, itemsPerPage: 5 });
+  const [pagination, setPagination] = useState({ currentPage: 1, itemsPerPage: 10 });
   const [sort, setSort] = useState<SortConfig<TableDataItem>>({ key: 'data', direction: 'descending' });
   const hasInitialized = useRef(false);
 
@@ -85,7 +75,6 @@ const DashboardCombustivel = () => {
         const currentYear = new Date().getFullYear();
         const firstDayOfYear = formatDateForInput(new Date(currentYear, 0, 1));
         const lastUpdateDate = formatDateForInput(lastUpdate);
-
         setGeneralFilters({
             ...initialFilterValues,
             from: firstDayOfYear,

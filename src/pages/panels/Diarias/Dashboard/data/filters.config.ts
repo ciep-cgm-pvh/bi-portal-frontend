@@ -2,16 +2,52 @@ import type { FilterConfig } from "../../../../../types/filters";
 
 // IDs alinhados com getDiariasFiltersOptions
 export const baseFilterConfig: FilterConfig[] = [
-  { id: "department", label: "Secretaria", type: "select", options: [] },
-  { id: "status", label: "Status", type: "select", options: [] },
-  { id: "processNumber", label: "Nº do Processo", type: "select", options: [] }, // pode trocar para 'text' se preferir digitação livre
-  { id: "dateRange", label: "Período", type: "daterange" }, // usa from/to
+  {
+    id: 'from',
+    label: 'Data Inicial',
+    type: 'date',
+  },
+  {
+    id: 'to',
+    label: 'Data Final',
+    type: 'date',
+  },
+  { 
+    id: "departmentCode", 
+    label: "Secretaria",
+    placeholder: 'Todas as unidades',
+    type: "select", 
+    options: [] 
+  },
+  { 
+    id: "status", 
+    label: "Status",
+    placeholder: 'Todas os status',
+    type: "select", 
+    options: [] 
+  },
+  { 
+    id: "employee", 
+    label: "Funcionário",
+    placeholder: 'Todas os funcionários',
+    type: "select", 
+    options: [] 
+  },
+  { 
+    id: "processNumber", 
+    label: "Nº do Processo",
+    placeholder: 'Todas os processos',
+    type: "select", 
+    options: [] 
+  }
 ];
 
 export const initialFilterValues = {
-  department: "",
+  from: "2025-01-01", 
+  to: "2025-06-30" ,
+  departmentCode: "",
   status: "",
   processNumber: "",
-  dateRange: { from: "2025-01-01", to: "2025-06-30" }, // ISO 'YYYY-MM-DD' quando houver valor
+  employee: "",
 };
 
