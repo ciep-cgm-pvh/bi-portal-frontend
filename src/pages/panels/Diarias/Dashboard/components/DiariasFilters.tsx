@@ -19,9 +19,6 @@ export const DiariasFilters = ({
   isLoading,
 }: DiariasFiltersProps) => {
   const [draftFilters, setDraftFilters] = useState(initialValues);
-
-  // --- MUDANÇAS PRINCIPAIS AQUI ---
-  // 1. Chama o hook para buscar as opções dinâmicas com base nos filtros atuais
   const { filterConfig, isLoading: isLoadingConfig } = useFiltersConfig(draftFilters);
 
   // 2. Sincroniza o estado interno se os valores iniciais mudarem (ex: ao limpar no pai)
@@ -35,6 +32,11 @@ export const DiariasFilters = ({
 
   const handleApply = () => {
     onApply(draftFilters);
+  };
+
+  const handleClear = () => {
+    onApply(draftFilters);
+    onClear();
   };
 
   // Combina o loading das opções com o loading principal
@@ -56,7 +58,7 @@ export const DiariasFilters = ({
       values={draftFilters}
       onChange={handleFilterChange}
       onApply={handleApply}
-      onClear={onClear}
+      onClear={handleClear}
     />
   );
 };

@@ -1,32 +1,29 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { SortConfig, TableDataItem } from '../../../../types/tables';
 import { DashboardPanelTemplate } from '../../../../templates/DashboardPanelTemplate';
 import { DiariasFilters } from './components/DiariasFilters';
 import { DiariasTable } from './components/DiariasTable';
 import { initialFilterValues } from './data/filters.config';
 import { useDiariasDashboardData } from './hooks/useDiariasDashboardData';
+import { formatDateForInput } from '../../../../utils/helpers';
 
 const DashboardDiarias = () => {
-  // --- Estados do Painel ---
-  const [generalFilters, setGeneralFilters] = useState(initialFilterValues);
-  const [columnFilters, setColumnFilters] = useState<Record<string, string>>({});
-  const [debouncedColumnFilters, setDebouncedColumnFilters] = useState<Record<string, string>>({});
-  const [pagination, setPagination] = useState({ currentPage: 1, itemsPerPage: 10 });
-  const [sort, setSort] = useState<SortConfig<TableDataItem>>({ key: 'data', direction: 'descending' });
+  const [ generalFilters, setGeneralFilters ] = useState(initialFilterValues);
+  const [ columnFilters, setColumnFilters ] = useState<Record<string, string>>({});
+  const [ debouncedColumnFilters, setDebouncedColumnFilters ] = useState<Record<string, string>>({});
+  const [ pagination, setPagination ] = useState({ currentPage: 1, itemsPerPage: 5 });
+  const [ sort, setSort ] = useState<SortConfig<TableDataItem>>({ key: 'departmentCode', direction: 'ascending' });
+  const hasInitialized = useRef(false);
 
-
-  // O efeito de debounce permanece o mesmo, está perfeito.
   useEffect(() => {
     const handler = setTimeout(() => {
       setDebouncedColumnFilters(columnFilters);
       setPagination(p => ({ ...p, currentPage: 1 }));
     }, 500);
-
     return () => clearTimeout(handler);
-  }, [columnFilters]);
+  }, [ columnFilters ]);
 
-  // 4. PASSE OS FILTROS SEPARADAMENTE PARA O HOOK
   const {
     kpiData,
     chartConfig,
@@ -40,36 +37,59 @@ const DashboardDiarias = () => {
     sort,
   });
 
+  useEffect(() => {
+    if (lastUpdate && !hasInitialized.current) {
+      const currentYear = new Date().getFullYear();
+      const firstDayOfYear = formatDateForInput(new Date(currentYear, 0, 1));
+      const lastUpdateDate = (lastUpdate);
 
-  // Handlers para filtros GERAIS (sem alterações)
+      setGeneralFilters({
+        ...initialFilterValues,
+        from: firstDayOfYear,
+        to: lastUpdateDate,
+      });
+
+      hasInitialized.current = true;
+    }
+  }, [ lastUpdate ]);
+
   const handleApplyFilters = useCallback((newFilters: any) => {
     setGeneralFilters(newFilters);
     setPagination(prev => ({ ...prev, currentPage: 1 }));
   }, []);
 
   const handleClearFilters = useCallback(() => {
-    setGeneralFilters(initialFilterValues);
-    setPagination(prev => ({ ...prev, currentPage: 1 }));
-  }, []);
+    if (lastUpdate) {
+      const currentYear = new Date().getFullYear();
+      const firstDayOfYear = formatDateForInput(new Date(currentYear, 0, 1));
+      const lastUpdateDate = (lastUpdate);
 
-  // 5. CRIE O HANDLER PARA ATUALIZAR OS FILTROS DA COLUNA
+      setGeneralFilters({
+        ...initialFilterValues,
+        from: firstDayOfYear,
+        to: lastUpdateDate,
+      });
+    } else {
+      setGeneralFilters(initialFilterValues);
+    }
+    setPagination(prev => ({ ...prev, currentPage: 1 }));
+  }, [ lastUpdate ]);
+
   const handleColumnFilterChange = useCallback((accessor: string, value: string) => {
-    // Atualiza o estado "ao vivo" dos filtros da coluna a cada tecla digitada
     setColumnFilters(prev => ({
       ...prev,
-      [accessor]: value,
+      [ accessor ]: value,
     }));
   }, []);
 
-  // Memoização dos componentes (sem grandes alterações, apenas passando novas props)
   const filtersComponent = useMemo(() => (
     <DiariasFilters
       initialValues={generalFilters}
       onApply={handleApplyFilters}
       onClear={handleClearFilters}
-      isLoading={isLoading}
+      isLoading={isLoading.isLoadingOptions}
     />
-  ), [generalFilters, isLoading, handleApplyFilters, handleClearFilters]);
+  ), [ generalFilters, isLoading, handleApplyFilters, handleClearFilters ]);
 
   const tableComponent = useMemo(() => (
     <DiariasTable
@@ -79,19 +99,18 @@ const DashboardDiarias = () => {
       onPaginationChange={setPagination}
       sort={sort}
       onSortChange={setSort}
-      isLoading={isLoading}
-      // 6. PASSE O ESTADO DO FILTRO E O HANDLER PARA A TABELA
-      filterValues={columnFilters} // Passa o estado "ao vivo" para os inputs da tabela
-      onFilterChange={handleColumnFilterChange as (accessor: keyof TableDataItem, value: string) => void} // Passa a função para a tabela chamar quando um filtro mudar
+      isLoading={isLoading.loadingTable}
+      filterValues={columnFilters}
+      onFilterChange={handleColumnFilterChange as (accessor: keyof TableDataItem, value: string) => void}
     />
-  ), [tableData, pagination, sort, isLoading, columnFilters, handleColumnFilterChange]); // Adicione as novas dependências
+  ), [ tableData, pagination, sort, isLoading, columnFilters, handleColumnFilterChange ]);
 
   return (
     <DashboardPanelTemplate
       title="Diárias"
       description="Visualize e filtre os dados de gastos com diárias."
       lastUpdate={lastUpdate}
-      isLoading={isLoading}
+      isLoading={isLoading.isLoadingKpi}
       kpiData={kpiData}
       chartConfig={chartConfig}
       filtersComponent={filtersComponent}
