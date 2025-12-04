@@ -87,7 +87,7 @@ const DashboardDiarias = () => {
       initialValues={generalFilters}
       onApply={handleApplyFilters}
       onClear={handleClearFilters}
-      isLoading={isLoading.isLoadingOptions}
+      isLoading={isLoading.isLoadingKpi}
     />
   ), [ generalFilters, isLoading, handleApplyFilters, handleClearFilters ]);
 

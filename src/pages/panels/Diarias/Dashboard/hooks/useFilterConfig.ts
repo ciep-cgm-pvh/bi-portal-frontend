@@ -14,11 +14,29 @@ import { GET_DIARIAS_FILTER_OPTIONS_QUERY } from '../../Queries/DiariasQueries';
  * - processNumber[{value,label}]
  */
 
-export const useFiltersConfig = (activeFilters: any) => {
+export const useFiltersConfig = (activeFilters: Record<string, any>) => {
+  const filtersForOptionsQuery = useMemo(() => {
+    // Cria uma cópia para não modificar o estado original
+    const cleanedFilters = { ...activeFilters };
+    
+    // Se houver from/to, agrupe em dateRange
+    if (cleanedFilters.from || cleanedFilters.to) {
+      cleanedFilters.dateRange = {
+        from: cleanedFilters.from,
+        to: cleanedFilters.to,
+      };
+    }
+    
+    delete cleanedFilters.from;
+    delete cleanedFilters.to;
+    
+    return cleanedFilters;
+  }, [ activeFilters ]);
+  console.log(filtersForOptionsQuery)
   const [ result ] = useQuery({
     query: GET_DIARIAS_FILTER_OPTIONS_QUERY,
     // 2. Passe os filtros ativos como variáveis para a query
-    variables: activeFilters
+    variables: { filters: filtersForOptionsQuery }
   });
 
   const { data, fetching: isLoading, error } = result;
