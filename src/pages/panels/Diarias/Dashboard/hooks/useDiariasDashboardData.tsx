@@ -4,7 +4,7 @@ import { CircleCheckBig, DollarSign } from 'lucide-react';
 import { useMemo } from 'react';
 import { useQuery } from 'urql';
 import type { ChartConfig } from '../../../../../types/charts';
-import { GET_DIARIAS_CHARTS_DATA_QUERY, GET_DIARIAS_FILTER_OPTIONS_QUERY, GET_DIARIAS_KPIS_DATA_QUERY, GET_DIARIAS_TABLE_DATA_QUERY } from '../../Queries/DiariasQueries';
+import { GET_DIARIAS_CHARTS_DATA_QUERY, GET_DIARIAS_KPIS_DATA_QUERY, GET_DIARIAS_TABLE_DATA_QUERY } from '../../Queries/DiariasQueries';
 import { formatCurrency } from '../../../../../utils/helpers';
 
 
@@ -55,7 +55,6 @@ export const useDiariasDashboardData = ({ filters, tableFilter, pagination, sort
   
   const chartConfig = useMemo((): ChartConfig[] => {
     const charts = chartsDataRaw?.getDiariasCharts;
-    console.log(charts)
     if (!charts) return [];
     return [
       {
@@ -118,20 +117,20 @@ export const useDiariasDashboardData = ({ filters, tableFilter, pagination, sort
     totalCount,
   }), [ rows, totalCount ]);
 
-  const [ optionsResult ] = useQuery({
-    query: GET_DIARIAS_FILTER_OPTIONS_QUERY,
-    variables: { filters: queryVariables },
-    requestPolicy: 'cache-and-network'
-  });
-  const { data: optionsDataRaw, fetching: isLoadingOptions, error: optionsError } = optionsResult;
+  // const [ optionsResult ] = useQuery({
+  //   query: GET_DIARIAS_FILTER_OPTIONS_QUERY,
+  //   variables: { filters: queryVariables },
+  //   requestPolicy: 'cache-and-network'
+  // });
+  // const { data: optionsDataRaw, fetching: isLoadingOptions, error: optionsError } = optionsResult;
 
   return {
     kpiData,
     chartConfig,
-    filterOptions: optionsDataRaw,
+    // filterOptions: optionsDataRaw,
     tableData,
     lastUpdate,
-    isLoading: {isLoadingKpi, isLoadingCharts, loadingTable, isLoadingOptions},
-      error: { kpiError, chartsError, tableError, optionsError},
+    isLoading: {isLoadingKpi, isLoadingCharts, loadingTable},
+      error: { kpiError, chartsError, tableError},
   };
 };
