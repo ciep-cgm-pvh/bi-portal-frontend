@@ -82,26 +82,26 @@ export const GET_DIARIAS_CHARTS_DATA_QUERY = `
  */
 
 export const GET_DIARIAS_FILTER_OPTIONS_QUERY = `
-  query GetDiariasFilterOptions($filtersOptions: DiariasFiltersOptions) {
-    getDiariasFiltersOptions(filters: $filtersOptions) {
-      departmentCode {
-        value
-        label
-      }
-      status {
-        value
-        label
-      }
-      processNumber {
-        value
-        label
-      }
-      employee {
-        value
-        label
-      }
+query GetDiariasDashboardData($filters: DiariasFiltersOptions) {
+  getDiariasFiltersOptions(filters: $filters) {
+    departmentCode {
+      value
+      label
+    }
+    status {
+      value
+      label
+    }
+    processNumber {
+      value
+      label
+    }
+    employee {
+      value
+      label
     }
   }
+}
 `;
 
 
