@@ -31,9 +31,7 @@ export const useFiltersConfig = (activeFilters: Record<string, any>) => {
     requestPolicy: 'network-only' 
   });
 
-  console.log(filtersForOptionsQuery)
   const { data, fetching: isLoading, error } = result;
-  console.log("data: ", data)
 
   const finalFilterConfig = useMemo((): FilterConfig[] => {
     let config = [ ...baseFilterConfig ];
