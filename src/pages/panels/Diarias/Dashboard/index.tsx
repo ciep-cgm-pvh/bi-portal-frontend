@@ -40,18 +40,24 @@ const DashboardDiarias = () => {
   useEffect(() => {
     if (lastUpdate && !hasInitialized.current) {
       const currentYear = new Date().getFullYear();
-      const firstDayOfYear = formatDateForInput(new Date(currentYear, 0, 1));
-      const lastUpdateDate = (lastUpdate);
+      const lastUpdateYear = new Date(lastUpdate).getFullYear();
+
+      const startYear =
+        lastUpdateYear < currentYear ? lastUpdateYear : currentYear;
+
+      const fromDate = formatDateForInput(new Date(startYear, 0, 1));
+      const toDate = formatDateForInput(lastUpdate);
 
       setGeneralFilters({
         ...initialFilterValues,
-        from: firstDayOfYear,
-        to: lastUpdateDate,
+        from: fromDate,
+        to: toDate,
       });
 
       hasInitialized.current = true;
     }
   }, [ lastUpdate ]);
+
 
   const handleApplyFilters = useCallback((newFilters: any) => {
     setGeneralFilters(newFilters);
