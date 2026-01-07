@@ -51,11 +51,11 @@ const columns: TableColumn<TableDataItem>[] = [
     render: (item) => formatCell(item.grantedAmount, 'CURRENCY'),
   },
   {
-    header: 'Data de Pagamento',
-    accessor: 'grantedDate',
+    header: 'Data de Solicitação',
+    accessor: 'approvalDate',
     sortable: true,
     isFilterable: true,
-    render: (item) => item.grantedDate,
+    render: (item) => item.approvalDate,
   },
   {
     header: 'Status',

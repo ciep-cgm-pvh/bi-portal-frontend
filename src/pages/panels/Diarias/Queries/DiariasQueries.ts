@@ -30,7 +30,7 @@ export const GET_DIARIAS_TABLE_DATA_QUERY = `
       grantedAmount
       status
       employee
-      grantedDate
+      approvalDate
       processNumber
     }
     totalCount
