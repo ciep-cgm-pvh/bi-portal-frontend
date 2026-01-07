@@ -77,14 +77,20 @@ const DashboardCombustivel = () => {
 
   const handleClearFilters = () => {
     if (lastUpdate) {
-        const currentYear = new Date().getFullYear();
-        const firstDayOfYear = formatDateForInput(new Date(currentYear, 0, 1));
-        const lastUpdateDate = formatDateForInput(lastUpdate);
-        setGeneralFilters({
-            ...initialFilterValues,
-            from: firstDayOfYear,
-            to: lastUpdateDate,
-        });
+      const currentYear = new Date().getFullYear();
+      const lastUpdateYear = new Date(lastUpdate).getFullYear();
+
+      const startYear =
+        lastUpdateYear < currentYear ? lastUpdateYear : currentYear;
+
+      const fromDate = formatDateForInput(new Date(startYear, 0, 1));
+      const toDate = formatDateForInput(lastUpdate);
+
+      setGeneralFilters({
+        ...initialFilterValues,
+        from: fromDate,
+        to: toDate,
+      });
     } else {
         setGeneralFilters(initialFilterValues);
     }
