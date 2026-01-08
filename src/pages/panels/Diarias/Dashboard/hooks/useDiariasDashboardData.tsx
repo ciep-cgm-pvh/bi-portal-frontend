@@ -31,12 +31,12 @@ export const useDiariasDashboardData = ({ filters, tableFilter, pagination, sort
     const kpis = kpiDataRaw?.getDiariasKpi;
     if (!kpis) return [
       { title: 'Gastos Concedidos', value: '...', icon: <DollarSign /> },
-      { title: 'Total Aprovados', value: '...', icon: <CircleCheckBig /> },
+      // { title: 'Total Aprovados', value: '...', icon: <CircleCheckBig /> },
       { title: 'Total de Diárias', value: '...', icon: <CircleCheckBig /> },
     ];
     return [
       { title: 'Gastos Concedidos', value: formatCurrency(kpis.totalConcedido), icon: <DollarSign color='#4CAF50' /> },
-      { title: 'Total Aprovados', value: kpis.totalAprovado.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }), icon: <CircleCheckBig color='#FF9800' /> },
+      // { title: 'Total Aprovados', value: kpis.totalAprovado.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }), icon: <CircleCheckBig color='#FF9800' /> },
       { title: 'Total de Diárias', value: kpis.totalDiarias, icon: <CircleCheckBig color='#9C27B0' /> },
     ];
   }, [ kpiDataRaw ]);
