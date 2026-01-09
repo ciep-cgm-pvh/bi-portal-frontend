@@ -13,7 +13,7 @@ const DashboardDiarias = () => {
   const [ columnFilters, setColumnFilters ] = useState<Record<string, string>>({});
   const [ debouncedColumnFilters, setDebouncedColumnFilters ] = useState<Record<string, string>>({});
   const [ pagination, setPagination ] = useState({ currentPage: 1, itemsPerPage: 5 });
-  const [ sort, setSort ] = useState<SortConfig<TableDataItem>>({ key: 'departmentCode', direction: 'ascending' });
+  const [ sort, setSort ] = useState<SortConfig<TableDataItem>>({ key: 'approvalDate', direction: 'descending' });
   const hasInitialized = useRef(false);
 
   useEffect(() => {
