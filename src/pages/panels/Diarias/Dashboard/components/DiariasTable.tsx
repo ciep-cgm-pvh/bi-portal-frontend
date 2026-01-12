@@ -27,7 +27,7 @@ const formatCell = (value: any, dataType?: 'CURRENCY' | 'DATE'): ReactNode => {
 const columns: TableColumn<TableDataItem>[] = [
   {
     header: 'Secretaria',
-    accessor: 'department',
+    accessor: 'departmentCode',
     sortable: true,
     isFilterable: true,
   },
@@ -45,24 +45,24 @@ const columns: TableColumn<TableDataItem>[] = [
   },
   {
     header: 'Concedido',
-    accessor: 'amountGranted',
+    accessor: 'grantedAmount',
     sortable: true,
     isFilterable: true,
-    render: (item) => formatCell(item.amountGranted, 'CURRENCY'),
+    render: (item) => formatCell(item.grantedAmount, 'CURRENCY'),
   },
   {
-    header: 'Data de Pagamento',
-    accessor: 'paymentDate',
+    header: 'Data de Solicitação',
+    accessor: 'approvalDate',
     sortable: true,
     isFilterable: true,
-    render: (item) => item.paymentDate,
+    render: (item) => item.approvalDate,
   },
-  // {
-  //   header: 'Status',
-  //   accessor: 'status',
-  //   sortable: true,
-  //   isFilterable: true,
-  // },
+  {
+    header: 'Status',
+    accessor: 'status',
+    sortable: true,
+    isFilterable: true,
+  },
 ];
 
 interface DiariasTableProps {

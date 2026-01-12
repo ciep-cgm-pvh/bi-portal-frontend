@@ -9,7 +9,7 @@
  * Inclui KPIs, dados para gráficos, opções de filtros dinâmicos e a primeira página da tabela.
  * O objetivo é carregar o estado inicial do painel com uma única requisição.
  */
-export const GET_DIARIAS_DASHBOARD_DATA_QUERY = `
+export const GET_DIARIAS_TABLE_DATA_QUERY = `
   query Diarias(
   $limit: Int
   $offset: Int
@@ -18,49 +18,58 @@ export const GET_DIARIAS_DASHBOARD_DATA_QUERY = `
   $filters: DiariasFilters
 	$tableFilters: DiariasTableFilters
 ){
-  getDiarias(filters: $filters) {
-    employee
-    paymentDate
-    processNumber
-    department
-    defaultDate
-    approvedDate
-    canceledDate
-  }
-
   getDiariasTable(
     limit: $limit
     offset: $offset
     sortBy: $sortBy
     sortDirection: $sortDirection
-    filters: $filters
-    tableFilters: $tableFilters
-  ){
-    employee
-    department
-    amountGranted
-    status
-    paymentDate
-    processNumber
+    filters:$filters
+    tableFilters:$tableFilters) {
+		data {
+      departmentCode
+      grantedAmount
+      status
+      employee
+      approvalDate
+      processNumber
+    }
+    totalCount
   }
+}
+`;
 
+export const GET_DIARIAS_KPIS_DATA_QUERY = `
+  query Diarias(
+  $filters: DiariasFilters
+){
   getDiariasKpi(filters: $filters) {
-    totalGasto
+    totalConcedido
+    totalAprovado
     totalDiarias
   }
+  
+  getDiariasLastUpdate
+}
+`;
 
+export const GET_DIARIAS_CHARTS_DATA_QUERY = `
+  query Diarias(
+  $filters: DiariasFilters
+){
   getDiariasCharts(filters: $filters) {
-    GastoMesDiaria {
-      month
+    GastoOrgaoDiaria {
+      name
       total
-    }
-    OrgaoGastoDiaria {
+    },
+    GastoMesDiaria {
+      name
+      total
+    },
+    GastoFuncionarioDiaria {
       name
       total
     }
-  }
-  getDiariasTableCount(filters: $filters tableFilters: $tableFilters)
-  getDiariasLastUpdate
+	}
 }
 `;
 // =================================================
@@ -73,22 +82,26 @@ export const GET_DIARIAS_DASHBOARD_DATA_QUERY = `
  */
 
 export const GET_DIARIAS_FILTER_OPTIONS_QUERY = `
-  query GetDiariasFilterOptions($filtersOptions: DiariasFiltersOptions) {
-    getDiariasFiltersOptions(filters: $filtersOptions) {
-      department {
-        value
-        label
-      }
-      status {
-        value
-        label
-      }
-      processNumber {
-        value
-        label
-      }
+query GetDiariasDashboardData($filters: DiariasFiltersOptions) {
+  getDiariasFiltersOptions(filters: $filters) {
+    departmentCode {
+      value
+      label
+    }
+    status {
+      value
+      label
+    }
+    processNumber {
+      value
+      label
+    }
+    employee {
+      value
+      label
     }
   }
+}
 `;
 
 

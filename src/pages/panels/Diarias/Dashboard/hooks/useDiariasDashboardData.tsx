@@ -1,125 +1,136 @@
 /* eslint-disable no-constant-binary-expression */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { DollarSign, Wrench } from 'lucide-react';
+import { CircleCheckBig, DollarSign } from 'lucide-react';
 import { useMemo } from 'react';
 import { useQuery } from 'urql';
 import type { ChartConfig } from '../../../../../types/charts';
-import { GET_DIARIAS_DASHBOARD_DATA_QUERY } from '../../Queries/DiariasQueries';
+import { GET_DIARIAS_CHARTS_DATA_QUERY, GET_DIARIAS_KPIS_DATA_QUERY, GET_DIARIAS_TABLE_DATA_QUERY } from '../../Queries/DiariasQueries';
+import { formatCurrency } from '../../../../../utils/helpers';
 
-// Helpers
-const formatCurrency = (value: number) =>
-  new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value || 0);
-
-const sortKeyMapping: { [key: string]: string } = {
-  // data: 'paymentDate',
-  // total: 'amountGranted',
-};
 
 export const useDiariasDashboardData = ({ filters, tableFilter, pagination, sort }: any) => {
   // 1) Variáveis da query
-  const queryVariables = useMemo(() => {
-    const sortByBackend = sortKeyMapping[sort.key] || sort.key;
-    return {
-      filters,
-      tableFilter,
-      limit: pagination.itemsPerPage,
-      offset: (pagination.currentPage - 1) * pagination.itemsPerPage,
-      sortBy: sortByBackend,
-      sortDirection: sort.direction,
-    };
-  }, [filters, pagination.currentPage, pagination.itemsPerPage, sort.direction, sort.key, tableFilter]);
+  const queryVariables = useMemo(() => ({
+    dateRange: { from: filters.from, to: filters.to },
+    employee: filters.employee,
+    departmentCode: filters.departmentCode,
+    status: filters.status,
+    processNumber: filters.processNumber,
+  }), [filters]);
 
-  const [result] = useQuery({
-    query: GET_DIARIAS_DASHBOARD_DATA_QUERY,
-    variables: queryVariables,
+  const [kpiResult] = useQuery({
+    query: GET_DIARIAS_KPIS_DATA_QUERY,
+    variables: { filters: queryVariables },
+    requestPolicy: 'cache-and-network'
   });
 
-  const { data, fetching: isLoading, error } = result;
+  const { data: kpiDataRaw, fetching: isLoadingKpi, error: kpiError } = kpiResult;
 
   // 2) KPIs
   const kpiData = useMemo(() => {
-    const kpis = data?.getDiariasKpi;
-    if (!kpis) {
-      return [
-        { title: 'Total Concedido', value: 'Carregando...', icon: <DollarSign className="size-5" /> },
-        { title: 'Nº de Diárias', value: 'Carregando...', icon: <Wrench className="size-5" /> },
-      ];
-    }
-    return [
-      { title: 'Total Concedido', value: formatCurrency(kpis.totalGasto), icon: <DollarSign className="size-5 text-green-500" /> },
-      { title: 'Nº de Diárias', value: Number(kpis.totalDiarias ?? 0).toLocaleString('pt-BR'), icon: <Wrench className="size-5 text-blue-500" /> },
+    const kpis = kpiDataRaw?.getDiariasKpi;
+    if (!kpis) return [
+      { title: 'Gastos Concedidos', value: '...', icon: <DollarSign /> },
+      // { title: 'Total Aprovados', value: '...', icon: <CircleCheckBig /> },
+      { title: 'Total de Diárias', value: '...', icon: <CircleCheckBig /> },
     ];
-  }, [data?.getDiariasKpi]);
+    return [
+      { title: 'Gastos Concedidos', value: formatCurrency(kpis.totalConcedido), icon: <DollarSign color='#4CAF50' /> },
+      // { title: 'Total Aprovados', value: kpis.totalAprovado.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }), icon: <CircleCheckBig color='#FF9800' /> },
+      { title: 'Total de Diárias', value: kpis.totalDiarias, icon: <CircleCheckBig color='#9C27B0' /> },
+    ];
+  }, [ kpiDataRaw ]);
+
+  // Última atualização
+  const lastUpdate = kpiDataRaw?.getDiariasLastUpdate;
 
   // 3) Gráficos
+  const [chartsResult] = useQuery({
+      query: GET_DIARIAS_CHARTS_DATA_QUERY,
+      variables: { filters: queryVariables },
+      requestPolicy: 'cache-and-network'
+    });
+
+  const { data: chartsDataRaw, fetching: isLoadingCharts, error: chartsError } = chartsResult;
+  
   const chartConfig = useMemo((): ChartConfig[] => {
-    const charts = data?.getDiariasCharts;
+    const charts = chartsDataRaw?.getDiariasCharts;
     if (!charts) return [];
-
-    const gastoPorOrgao = (charts.OrgaoGastoDiaria ?? []).map((item: any) => ({
-      name: item?.name ?? 'N/A',
-      value: Number(item?.total) ?? 0,
-    }));
-
-    const gastoPorMes = (charts.GastoMesDiaria ?? []).map((item: any) => ({
-      name: formatMonth(item?.month),
-      value: Number(item?.total) ?? 0,
-    }));
-
     return [
       {
         id: 'custo-por-orgao',
         title: 'Gasto por Órgão',
-        type: 'pie',
-        data: gastoPorOrgao,
-        config: { dataKey: 'value', nameKey: 'name' },
+        type: 'bar-vertical',
+        data: charts.GastoOrgaoDiaria,
+        config: { dataKey: 'total', categoryKey: 'name' },
       },
       {
         id: 'gasto-por-mes',
         title: 'Gasto por Mês',
-        type: 'bar-vertical',
-        data: gastoPorMes,
-        config: { dataKey: 'value', categoryKey: 'name' },
+        type: 'line',
+        data: charts.GastoMesDiaria,
+        config: { dataKey: 'total', categoryKey: 'name'},
+      },
+      {
+        id: 'gasto-por-funcionario',
+        title: 'Gasto por Funcionário',
+        type: 'ranking-table',
+        data: charts.GastoFuncionarioDiaria,
+        config: {
+          columns: [
+            {
+              header: 'Funcionário',
+              accessor: 'name',
+              className: 'text-left'
+            },
+            {
+              header: 'Total Gasto',
+              accessor: 'total',
+              className: 'text-right',
+              render: formatCurrency
+            }
+          ]
+        }
       },
     ];
-  }, [data?.getDiariasCharts]);
+  }, [ chartsDataRaw ]);
 
   // 4) Tabela
-  const tableData = useMemo(() => ({
-    rows: data?.getDiariasTable || [],
-    totalCount: data?.getDiariasTableCount || 0,
-  }), [data?.getDiarias, data?.getDiariasTableCount]);
+  const [tableResult] = useQuery({
+    query: GET_DIARIAS_TABLE_DATA_QUERY,
+    variables: { 
+      filters: queryVariables, 
+      tableFilters: tableFilter, 
+      limit: pagination.itemsPerPage, 
+      offset: (pagination.currentPage - 1) * pagination.itemsPerPage, 
+      sortBy: sort.key, 
+      sortDirection: sort.direction 
+    },
+    requestPolicy: 'cache-and-network'
+  });
 
-  // 5) Última atualização
-  const lastUpdate = data?.getDiariasLastUpdate ?? null;
+  const { data: tableDataRaw, fetching: loadingTable, error: tableError} = tableResult;
+  const rows = tableDataRaw?.getDiariasTable.data || [];
+  const totalCount = tableDataRaw?.getDiariasTable.totalCount;
+  const tableData = useMemo(() => ({
+    rows,
+    totalCount,
+  }), [ rows, totalCount ]);
+
+  // const [ optionsResult ] = useQuery({
+  //   query: GET_DIARIAS_FILTER_OPTIONS_QUERY,
+  //   variables: { filters: queryVariables },
+  //   requestPolicy: 'cache-and-network'
+  // });
+  // const { data: optionsDataRaw, fetching: isLoadingOptions, error: optionsError } = optionsResult;
 
   return {
     kpiData,
     chartConfig,
-    filterOptions: data?.getDiariasFiltersOptions,
+    // filterOptions: optionsDataRaw,
     tableData,
     lastUpdate,
-    isLoading,
-    error,
+    isLoading: {isLoadingKpi, isLoadingCharts, loadingTable},
+      error: { kpiError, chartsError, tableError},
   };
 };
-
-// Utils
-function formatMonth(m?: string) {
-  if (!m) return 'N/A';
-  const iso = /^(\d{4})-(\d{1,2})$/.exec(m);
-  if (iso) {
-    const [, y, mm] = iso;
-    return new Date(Number(y), Number(mm) - 1, 1)
-      .toLocaleDateString('pt-BR', { month: 'short', year: 'numeric' })
-      .replace('.', '');
-  }
-  const br = /^(\d{1,2})\/(\d{4})$/.exec(m);
-  if (br) {
-    const [, mm, y] = br;
-    return new Date(Number(y), Number(mm) - 1, 1)
-      .toLocaleDateString('pt-BR', { month: 'short', year: 'numeric' })
-      .replace('.', '');
-  }
-  return m;
-}

@@ -68,8 +68,8 @@ export const TableSection = <T extends TableDataItem>({
             {/* 3. Nova Linha de Filtros (renderizada condicionalmente) */}
             {hasFilters && onFilterChange && filterValues && (
               <tr className="border-b border-gray-200">
-                {columns.map((column) => (
-                  <td key={`${String(column.accessor)}-filter`} className="p-2">
+                {columns.map((column, i) => (
+                  <td key={`${i}: ${String(column.accessor)}-filter`} className="p-2">
                     {column.isFilterable ? (
                       <input
                         type="text"
@@ -91,10 +91,10 @@ export const TableSection = <T extends TableDataItem>({
             ) : data.length === 0 ? (
               <tr><td colSpan={columns.length} className="p-6 text-center text-gray-500">{emptyMessage}</td></tr>
             ) : (
-              data.map((item) => (
-                <tr key={(item.id)} className="border-b border-gray-100 hover:bg-gray-50 transition-colors">
-                  {columns.map((column) => (
-                    <td key={String(column.accessor)} className={`py-4 px-4 ${column.className || ''}`}>
+              data.map((item, i) => (
+                <tr key={item.id ?? `row-${i}`} className="border-b border-gray-100 hover:bg-gray-50 transition-colors">
+                  {columns.map((column, i) => (
+                    <td key={`${String(column.accessor)}-${i}`} className={`py-4 px-4 ${column.className || ''}`}>
                       {column.render ? column.render(item) : getNestedValue(item, String(column.accessor))}
                     </td>
                   ))}

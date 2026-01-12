@@ -167,6 +167,5 @@ const HubCardsDataProduction: HubCardInterface[] = [
 ];
 
 export default function getHubCardsData() {
-  console.log('Current NODE_ENV:', process.env.NODE_ENV);
-  return process.env.NODE_ENV === 'PRODUCTION' ? HubCardsDataProduction : HubCardsDataDeveloper;
+  return import.meta.env.VITE_ENV === 'PRODUCTION' ? HubCardsDataProduction : HubCardsDataDeveloper;
 }
