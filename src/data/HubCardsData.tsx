@@ -21,7 +21,7 @@ const HubCardsDataDeveloper: HubCardInterface[] = [
     title: "Diárias (demo)",
     description: "Painel com dados de concessão de diárias.",
     route: "/painel/diarias/dashboard",
-    icon: <TicketsPlane className="text-orange-400 w-6 h-6" />,
+    icon: <TicketsPlane className="text-blue-400 w-6 h-6" />,
     type: "demonstracão",
   },
   // {
@@ -44,7 +44,7 @@ const HubCardsDataDeveloper: HubCardInterface[] = [
     // route: "https://lookerstudio.google.com/reporting/613ae68b-beee-4091-9f6b-7aa1da14de8b/page/TAEHF",
     //route:"https://dashboard-geral.vercel.app/paineis/diarias",
     route: "https://lookerstudio.google.com/reporting/613ae68b-beee-4091-9f6b-7aa1da14de8b/page/TAEHF",
-    icon: <TicketsPlane className="text-orange-400 w-6 h-6" />,
+    icon: <TicketsPlane className="text-blue-400 w-6 h-6" />,
     type: "Gestão",
   },
   {
@@ -100,6 +100,13 @@ const HubCardsDataDeveloper: HubCardInterface[] = [
 
 const HubCardsDataProduction: HubCardInterface[] = [
   {
+    title: "Diárias (demo)",
+    description: "Painel com dados de concessão de diárias.",
+    route: "/painel/diarias/dashboard",
+    icon: <TicketsPlane className="text-blue-400 w-6 h-6" />,
+    type: "demonstracão",
+  },
+  {
     title: "Abastecimento",
     description: "Painel com dados de abastecimento de frota.",
     route: "/painel/abastecimento/dashboard",
@@ -112,7 +119,7 @@ const HubCardsDataProduction: HubCardInterface[] = [
     // route: "https://lookerstudio.google.com/reporting/613ae68b-beee-4091-9f6b-7aa1da14de8b/page/TAEHF",
     //route:"https://dashboard-geral.vercel.app/paineis/diarias",
     route: "https://lookerstudio.google.com/reporting/613ae68b-beee-4091-9f6b-7aa1da14de8b/page/TAEHF",
-    icon: <TicketsPlane className="text-orange-400 w-6 h-6" />,
+    icon: <TicketsPlane className="text-blue-400 w-6 h-6" />,
     type: "Gestão",
   },
   {
