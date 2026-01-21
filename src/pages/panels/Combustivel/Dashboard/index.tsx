@@ -36,7 +36,6 @@ const DashboardCombustivel = () => {
     lastUpdate,
     columns,
     isLoading,
-    error,
   } = useAbastecimentoDashboardData({
     filters: generalFilters,
     tableFilters: debouncedColumnFilters,

@@ -34,7 +34,7 @@ const DashboardDiarias = () => {
     return () => clearTimeout(handler);
   }, [ columnFilters ]);
 
-  const { kpiData, chartConfig, tableData, lastUpdate, isLoading, error } =
+  const { kpiData, chartConfig, tableData, lastUpdate, isLoading } =
     useDiariasDashboardData({
       filters: generalFilters,
       tableFilter: debouncedColumnFilters,
@@ -42,7 +42,7 @@ const DashboardDiarias = () => {
       sort,
     });
 
-  const hasError = error.kpiError || error.chartsError || error.tableError;
+  // const hasError = error.kpiError || error.chartsError || error.tableError;
 
   // if (hasError) {
   //   console.error("Erro ao carregar dados do dashboard:", hasError);
