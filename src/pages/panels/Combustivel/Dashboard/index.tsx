@@ -44,9 +44,9 @@ const DashboardCombustivel = () => {
     sort,
   });
 
-  if (error) {
-    console.error('Erro ao carregar dados do dashboard:', error);
-  }
+  // if (error) {
+  //   console.error('Erro ao carregar dados do dashboard:', error);
+  // }
 
   useEffect(() => {
     if (lastUpdate && !hasInitialized.current) {
