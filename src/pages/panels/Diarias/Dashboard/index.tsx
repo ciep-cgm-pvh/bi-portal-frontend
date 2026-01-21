@@ -44,9 +44,9 @@ const DashboardDiarias = () => {
 
   const hasError = error.kpiError || error.chartsError || error.tableError;
 
-  if (hasError) {
-    console.error("Erro ao carregar dados do dashboard:", hasError);
-  }
+  // if (hasError) {
+  //   console.error("Erro ao carregar dados do dashboard:", hasError);
+  // }
 
   useEffect(() => {
     if (lastUpdate && !hasInitialized.current) {
