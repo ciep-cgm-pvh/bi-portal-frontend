@@ -9,6 +9,34 @@ import {
   GET_COMBUSTIVEL_TABLE_DATA_QUERY
 } from '../../queries/CombustivelQueries';
 
+function formatDatePtBR(date: string) {
+  // espera yyyy-mm-dd
+  const [ yyyy, mm, dd ] = date.split('-');
+  return `${dd}/${mm}/${yyyy}`;
+}
+
+function groupByMonth(data: { date: string; total: number }[]) {
+  const map = new Map<string, number>();
+
+  data.forEach(item => {
+    // date: yyyy-mm-dd
+    const [ yyyy, mm ] = item.date.split('-');
+    const key = `${yyyy}-${mm}`; // chave técnica
+
+    map.set(key, (map.get(key) || 0) + (item.total || 0));
+  });
+
+  return Array.from(map.entries())
+    .sort((a, b) => a[ 0 ].localeCompare(b[ 0 ]))
+    .map(([ key, total ]) => {
+      const [ yyyy, mm ] = key.split('-');
+      return {
+        date: `${mm}/${yyyy}`, // saída pt-BR
+        total
+      };
+    });
+}
+
 export const useAbastecimentoDashboardData = ({ filters, tableFilters, pagination, sort }: any) => {
 
   const cleanedFilters = useMemo(() => ({
@@ -45,6 +73,7 @@ export const useAbastecimentoDashboardData = ({ filters, tableFilters, paginatio
 
   const kpiData = useMemo(() => {
     const kpis = kpiDataRaw?.kpis;
+    console.log('KPI Data Raw:', kpiDataRaw);
     if (!kpis) return [
       { title: 'Gastos Totais', value: '...', icon: <FuelIcon /> },
       { title: 'Média Diária', value: '...', icon: <CalendarIcon /> },
@@ -73,7 +102,7 @@ export const useAbastecimentoDashboardData = ({ filters, tableFilters, paginatio
         id: 'custo-por-tempo',
         title: 'Gasto ao longo do tempo',
         type: 'line',
-        data: charts.costOverTime || [],
+        data: groupByMonth(charts.costOverTime || []),
         config: { dataKey: 'total', categoryKey: 'date' }
       },
       {
@@ -100,12 +129,14 @@ export const useAbastecimentoDashboardData = ({ filters, tableFilters, paginatio
             {
               header: 'Data',
               accessor: 'date',
-              className: 'text-left'
+              className: 'text-left', 
+              render: (value: string) => formatDatePtBR(value)
             }, 
             {
               header: 'Total Gasto', 
               accessor: 'total',
-              className: 'text-right', render: formatCurrency
+              className: 'text-right', 
+              render: formatCurrency
             } 
           ]
         }
