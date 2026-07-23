@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-// Local: src/pages/panels/Diarias/Dashboard/components/DiariasTable.tsx
+// src/pages/panels/Suprimentos/Dashboard/components/SuprimentosTable.tsx
 
 import type { ReactNode } from 'react';
 import { useMemo } from 'react';
@@ -12,7 +12,7 @@ const formatBRL = (v: any) =>
   new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(Number(v || 0));
 
 const formatCell = (value: any, dataType?: 'CURRENCY' | 'DATE'): ReactNode => {
-  if (value === null ||  value === '') return 'N/A';
+  if (value === null || value === '') return 'N/A';
   switch (dataType) {
     case 'CURRENCY':
       return formatBRL(value);
@@ -23,7 +23,7 @@ const formatCell = (value: any, dataType?: 'CURRENCY' | 'DATE'): ReactNode => {
   }
 };
 
-// Colunas para DIÁRIAS (acessores devem bater com getDiarias)
+// Colunas para SUPRIMENTOS
 const columns: TableColumn<TableDataItem>[] = [
   {
     header: 'Secretaria',
@@ -51,7 +51,7 @@ const columns: TableColumn<TableDataItem>[] = [
     render: (item) => formatCell(item.grantedAmount, 'CURRENCY'),
   },
   {
-    header: 'Data de Solicitação',
+    header: 'Data de Aprovação',
     accessor: 'approvalDate',
     sortable: true,
     isFilterable: true,
@@ -65,7 +65,7 @@ const columns: TableColumn<TableDataItem>[] = [
   },
 ];
 
-interface DiariasTableProps {
+interface SuprimentosTableProps {
   data: TableDataItem[];
   totalCount: number;
   pagination: {
@@ -80,7 +80,7 @@ interface DiariasTableProps {
   onFilterChange: (accessor: keyof TableDataItem, value: string) => void;
 }
 
-export const DiariasTable = ({
+export const SuprimentosTable = ({
   data,
   totalCount,
   pagination,
@@ -90,7 +90,7 @@ export const DiariasTable = ({
   isLoading,
   filterValues,
   onFilterChange,
-}: DiariasTableProps) => {
+}: SuprimentosTableProps) => {
   const totalPages = useMemo(() => {
     return Math.ceil((totalCount || 0) / pagination.itemsPerPage);
   }, [totalCount, pagination.itemsPerPage]);
@@ -114,7 +114,7 @@ export const DiariasTable = ({
   return (
     <div className="shadow-md rounded-lg">
       <TableSection
-        title="Histórico de Diárias"
+        title="Histórico de Suprimentos de Fundos"
         columns={columns}
         data={data}
         isLoading={isLoading}

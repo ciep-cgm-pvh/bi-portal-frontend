@@ -6,49 +6,30 @@
  * @description Query principal que busca todos os dados necessários para o dashboard de abastecimento.
  * Inclui KPIs, dados para gráficos, opções de filtros dinâmicos e a primeira página da tabela.
  * O objetivo é carregar o estado inicial do painel com uma única requisição.
- */
-
-export const GET_COMBUSTIVEL_DASHBOARD_DATA_QUERY = `
-  query GetAbastecimentoDashboardData (
-  $filters: AbastecimentoFiltersInput
-  $limit: Int
-  $vehicleLimit: Int
-  $offset: Int
-  $sortBy: String
-  $sortDirection: String
-  $tableFilters: AbastecimentoTableFiltersInput
-) {
-  # 1. KPIs
-  kpis: getAbastecimentoKpi(filters: $filters) {
+ */ 
+export const GET_COMBUSTIVEL_KPI_DATA_QUERY = `
+  query GetAbastecimentoKpiData($filters: AbastecimentoFiltersInput) {
+    kpis: getAbastecimentoKpi(filters: $filters) {
     fuelConsumed
     totalCost
-    kilometersDriven
     vehiclesCount
-    dailyAverageCost
-    suppliesCount
     lastUpdate
   }
-
+}
+`
+export const GET_COMBUSTIVEL_CHARTS_DATA_QUERY = `
+  query GetAbastecimentoCharts (
+  $filters: AbastecimentoFiltersInput
+  $vehicleLimit: Int
+) {
   # 2. Charts Data
   getAbastecimentoCharts(vehicleLimit: $vehicleLimit filters: $filters) {
-    costByVehicle {
-      vehicle
-      total
-    }
     costByDepartment{
       department
       total
     }
-    costByCity{
-      city
-      total
-    }
     costByPlate{
       plate
-      total
-    }
-    costByDate{
-      date
       total
     }
     costOverTime{
@@ -69,11 +50,21 @@ export const GET_COMBUSTIVEL_DASHBOARD_DATA_QUERY = `
       total
     }
   }
-  
+}
+`
+export const GET_COMBUSTIVEL_TABLE_DATA_QUERY = `
+  query GetAbastecimentoDashboardData (
+  $filters: AbastecimentoFiltersInput
+  $limit: Int
+  $offset: Int
+  $sortBy: String
+  $sortDirection: String
+  $tableFilters: AbastecimentoTableFiltersInput
+) {
   # 3. Dados da Tabela (paginados e com novo campo 'id')
   tableData: getAbastecimentosTable(
     limit: $limit
-  	offset: $offset
+    offset: $offset
     sortBy: $sortBy
     sortDirection: $sortDirection
     filters: $filters
@@ -95,7 +86,6 @@ export const GET_COMBUSTIVEL_DASHBOARD_DATA_QUERY = `
       city
     }
     department
-    costCenter
   }
 
   columns: getAbastecimentosColumns {
@@ -153,7 +143,6 @@ query GetAbastecimentoFiltersOptions($filters: AbastecimentoFiltersOptionsInput)
 export const DOWNLOAD_ALL_COMBUSTIVEL_QUERY = `
   query DownloadAllAbastecimento {
   getAbastecimentos {
-    id
     data: datetime
     custo: cost
     quantidadeAbastecida: fuelVolume
@@ -177,7 +166,6 @@ query DownloadVehicleSummary {
   getAbastecimentoVehicleSummary {
     departamento: department
     custoTotal: totalCost
-    quantidadeAbastecimento: supplyCount
     veiculo: vehicle {
       placa: plate
       modelo: model

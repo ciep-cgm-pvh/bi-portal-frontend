@@ -7,7 +7,7 @@ interface PaginationControlsProps {
   itemsPerPage: number;
   onItemsPerPageChange: (value: number) => void;
   totalItems: number;
-}
+} 
 
 export const PaginationControls = ({
   currentPage,

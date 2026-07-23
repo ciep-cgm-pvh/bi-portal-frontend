@@ -77,13 +77,15 @@ const ProjectPhases = ({ mockData, phasesData }: { mockData: boolean, phasesData
 
 
 // Função para formatar a data no padrão pt-BR
-const formatBrDate = (dateString?: string): string | undefined => {
+const formatBrDate = (input: any): string | undefined => {
+  const dateString = typeof input === "string" ? input : input?.last_update;
   if (!dateString) return undefined;
-  // Converte a string ISO para um objeto Date e formata
-  return new Date(dateString).toLocaleDateString('pt-BR', {
-    timeZone: 'UTC', // Garante que a data não mude por causa do fuso horário
-  });
-};
+
+  const date = new Date(dateString);
+  if (isNaN(date.getTime())) return undefined;
+
+  return date.toLocaleDateString("pt-BR", { timeZone: "UTC" });
+};;
 
 // Props que o nosso template de painel vai receber
 interface DashboardPanelTemplateProps {
@@ -135,36 +137,21 @@ export const DashboardPanelTemplate = ({
       )}
 
       {/* Conteúdo do Painel */}
-      <div className="flex flex-col gap-6">
-        <Header
-          title={title}
-          description={description}
-          onBackToHub={() => navigate('/hub')}
-          lastUpdate={formattedLastUpdate}
-        />
-        <KPISection>
-          {kpiData.map((kpi, index) => <KPICard key={index} {...kpi} />)}
-        </KPISection>
-        {filtersComponent}
-        <ChartsSection charts={chartConfig} />
-        {tableComponent}
+        <div className="flex flex-col gap-6">
+          <Header
+            title={title}
+            description={description}
+            onBackToHub={() => navigate('/hub')}
+            lastUpdate={formattedLastUpdate}
+          />
+          <KPISection>
+            {kpiData.map((kpi, index) => <KPICard key={index} {...kpi} />)}
+          </KPISection>
+          {filtersComponent}
+          <ChartsSection charts={chartConfig} />
+          {tableComponent}
+        </div>
       </div>
-    </div>
-      {/* <Header
-        title={title}
-        description={description}
-        onBackToHub={() => navigate('/hub')}
-        lastUpdate={formattedLastUpdate}
-      />
-      <KPISection>
-        {kpiData.map((kpi, index) => <KPICard key={index} {...kpi} />)}
-      </KPISection>
-
-      {filtersComponent}
-
-      <ChartsSection charts={chartConfig} />
-
-      {tableComponent} */}
     </div>
   );
 };

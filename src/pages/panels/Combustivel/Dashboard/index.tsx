@@ -6,24 +6,14 @@ import { AbastecimentoTable } from './components/Table';
 import { initialFilterValues } from './data/filters.config';
 import type { SortConfig, TableDataItem } from '../../../../types/tables';
 import { useAbastecimentoDashboardData } from './hooks/useAbastecimentoDashboardData';
-
-// Função auxiliar para formatar a data no padrão YYYY-MM-DD para o input 'date'
-const formatDateForInput = (dateString: string | Date): string => {
-  if (!dateString) return '';
-  const date = new Date(dateString);
-  // Pega o ano, mês e dia em UTC para evitar deslocamento por fuso horário
-  const year = date.getUTCFullYear();
-  const month = String(date.getUTCMonth() + 1).padStart(2, '0');
-  const day = String(date.getUTCDate()).padStart(2, '0');
-  return `${year}-${month}-${day}`;
-};
+import { formatDateForInput } from '../../../../utils/helpers';
 
 const DashboardCombustivel = () => {
   // --- Estados do Painel ---
   const [generalFilters, setGeneralFilters] = useState(initialFilterValues);
   const [columnFilters, setColumnFilters] = useState<Record<string, string>>({});
   const [debouncedColumnFilters, setDebouncedColumnFilters] = useState<Record<string, string>>({});
-  const [pagination, setPagination] = useState({ currentPage: 1, itemsPerPage: 5 });
+  const [pagination, setPagination] = useState({ currentPage: 1, itemsPerPage: 10 });
   const [sort, setSort] = useState<SortConfig<TableDataItem>>({ key: 'data', direction: 'descending' });
   const hasInitialized = useRef(false);
 
@@ -53,21 +43,30 @@ const DashboardCombustivel = () => {
     sort,
   });
 
+  // if (error) {
+  //   console.error('Erro ao carregar dados do dashboard:', error);
+  // }
+
   useEffect(() => {
-    // Roda apenas se 'lastUpdate' existir E se a inicialização ainda não ocorreu
     if (lastUpdate && !hasInitialized.current) {
       const currentYear = new Date().getFullYear();
-      const firstDayOfYear = formatDateForInput(new Date(currentYear, 0, 1));
-      const lastUpdateDate = formatDateForInput(lastUpdate);
+      const lastUpdateYear = new Date(lastUpdate).getFullYear();
+
+      const startYear =
+        lastUpdateYear < currentYear ? lastUpdateYear : currentYear;
+
+      const fromDate = formatDateForInput(new Date(startYear, 0, 1));
+      const toDate = formatDateForInput(lastUpdate);
 
       setGeneralFilters({
         ...initialFilterValues,
-        from: firstDayOfYear,
-        to: lastUpdateDate,
+        from: fromDate,
+        to: toDate,
       });
+
       hasInitialized.current = true;
     }
-  }, [lastUpdate]); 
+  }, [ lastUpdate ]);
   
   // Handlers para filtros GERAIS (sem alterações)
   const handleApplyFilters = useCallback((newFilters: any) => {
@@ -77,18 +76,24 @@ const DashboardCombustivel = () => {
 
   const handleClearFilters = () => {
     if (lastUpdate) {
-        const currentYear = new Date().getFullYear();
-        const firstDayOfYear = formatDateForInput(new Date(currentYear, 0, 1));
-        const lastUpdateDate = formatDateForInput(lastUpdate);
-        setGeneralFilters({
-            ...initialFilterValues,
-            from: firstDayOfYear,
-            to: lastUpdateDate,
-        });
+      const currentYear = new Date().getFullYear();
+      const lastUpdateYear = new Date(lastUpdate).getFullYear();
+
+      const startYear =
+        lastUpdateYear < currentYear ? lastUpdateYear : currentYear;
+
+      const fromDate = formatDateForInput(new Date(startYear, 0, 1));
+      const toDate = formatDateForInput(lastUpdate);
+
+      setGeneralFilters({
+        ...initialFilterValues,
+        from: fromDate,
+        to: toDate,
+      });
     } else {
         setGeneralFilters(initialFilterValues);
     }
-  };
+  }; 
 
   const handleColumnFilterChange = useCallback((accessor: string, value: string) => {
     setColumnFilters(prev => ({
@@ -99,7 +104,7 @@ const DashboardCombustivel = () => {
 
   const filterComponent = useMemo(() => (
     <AbastecimentoFilters
-      isLoading={isLoading}
+      isLoading={isLoading.loadingKpi}
       initialValues={generalFilters}
       onApply={handleApplyFilters}
       onClear={handleClearFilters}
@@ -115,7 +120,7 @@ const DashboardCombustivel = () => {
       onPaginationChange={setPagination}
       sort={sort}
       onSortChange={setSort}
-      isLoading={isLoading}
+      isLoading={isLoading.loadingTable}
       filterValues={columnFilters} 
       onFilterChange={handleColumnFilterChange as (accessor: keyof TableDataItem, value: string) => void}
     />
@@ -133,6 +138,7 @@ const DashboardCombustivel = () => {
       chartConfig={chartConfig}
       filtersComponent={filterComponent}
       tableComponent={tableComponent}
+
     />
   );
 };

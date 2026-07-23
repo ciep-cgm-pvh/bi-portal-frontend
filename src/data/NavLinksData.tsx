@@ -14,7 +14,39 @@ import DashboardManutencao from '../pages/panels/Manutencao/Dashboard';
 import DataSourceManutencao from '../pages/panels/Manutencao/DataSoruce';
 import HomeManutencao from '../pages/panels/Manutencao/Home';
 
+import DashboardSuprimentos from '../pages/panels/Suprimentos/Dashboard';
+import DataSourceSuprimentos from '../pages/panels/Suprimentos/DataSoruce';
+import HomeSuprimentos from '../pages/panels/Suprimentos/Home';
+
+
+
 const navLinks: NavLinkInterface[] = [
+  // Painel de Suprimentos
+  {
+    title: "Início",
+    path: "/painel/suprimentos/home",
+    icon: <House size={18} />,
+    element: <HomeSuprimentos />,
+    published: true,
+    group: "suprimentos",
+  },
+  {
+    title: "Painel",
+    path: "/painel/suprimentos/dashboard",
+    icon: <BarChart2 size={18} />,
+    element: <DashboardSuprimentos />,
+    published: true,
+    group: "suprimentos",
+  },
+  {
+    title: "Fonte de Dados",
+    path: "/painel/suprimentos/datasource",
+    icon: <Database size={18} />,
+    element: <DataSourceSuprimentos />,
+    published: true,
+    group: "suprimentos",
+  },
+  
   // Painel de Manutenção
   {
     title: "Início",

@@ -6,12 +6,12 @@ import { useQuery } from "urql";
 import type { ChartConfig } from "../../../../../types/charts";
 import { formatCurrency } from "../../../../../utils/helpers";
 import {
-  GET_DIARIAS_CHARTS_DATA_QUERY,
-  GET_DIARIAS_KPIS_DATA_QUERY,
-  GET_DIARIAS_TABLE_DATA_QUERY,
-} from "../../Queries/DiariasQueries";
+  GET_SUPRIMENTOS_CHARTS_DATA_QUERY,
+  GET_SUPRIMENTOS_KPIS_DATA_QUERY,
+  GET_SUPRIMENTOS_TABLE_DATA_QUERY,
+} from "../../Queries/SuprimentosQueries";
 
-export const useDiariasDashboardData = ({
+export const useSuprimentosDashboardData = ({
   filters,
   tableFilter,
   pagination,
@@ -26,11 +26,11 @@ export const useDiariasDashboardData = ({
       status: filters.status,
       processNumber: filters.processNumber,
     }),
-    [ filters ],
+    [filters]
   );
 
-  const [ kpiResult ] = useQuery({
-    query: GET_DIARIAS_KPIS_DATA_QUERY,
+  const [kpiResult] = useQuery({
+    query: GET_SUPRIMENTOS_KPIS_DATA_QUERY,
     variables: { filters: queryVariables },
     requestPolicy: "cache-and-network",
   });
@@ -43,12 +43,11 @@ export const useDiariasDashboardData = ({
 
   // 2) KPIs
   const kpiData = useMemo(() => {
-    const kpis = kpiDataRaw?.getDiariasKpi;
+    const kpis = kpiDataRaw?.SuprimentoKpis;
     if (!kpis)
       return [
         { title: "Gastos Concedidos", value: "...", icon: <DollarSign /> },
-        // { title: 'Total Aprovados', value: '...', icon: <CircleCheckBig /> },
-        { title: "Total de Diárias", value: "...", icon: <CircleCheckBig /> },
+        { title: "Total de Processos", value: "...", icon: <CircleCheckBig /> },
       ];
     return [
       {
@@ -56,21 +55,20 @@ export const useDiariasDashboardData = ({
         value: formatCurrency(kpis.totalConcedido),
         icon: <DollarSign color="#4CAF50" />,
       },
-      // { title: 'Total Aprovados', value: kpis.totalAprovado.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }), icon: <CircleCheckBig color='#FF9800' /> },
       {
-        title: "Total de Diárias",
-        value: kpis.totalDiarias,
+        title: "Total de Processos",
+        value: kpis.totalProcessos,
         icon: <CircleCheckBig color="#9C27B0" />,
       },
     ];
-  }, [ kpiDataRaw ]);
+  }, [kpiDataRaw]);
 
   // Última atualização
-  const lastUpdate = kpiDataRaw?.getDiariasLastUpdate;
+  const lastUpdate = kpiDataRaw?.getSuprimentoLastUpdate || kpiDataRaw?.SuprimentoKpis?.lastUpdate;
 
   // 3) Gráficos
-  const [ chartsResult ] = useQuery({
-    query: GET_DIARIAS_CHARTS_DATA_QUERY,
+  const [chartsResult] = useQuery({
+    query: GET_SUPRIMENTOS_CHARTS_DATA_QUERY,
     variables: { filters: queryVariables },
     requestPolicy: "cache-and-network",
   });
@@ -82,28 +80,28 @@ export const useDiariasDashboardData = ({
   } = chartsResult;
 
   const chartConfig = useMemo((): ChartConfig[] => {
-    const charts = chartsDataRaw?.getDiariasCharts;
+    const charts = chartsDataRaw?.SuprimentoCharts;
     if (!charts) return [];
     return [
       {
         id: "custo-por-orgao",
         title: "Gasto por Órgão",
         type: "bar-vertical",
-        data: charts.GastoOrgaoDiaria || [],
+        data: charts.GastoOrgao || [],
         config: { dataKey: "total", categoryKey: "name" },
       },
       {
         id: "gasto-por-mes",
         title: "Gasto por Mês",
         type: "line",
-        data: charts.GastoMesDiaria || [],
+        data: charts.GastoMes || [],
         config: { dataKey: "total", categoryKey: "name" },
       },
       {
         id: "gasto-por-funcionario",
         title: "Gasto por Funcionário",
         type: "ranking-table",
-        data: charts.GastoFuncionarioDiaria || [],
+        data: charts.GastoFuncionario || [],
         config: {
           columns: [
             {
@@ -121,11 +119,11 @@ export const useDiariasDashboardData = ({
         },
       },
     ];
-  }, [ chartsDataRaw ]);
+  }, [chartsDataRaw]);
 
   // 4) Tabela
-  const [ tableResult ] = useQuery({
-    query: GET_DIARIAS_TABLE_DATA_QUERY,
+  const [tableResult] = useQuery({
+    query: GET_SUPRIMENTOS_TABLE_DATA_QUERY,
     variables: {
       filters: queryVariables,
       tableFilters: tableFilter,
@@ -142,16 +140,18 @@ export const useDiariasDashboardData = ({
     fetching: loadingTable,
     error: tableError,
   } = tableResult;
- 
-  const tableData = useMemo(() => ({
-    rows: tableDataRaw?.getDiariasTable?.data ?? [],
-    totalCount: tableDataRaw?.getDiariasTable?.totalCount ?? 0,
-  }), [ tableDataRaw ]);
+
+  const tableData = useMemo(
+    () => ({
+      rows: tableDataRaw?.getSuprimentoTable?.data ?? [],
+      totalCount: tableDataRaw?.getSuprimentoTable?.totalCount ?? 0,
+    }),
+    [tableDataRaw]
+  );
 
   return {
     kpiData,
     chartConfig,
-    // filterOptions: optionsDataRaw,
     tableData,
     lastUpdate,
     isLoading: { isLoadingKpi, isLoadingCharts, loadingTable },

@@ -24,7 +24,7 @@ const DataSourceAbastecimento = () => {
   return (
     <DataSourcePanelTemplate
       pageTitle="Fontes de Dados - Abastecimento"
-      overviewText={<p>Acesse os dados brutos ou consolidados referentes aos abastecimentos.</p>}
+      overviewText={"Acesse os dados brutos ou consolidados referentes aos abastecimentos."}
       dataSources={abastecimentoDataSources}
     />
   );
