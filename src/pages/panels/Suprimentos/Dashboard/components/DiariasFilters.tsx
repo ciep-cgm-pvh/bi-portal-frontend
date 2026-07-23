@@ -1,0 +1,1 @@
+export { SuprimentosFilters as DiariasFilters } from './SuprimentosFilters';
