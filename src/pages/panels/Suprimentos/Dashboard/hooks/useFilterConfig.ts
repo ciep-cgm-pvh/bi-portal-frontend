@@ -1,16 +1,14 @@
-// Em src/pages/panels/Diarias/Dashboard/hooks/useFilterConfig.ts
+// src/pages/panels/Suprimentos/Dashboard/hooks/useFilterConfig.ts
 import { useMemo } from "react";
 import { useQuery } from "urql";
 import type { FilterConfig } from "../../../../../types/filters";
 import { baseFilterConfig } from "../data/filters.config";
-import { GET_DIARIAS_FILTER_OPTIONS_QUERY } from '../../Queries/DiariasQueries';
+import { GET_SUPRIMENTOS_FILTER_OPTIONS_QUERY } from '../../Queries/SuprimentosQueries';
 
 export const useFiltersConfig = (activeFilters: Record<string, any>) => {
   const filtersForOptionsQuery = useMemo(() => {
-    // Cria uma cópia para não modificar o estado original
     const cleanedFilters = { ...activeFilters };
     
-    // Se houver from/to, agrupe em dateRange
     if (cleanedFilters.from || cleanedFilters.to) {
       cleanedFilters.dateRange = {
         from: cleanedFilters.from,
@@ -22,11 +20,10 @@ export const useFiltersConfig = (activeFilters: Record<string, any>) => {
     delete cleanedFilters.to;
     
     return cleanedFilters;
-  }, [ activeFilters ]);
+  }, [activeFilters]);
 
-  const [ result ] = useQuery({
-    query: GET_DIARIAS_FILTER_OPTIONS_QUERY,
-    // 2. Passe os filtros ativos como variáveis para a query
+  const [result] = useQuery({
+    query: GET_SUPRIMENTOS_FILTER_OPTIONS_QUERY,
     variables: { filters: filtersForOptionsQuery },
     requestPolicy: 'network-only' 
   });
@@ -34,29 +31,28 @@ export const useFiltersConfig = (activeFilters: Record<string, any>) => {
   const { data, fetching: isLoading, error } = result;
 
   const finalFilterConfig = useMemo((): FilterConfig[] => {
-    let config = [ ...baseFilterConfig ];
+    let config = [...baseFilterConfig];
 
-    if (data?.getDiariasFiltersOptions) {
-      const options = data.getDiariasFiltersOptions;
+    if (data?.SuprimentoFilterOptions) {
+      const options = data.SuprimentoFilterOptions;
       
       config = config.map(filter => {
         switch (filter.id) {
           case "departmentCode":
-            return { ...filter, options: (options.departmentCode) };
+            return { ...filter, options: options.departmentCode ?? [] };
           case "status":
-            return { ...filter, options: (options.status) };
+            return { ...filter, options: options.status ?? [] };
           case "employee":
-            return { ...filter, options: (options.employee) };
+            return { ...filter, options: options.employee ?? [] };
           case "processNumber":
-            return { ...filter, options: (options.processNumber) };
+            return { ...filter, options: options.processNumber ?? [] };
           default:
-            // Se existir algum filtro “extra” na base, mantém como está
-          return { ...filter, options: filter.options ?? [] };
+            return { ...filter, options: filter.options ?? [] };
         }
       });
     }
     return config;
-  }, [ data, activeFilters ]);
+  }, [data, activeFilters]);
 
   return {
     filterConfig: finalFilterConfig,
