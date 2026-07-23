@@ -6,7 +6,7 @@ import App from './App.tsx';
 import './styles/index.css';
 
 const urls = {
-  local: 'http://localhost:3000/graphql',
+  local: 'http://localhost:3333/graphql',
   localNetwork: 'http://10.148.2.210:3000/graphql',
   production: 'https://bi-portal-api.vercel.app/graphql',
   // Corrigido: Adicionado '/graphql' ao final da URL

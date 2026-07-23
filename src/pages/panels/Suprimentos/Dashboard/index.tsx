@@ -3,24 +3,20 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { DashboardPanelTemplate } from "../../../../templates/DashboardPanelTemplate";
 import type { SortConfig, TableDataItem } from "../../../../types/tables";
 import { formatDateForInput } from "../../../../utils/helpers";
-import { DiariasFilters } from "./components/DiariasFilters";
-import { DiariasTable } from "./components/DiariasTable";
+import { SuprimentosFilters } from "./components/SuprimentosFilters";
+import { SuprimentosTable } from "./components/SuprimentosTable";
 import { initialFilterValues } from "./data/filters.config";
-import { useDiariasDashboardData } from "./hooks/useDiariasDashboardData";
+import { useSuprimentosDashboardData } from "./hooks/useSuprimentosDashboardData";
 
-const DashboardDiarias = () => {
-  const [ generalFilters, setGeneralFilters ] = useState(initialFilterValues);
-  const [ columnFilters, setColumnFilters ] = useState<Record<string, string>>(
-    {},
-  );
-  const [ debouncedColumnFilters, setDebouncedColumnFilters ] = useState<
-    Record<string, string>
-  >({});
-  const [ pagination, setPagination ] = useState({
+const DashboardSuprimentos = () => {
+  const [generalFilters, setGeneralFilters] = useState(initialFilterValues);
+  const [columnFilters, setColumnFilters] = useState<Record<string, string>>({});
+  const [debouncedColumnFilters, setDebouncedColumnFilters] = useState<Record<string, string>>({});
+  const [pagination, setPagination] = useState({
     currentPage: 1,
     itemsPerPage: 5,
   });
-  const [ sort, setSort ] = useState<SortConfig<TableDataItem>>({
+  const [sort, setSort] = useState<SortConfig<TableDataItem>>({
     key: "approvalDate",
     direction: "descending",
   });
@@ -32,21 +28,15 @@ const DashboardDiarias = () => {
       setPagination((p) => ({ ...p, currentPage: 1 }));
     }, 500);
     return () => clearTimeout(handler);
-  }, [ columnFilters ]);
+  }, [columnFilters]);
 
   const { kpiData, chartConfig, tableData, lastUpdate, isLoading } =
-    useDiariasDashboardData({
+    useSuprimentosDashboardData({
       filters: generalFilters,
       tableFilter: debouncedColumnFilters,
       pagination,
       sort,
     });
-
-  // const hasError = error.kpiError || error.chartsError || error.tableError;
-
-  // if (hasError) {
-  //   console.error("Erro ao carregar dados do dashboard:", hasError);
-  // }
 
   useEffect(() => {
     if (lastUpdate && !hasInitialized.current) {
@@ -67,7 +57,7 @@ const DashboardDiarias = () => {
 
       hasInitialized.current = true;
     }
-  }, [ lastUpdate ]);
+  }, [lastUpdate]);
 
   const handleApplyFilters = useCallback((newFilters: any) => {
     setGeneralFilters(newFilters);
@@ -94,33 +84,33 @@ const DashboardDiarias = () => {
       setGeneralFilters(initialFilterValues);
     }
     setPagination((prev) => ({ ...prev, currentPage: 1 }));
-  }, [ lastUpdate ]);
+  }, [lastUpdate]);
 
   const handleColumnFilterChange = useCallback(
     (accessor: string, value: string) => {
       setColumnFilters((prev) => ({
         ...prev,
-        [ accessor ]: value,
+        [accessor]: value,
       }));
     },
-    [],
+    []
   );
 
   const filtersComponent = useMemo(
     () => (
-      <DiariasFilters
+      <SuprimentosFilters
         initialValues={generalFilters}
         onApply={handleApplyFilters}
         onClear={handleClearFilters}
         isLoading={isLoading.isLoadingKpi}
       />
     ),
-    [ generalFilters, isLoading, handleApplyFilters, handleClearFilters ],
+    [generalFilters, isLoading, handleApplyFilters, handleClearFilters]
   );
 
   const tableComponent = useMemo(
     () => (
-      <DiariasTable
+      <SuprimentosTable
         data={tableData.rows}
         totalCount={tableData.totalCount}
         pagination={pagination}
@@ -132,7 +122,7 @@ const DashboardDiarias = () => {
         onFilterChange={
           handleColumnFilterChange as (
             accessor: keyof TableDataItem,
-            value: string,
+            value: string
           ) => void
         }
       />
@@ -144,13 +134,13 @@ const DashboardDiarias = () => {
       isLoading,
       columnFilters,
       handleColumnFilterChange,
-    ],
+    ]
   );
 
   return (
     <DashboardPanelTemplate
-      title="Diárias"
-      description="Visualize e filtre os dados de gastos com diárias."
+      title="Suprimentos de Fundos"
+      description="Visualize e filtre os dados de suprimentos de fundos."
       lastUpdate={lastUpdate}
       isLoading={isLoading.isLoadingKpi}
       kpiData={kpiData}
@@ -164,4 +154,4 @@ const DashboardDiarias = () => {
   );
 };
 
-export default DashboardDiarias;
+export default DashboardSuprimentos;
