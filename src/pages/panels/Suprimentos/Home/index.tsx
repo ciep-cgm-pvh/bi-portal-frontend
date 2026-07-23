@@ -4,11 +4,11 @@ import type { ActionLink } from '../../../../types/home';
 
 
 // Configuração específica para a Home do painel de Combustível
-const panelTitle = "Painel de Diárias";
-const panelSubtitle = "Análise e acompanhamento dos dados de manutenção da frota";
+const panelTitle = "Painel de Suprimento de Fundos";
+const panelSubtitle = "Análise e acompanhamento dos dados de suprimento de fundos";
 const panelDescription = (
   <>
-    Este painel oferece uma visão consolidada <strong>sobre os dados de diárias</strong>, possibilitando acompanhar valores aprovados, concedidos e cancelados. Explore <strong>gráficos interativos, KPIs financeiros e tabelas dinâmicas</strong> para apoiar a transparência, o controle e a tomada de decisão na gestão de recursos públicos.
+    Este painel oferece uma visão consolidada <strong>sobre os dados de suprimento de fundos</strong>, possibilitando acompanhar valores aprovados, concedidos e cancelados. Explore <strong>gráficos interativos, KPIs financeiros e tabelas dinâmicas</strong> para apoiar a transparência, o controle e a tomada de decisão na gestão de recursos públicos.
   </>
 );
 
