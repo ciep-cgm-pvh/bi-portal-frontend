@@ -21,7 +21,7 @@ if (import.meta.env.VITE_ENV === "PRODUCTION") {
 
 // Crie o cliente, apontando para a URL do seu backend GraphQL
 const client = createClient({
-  url: import.meta.env.VITE_ENV === 'PRODUCTION' ? urls.production : urls.local,
+  url: import.meta.env.VITE_ENV === 'PRODUCTION' ? urls.production : urls.developer,
   exchanges: [
     cacheExchange,
     fetchExchange,

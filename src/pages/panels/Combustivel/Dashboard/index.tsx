@@ -36,7 +36,6 @@ const DashboardCombustivel = () => {
     lastUpdate,
     columns,
     isLoading,
-    error,
   } = useAbastecimentoDashboardData({
     filters: generalFilters,
     tableFilters: debouncedColumnFilters,
@@ -44,25 +43,30 @@ const DashboardCombustivel = () => {
     sort,
   });
 
-  if (error) {
-    console.error('Erro ao carregar dados do dashboard:', error);
-  }
+  // if (error) {
+  //   console.error('Erro ao carregar dados do dashboard:', error);
+  // }
 
   useEffect(() => {
-    // Roda apenas se 'lastUpdate' existir E se a inicialização ainda não ocorreu
     if (lastUpdate && !hasInitialized.current) {
       const currentYear = new Date().getFullYear();
-      const firstDayOfYear = formatDateForInput(new Date(currentYear, 0, 1));
-      const lastUpdateDate = formatDateForInput(lastUpdate);
+      const lastUpdateYear = new Date(lastUpdate).getFullYear();
+
+      const startYear =
+        lastUpdateYear < currentYear ? lastUpdateYear : currentYear;
+
+      const fromDate = formatDateForInput(new Date(startYear, 0, 1));
+      const toDate = formatDateForInput(lastUpdate);
 
       setGeneralFilters({
         ...initialFilterValues,
-        from: firstDayOfYear,
-        to: lastUpdateDate,
+        from: fromDate,
+        to: toDate,
       });
+
       hasInitialized.current = true;
     }
-  }, [lastUpdate]); 
+  }, [ lastUpdate ]);
   
   // Handlers para filtros GERAIS (sem alterações)
   const handleApplyFilters = useCallback((newFilters: any) => {
@@ -72,14 +76,20 @@ const DashboardCombustivel = () => {
 
   const handleClearFilters = () => {
     if (lastUpdate) {
-        const currentYear = new Date().getFullYear();
-        const firstDayOfYear = formatDateForInput(new Date(currentYear, 0, 1));
-        const lastUpdateDate = formatDateForInput(lastUpdate);
-        setGeneralFilters({
-            ...initialFilterValues,
-            from: firstDayOfYear,
-            to: lastUpdateDate,
-        });
+      const currentYear = new Date().getFullYear();
+      const lastUpdateYear = new Date(lastUpdate).getFullYear();
+
+      const startYear =
+        lastUpdateYear < currentYear ? lastUpdateYear : currentYear;
+
+      const fromDate = formatDateForInput(new Date(startYear, 0, 1));
+      const toDate = formatDateForInput(lastUpdate);
+
+      setGeneralFilters({
+        ...initialFilterValues,
+        from: fromDate,
+        to: toDate,
+      });
     } else {
         setGeneralFilters(initialFilterValues);
     }

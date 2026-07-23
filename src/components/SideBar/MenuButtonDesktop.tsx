@@ -4,9 +4,9 @@ export default function MenuButtonDesktop({
 }: {
   openSideBar: (state: boolean) => void;
 }) {
-  if (typeof openSideBar !== "function") {
-    console.error("Expected openSideBar to be a function, got:", openSideBar);
-  }
+  // if (typeof openSideBar !== "function") {
+  //   console.error("Expected openSideBar to be a function, got:", openSideBar);
+  // }
   return (
     <button
       onClick={() => openSideBar(true)}
