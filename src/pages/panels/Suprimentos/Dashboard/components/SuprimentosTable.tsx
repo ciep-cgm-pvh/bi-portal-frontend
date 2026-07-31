@@ -32,6 +32,12 @@ const columns: TableColumn<TableDataItem>[] = [
     isFilterable: true,
   },
   {
+    header: 'Nº Empenho',
+    accessor: 'commitmentNumber',
+    sortable: true,
+    isFilterable: true,
+  },
+  {
     header: 'Nº Processo',
     accessor: 'processNumber',
     sortable: true,

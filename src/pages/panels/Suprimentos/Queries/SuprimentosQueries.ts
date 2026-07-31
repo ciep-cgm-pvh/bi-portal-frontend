@@ -26,6 +26,7 @@ export const GET_SUPRIMENTOS_TABLE_DATA_QUERY = `
     ) {
       data {
         departmentCode
+        commitmentNumber
         grantedAmount
         status
         employee
