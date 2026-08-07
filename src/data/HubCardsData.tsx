@@ -51,8 +51,9 @@ const HubCardsDataDeveloper: HubCardInterface[] = [
   {
     title: "Obras",
     description: "Painel de acompanhamento de obras.",
-    route:
-      "https://lookerstudio.google.com/u/0/reporting/973f6e54-754d-4e03-9bd9-aedeea124ca2/page/7jzHF",
+    route: "/painel/obras/dashboard",
+    // route:
+    //   "https://lookerstudio.google.com/u/0/reporting/973f6e54-754d-4e03-9bd9-aedeea124ca2/page/7jzHF",
     icon: <TrafficCone className="text-yellow-500 w-6 h-6" />,
     type: "Infraestrutura",
   },
@@ -136,8 +137,9 @@ const HubCardsDataProduction: HubCardInterface[] = [
   {
     title: "Obras",
     description: "Painel de acompanhamento de obras.",
-    route:
-      "https://lookerstudio.google.com/u/0/reporting/973f6e54-754d-4e03-9bd9-aedeea124ca2/page/7jzHF",
+    route: "/painel/obras/dashboard",
+    // route:
+    //   "https://lookerstudio.google.com/u/0/reporting/973f6e54-754d-4e03-9bd9-aedeea124ca2/page/7jzHF",
     icon: <TrafficCone className="text-yellow-500 w-6 h-6" />,
     type: "Infraestrutura",
   },
