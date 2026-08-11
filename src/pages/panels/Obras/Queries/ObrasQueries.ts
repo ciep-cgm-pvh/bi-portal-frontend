@@ -3,6 +3,16 @@
 // =================================================
 //      PAINEL DE OBRAS - DASHBOARD
 // =================================================
+//
+// Fonte: GPI módulo CPE -> Listagem de Empenho, filtrada pelos elementos de
+// despesa 4490.51 (Obras e Instalações), 3390.39-16 e 3390.39-21.
+// O grão de cada registro é um EMPENHO — um mesmo processo pode ter vários.
+//
+// Valores (conforme mapeamento da fonte):
+//   Empenhado = Vlr Empenho Líquido
+//   Liquidado = Vlr Empenho Liquidado - Vlr Empenho Liquidado Anulado
+//   Pago      = Vlr Empenho Pago + Vlr Empenho Liquidado Desconto
+//               - Vlr Empenho Pago Anulado - Vlr Empenho Liquidado Desconto Anulado
 
 /**
  * Query para buscar os dados paginados da tabela de Obras
@@ -26,16 +36,17 @@ export const GET_OBRAS_TABLE_DATA_QUERY = `
     ) {
       data {
         id
-        name
+        empenhoNumber
+        empenhoDate
         departmentCode
-        contractor
-        status
-        contractedAmount
+        program
+        projectActivity
+        creditor
+        processNumber
+        subject
+        committedAmount
+        settledAmount
         paidAmount
-        executionPercentage
-        neighborhood
-        startDate
-        expectedEndDate
       }
       totalCount
     }
@@ -48,10 +59,11 @@ export const GET_OBRAS_TABLE_DATA_QUERY = `
 export const GET_OBRAS_KPIS_DATA_QUERY = `
   query ObrasKpis($filters: ObrasFilters) {
     getObrasKpi(filters: $filters) {
-      totalContratado
+      totalEmpenhado
+      totalLiquidado
       totalPago
-      totalObras
-      percentualExecucaoMedio
+      totalProcessos
+      totalEmpenhos
     }
 
     getObrasLastUpdate
@@ -64,19 +76,19 @@ export const GET_OBRAS_KPIS_DATA_QUERY = `
 export const GET_OBRAS_CHARTS_DATA_QUERY = `
   query ObrasCharts($filters: ObrasFilters) {
     getObrasCharts(filters: $filters) {
-      InvestimentoOrgao {
+      EmpenhadoOrgao {
         name
         total
       }
-      InvestimentoMes {
+      EmpenhadoMes {
         name
         total
       }
-      ObrasPorStatus {
+      EmpenhadoPrograma {
         name
         total
       }
-      InvestimentoBairro {
+      EmpenhadoCredor {
         name
         total
       }
@@ -90,7 +102,7 @@ export const GET_OBRAS_CHARTS_DATA_QUERY = `
 
 /**
  * Query para buscar as opções dinâmicas dos filtros do dashboard de Obras.
- * É chamada a cada alteração de filtro para atualizar as opções dos demais.
+ * O backend aplica cascata: cada filtro lista opções sem se auto-restringir.
  */
 export const GET_OBRAS_FILTER_OPTIONS_QUERY = `
   query GetObrasFilterOptions($filters: ObrasFiltersOptions) {
@@ -99,15 +111,19 @@ export const GET_OBRAS_FILTER_OPTIONS_QUERY = `
         value
         label
       }
-      status {
+      program {
         value
         label
       }
-      contractor {
+      projectActivity {
         value
         label
       }
-      neighborhood {
+      creditor {
+        value
+        label
+      }
+      processNumber {
         value
         label
       }
@@ -120,36 +136,47 @@ export const GET_OBRAS_FILTER_OPTIONS_QUERY = `
 // =================================================
 
 /**
- * Query para baixar o relatório completo e detalhado das obras.
+ * Query para baixar o relatório completo e detalhado dos empenhos de obras.
  */
 export const DOWNLOAD_ALL_OBRAS_QUERY = `
   query DownloadAllObras {
     getObras {
-      id
-      name
+      empenhoNumber
+      empenhoYear
+      empenhoDate
+      empenhoType
       departmentCode
-      contractor
-      status
-      contractedAmount
+      budgetUnit
+      program
+      projectActivity
+      expenseElement
+      fundingSource
+      subElement
+      creditor
+      creditorCode
+      creditorDocument
+      processNumber
+      subject
+      contractNumber
+      contractYear
+      committedAmount
+      settledAmount
       paidAmount
-      executionPercentage
-      neighborhood
-      startDate
-      expectedEndDate
     }
   }
 `;
 
 /**
- * Query para baixar um resumo de investimento por secretaria.
+ * Query para baixar um resumo consolidado por secretaria.
  */
 export const DOWNLOAD_OBRAS_SUMMARY_QUERY = `
   query DownloadObrasSummary {
     getObrasDepartmentSummary {
       departmentCode
-      totalContratado
+      totalEmpenhado
+      totalLiquidado
       totalPago
-      obraCount
+      empenhoCount
     }
   }
 `;

@@ -15,38 +15,46 @@ export const baseFilterConfig: FilterConfig[] = [
   {
     id: "departmentCode",
     label: "Secretaria",
-    placeholder: 'Todas as unidades',
+    placeholder: 'Todas as secretarias',
     type: "select",
     options: []
   },
   {
-    id: "status",
-    label: "Status da Obra",
-    placeholder: 'Todos os status',
+    id: "program",
+    label: "Programa",
+    placeholder: 'Todos os programas',
     type: "select",
     options: []
   },
   {
-    id: "contractor",
-    label: "Empresa Contratada",
-    placeholder: 'Todas as empresas',
+    id: "projectActivity",
+    label: "Atividade / Projeto",
+    placeholder: 'Todas as atividades',
     type: "select",
     options: []
   },
   {
-    id: "neighborhood",
-    label: "Bairro",
-    placeholder: 'Todos os bairros',
+    id: "creditor",
+    label: "Credor",
+    placeholder: 'Todos os credores',
+    type: "select",
+    options: []
+  },
+  {
+    id: "processNumber",
+    label: "Nº do Processo",
+    placeholder: 'Todos os processos',
     type: "select",
     options: []
   }
 ];
 
 export const initialFilterValues = {
-  from: "2025-01-01",
-  to: "2025-12-31",
+  from: "2023-01-01",
+  to: "2026-12-31",
   departmentCode: "",
-  status: "",
-  contractor: "",
-  neighborhood: "",
+  program: "",
+  projectActivity: "",
+  creditor: "",
+  processNumber: "",
 };

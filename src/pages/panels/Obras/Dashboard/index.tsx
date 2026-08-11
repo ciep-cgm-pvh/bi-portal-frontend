@@ -1,8 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { DashboardPanelTemplate } from "../../../../templates/DashboardPanelTemplate";
 import type { SortConfig, TableDataItem } from "../../../../types/tables";
-import { formatDateForInput } from "../../../../utils/helpers";
 import { ObrasFilters } from "./components/ObrasFilters";
 import { ObrasTable } from "./components/ObrasTable";
 import { initialFilterValues } from "./data/filters.config";
@@ -17,11 +16,9 @@ const DashboardObras = () => {
     itemsPerPage: 5,
   });
   const [sort, setSort] = useState<SortConfig<TableDataItem>>({
-    key: "startDate",
+    key: "empenhoDate",
     direction: "descending",
   });
-  const hasInitialized = useRef(false);
-
   useEffect(() => {
     const handler = setTimeout(() => {
       setDebouncedColumnFilters(columnFilters);
@@ -38,36 +35,18 @@ const DashboardObras = () => {
       sort,
     });
 
-  const buildDefaultFilters = useCallback(() => {
-    if (!lastUpdate) return initialFilterValues;
-
-    const currentYear = new Date().getFullYear();
-    const lastUpdateYear = new Date(lastUpdate).getFullYear();
-    const startYear = lastUpdateYear < currentYear ? lastUpdateYear : currentYear;
-
-    return {
-      ...initialFilterValues,
-      from: formatDateForInput(new Date(startYear, 0, 1)),
-      to: formatDateForInput(lastUpdate),
-    };
-  }, [lastUpdate]);
-
-  useEffect(() => {
-    if (lastUpdate && !hasInitialized.current) {
-      setGeneralFilters(buildDefaultFilters());
-      hasInitialized.current = true;
-    }
-  }, [lastUpdate, buildDefaultFilters]);
-
+  // Diferente dos demais painéis, Obras abre com o período completo (2023 em
+  // diante). Uma obra atravessa exercícios, então restringir ao ano corrente
+  // esconderia a maior parte da execução acumulada.
   const handleApplyFilters = useCallback((newFilters: any) => {
     setGeneralFilters(newFilters);
     setPagination((prev) => ({ ...prev, currentPage: 1 }));
   }, []);
 
   const handleClearFilters = useCallback(() => {
-    setGeneralFilters(buildDefaultFilters());
+    setGeneralFilters(initialFilterValues);
     setPagination((prev) => ({ ...prev, currentPage: 1 }));
-  }, [buildDefaultFilters]);
+  }, []);
 
   const handleColumnFilterChange = useCallback(
     (accessor: string, value: string) => {
@@ -123,7 +102,7 @@ const DashboardObras = () => {
   return (
     <DashboardPanelTemplate
       title="Obras"
-      description="Acompanhe a execução física e financeira das obras públicas municipais."
+      description="Execução orçamentária de obras e serviços de engenharia, por empenho."
       lastUpdate={lastUpdate}
       isLoading={isLoading.isLoadingKpi}
       kpiData={kpiData}

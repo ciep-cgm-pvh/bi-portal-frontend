@@ -10,43 +10,45 @@ import type { SortConfig, TableColumn, TableDataItem } from '../../../../../type
 const formatBRL = (v: any) =>
   new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(Number(v || 0));
 
-const formatCell = (value: any, dataType?: 'CURRENCY' | 'DATE' | 'PERCENT'): ReactNode => {
+const formatCell = (value: any, dataType?: 'CURRENCY' | 'DATE'): ReactNode => {
   if (value === null || value === undefined || value === '') return 'N/A';
   switch (dataType) {
     case 'CURRENCY':
       return formatBRL(value);
     case 'DATE':
       return new Date(value).toLocaleDateString('pt-BR', { timeZone: 'UTC' });
-    case 'PERCENT':
-      return `${Number(value).toLocaleString('pt-BR', { maximumFractionDigits: 1 })}%`;
     default:
       return value;
   }
 };
 
-const ExecutionBar = ({ value }: { value: any }) => {
-  const percent = Math.min(Math.max(Number(value || 0), 0), 100);
+/**
+ * O "Histórico Empenho" costuma ter parágrafos inteiros. Mostramos um trecho
+ * e deixamos o texto completo no title, acessível ao passar o mouse.
+ */
+const Subject = ({ value }: { value: any }) => {
+  if (!value) return <>N/A</>;
+  const text = String(value);
   return (
-    <div className="flex items-center gap-2 min-w-32">
-      <div className="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden">
-        <div
-          className="h-full bg-blue-600 rounded-full"
-          style={{ width: `${percent}%` }}
-        />
-      </div>
-      <span className="text-xs text-gray-600 tabular-nums">
-        {formatCell(value, 'PERCENT')}
-      </span>
-    </div>
+    <span className="block max-w-80 truncate text-gray-600" title={text}>
+      {text}
+    </span>
   );
 };
 
 const columns: TableColumn<TableDataItem>[] = [
   {
-    header: 'Obra',
-    accessor: 'name',
+    header: 'Nº Empenho',
+    accessor: 'empenhoNumber',
     sortable: true,
     isFilterable: true,
+  },
+  {
+    header: 'Data',
+    accessor: 'empenhoDate',
+    sortable: true,
+    isFilterable: true,
+    render: (item) => formatCell(item.empenhoDate, 'DATE'),
   },
   {
     header: 'Secretaria',
@@ -55,57 +57,59 @@ const columns: TableColumn<TableDataItem>[] = [
     isFilterable: true,
   },
   {
-    header: 'Empresa Contratada',
-    accessor: 'contractor',
+    header: 'Nº Processo',
+    accessor: 'processNumber',
     sortable: true,
     isFilterable: true,
   },
   {
-    header: 'Bairro',
-    accessor: 'neighborhood',
+    header: 'Credor',
+    accessor: 'creditor',
     sortable: true,
     isFilterable: true,
   },
   {
-    header: 'Valor Contratado',
-    accessor: 'contractedAmount',
+    header: 'Programa',
+    accessor: 'program',
     sortable: true,
     isFilterable: true,
-    render: (item) => formatCell(item.contractedAmount, 'CURRENCY'),
   },
   {
-    header: 'Valor Pago',
-    accessor: 'paidAmount',
+    header: 'Atividade / Projeto',
+    accessor: 'projectActivity',
     sortable: true,
     isFilterable: true,
-    render: (item) => formatCell(item.paidAmount, 'CURRENCY'),
   },
   {
-    header: 'Execução',
-    accessor: 'executionPercentage',
+    header: 'Assunto',
+    accessor: 'subject',
+    sortable: false,
+    isFilterable: true,
+    render: (item) => <Subject value={item.subject} />,
+  },
+  {
+    header: 'Empenhado',
+    accessor: 'committedAmount',
     sortable: true,
     isFilterable: false,
-    render: (item) => <ExecutionBar value={item.executionPercentage} />,
+    className: 'text-right whitespace-nowrap',
+    render: (item) => formatCell(item.committedAmount, 'CURRENCY'),
   },
   {
-    header: 'Início',
-    accessor: 'startDate',
+    header: 'Liquidado',
+    accessor: 'settledAmount',
     sortable: true,
-    isFilterable: true,
-    render: (item) => formatCell(item.startDate, 'DATE'),
+    isFilterable: false,
+    className: 'text-right whitespace-nowrap',
+    render: (item) => formatCell(item.settledAmount, 'CURRENCY'),
   },
   {
-    header: 'Previsão de Término',
-    accessor: 'expectedEndDate',
+    header: 'Pago',
+    accessor: 'paidAmount',
     sortable: true,
-    isFilterable: true,
-    render: (item) => formatCell(item.expectedEndDate, 'DATE'),
-  },
-  {
-    header: 'Status',
-    accessor: 'status',
-    sortable: true,
-    isFilterable: true,
+    isFilterable: false,
+    className: 'text-right whitespace-nowrap',
+    render: (item) => formatCell(item.paidAmount, 'CURRENCY'),
   },
 ];
 
@@ -158,7 +162,7 @@ export const ObrasTable = ({
   return (
     <div className="shadow-md rounded-lg">
       <TableSection
-        title="Acompanhamento de Obras"
+        title="Empenhos de Obras e Serviços de Engenharia"
         columns={columns}
         data={data}
         isLoading={isLoading}

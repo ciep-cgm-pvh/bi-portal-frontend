@@ -41,12 +41,14 @@ export const useFiltersConfig = (activeFilters: Record<string, any>) => {
         switch (filter.id) {
           case "departmentCode":
             return { ...filter, options: options.departmentCode ?? [] };
-          case "status":
-            return { ...filter, options: options.status ?? [] };
-          case "contractor":
-            return { ...filter, options: options.contractor ?? [] };
-          case "neighborhood":
-            return { ...filter, options: options.neighborhood ?? [] };
+          case "program":
+            return { ...filter, options: options.program ?? [] };
+          case "projectActivity":
+            return { ...filter, options: options.projectActivity ?? [] };
+          case "creditor":
+            return { ...filter, options: options.creditor ?? [] };
+          case "processNumber":
+            return { ...filter, options: options.processNumber ?? [] };
           default:
             return { ...filter, options: filter.options ?? [] };
         }

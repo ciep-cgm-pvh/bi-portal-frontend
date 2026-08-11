@@ -8,9 +8,15 @@ const urls = {
   developer: 'https://bi-portal-api-clara.vercel.app/graphql',
 };
 
+// VITE_API_URL sobrescreve a escolha por ambiente — usado para apontar
+// o front para uma API rodando localmente. Sem ela, nada muda.
+const apiUrl =
+  import.meta.env.VITE_API_URL ||
+  (import.meta.env.VITE_ENV === 'PRODUCTION' ? urls.production : urls.developer);
+
 // Crie o cliente, apontando para a URL do seu backend GraphQL
 const client = createClient({
-  url: import.meta.env.VITE_ENV === 'PRODUCTION' ? urls.production : urls.developer,
+  url: apiUrl,
   exchanges: [
     cacheExchange,
     fetchExchange,

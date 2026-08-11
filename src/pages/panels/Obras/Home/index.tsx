@@ -3,10 +3,10 @@ import { HomePanelTemplate } from '../../../../templates/HomePanelTemplate';
 import type { ActionLink } from '../../../../types/home';
 
 const panelTitle = "Painel de Obras";
-const panelSubtitle = "Acompanhamento da execução das obras públicas municipais";
+const panelSubtitle = "Execução orçamentária de obras e serviços de engenharia";
 const panelDescription = (
   <>
-    Este painel oferece uma visão consolidada <strong>sobre as obras públicas do município</strong>, permitindo acompanhar valores contratados, valores pagos e o percentual de execução de cada empreendimento. Explore <strong>gráficos interativos, KPIs financeiros e tabelas dinâmicas</strong> para apoiar a transparência e o controle social sobre os investimentos em infraestrutura.
+    Este painel apresenta a <strong>execução orçamentária das obras e serviços de engenharia</strong> do município, acompanhando os valores <strong>empenhado, liquidado e pago</strong> por secretaria, programa, atividade/projeto e credor. Os dados têm origem nos empenhos dos elementos de despesa <em>4490.51 — Obras e Instalações</em>, <em>3390.39-16</em> e <em>3390.39-21</em>. Cada processo pode reunir mais de um empenho.
   </>
 );
 

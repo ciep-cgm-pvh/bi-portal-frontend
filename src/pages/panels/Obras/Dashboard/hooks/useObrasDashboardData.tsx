@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Banknote, HardHat, Percent, TrafficCone } from "lucide-react";
+import { Banknote, FileText, HandCoins, Receipt } from "lucide-react";
 import { useMemo } from "react";
 import { useQuery } from "urql";
 import type { ChartConfig } from "../../../../../types/charts";
@@ -21,9 +21,10 @@ export const useObrasDashboardData = ({
     () => ({
       dateRange: { from: filters.from, to: filters.to },
       departmentCode: filters.departmentCode,
-      status: filters.status,
-      contractor: filters.contractor,
-      neighborhood: filters.neighborhood,
+      program: filters.program,
+      projectActivity: filters.projectActivity,
+      creditor: filters.creditor,
+      processNumber: filters.processNumber,
     }),
     [filters]
   );
@@ -45,34 +46,31 @@ export const useObrasDashboardData = ({
     const kpis = kpiDataRaw?.getObrasKpi;
     if (!kpis)
       return [
-        { title: "Valor Contratado", value: "...", icon: <Banknote /> },
-        { title: "Valor Pago", value: "...", icon: <Banknote /> },
-        { title: "Total de Obras", value: "...", icon: <TrafficCone /> },
-        { title: "Execução Média", value: "...", icon: <Percent /> },
+        { title: "Empenhado", value: "...", icon: <Banknote /> },
+        { title: "Liquidado", value: "...", icon: <Receipt /> },
+        { title: "Pago", value: "...", icon: <HandCoins /> },
+        { title: "Processos", value: "...", icon: <FileText /> },
       ];
     return [
       {
-        title: "Valor Contratado",
-        value: formatCurrency(kpis.totalContratado),
-        icon: <Banknote color="#4CAF50" />,
+        title: "Empenhado",
+        value: formatCurrency(kpis.totalEmpenhado),
+        icon: <Banknote color="#2196F3" />,
       },
       {
-        title: "Valor Pago",
+        title: "Liquidado",
+        value: formatCurrency(kpis.totalLiquidado),
+        icon: <Receipt color="#FF9800" />,
+      },
+      {
+        title: "Pago",
         value: formatCurrency(kpis.totalPago),
-        icon: <HardHat color="#FF9800" />,
+        icon: <HandCoins color="#4CAF50" />,
       },
       {
-        title: "Total de Obras",
-        value: String(kpis.totalObras ?? 0),
-        icon: <TrafficCone color="#9C27B0" />,
-      },
-      {
-        title: "Execução Média",
-        value: `${Number(kpis.percentualExecucaoMedio ?? 0).toLocaleString("pt-BR", {
-          minimumFractionDigits: 1,
-          maximumFractionDigits: 1,
-        })}%`,
-        icon: <Percent color="#2196F3" />,
+        title: "Processos",
+        value: `${kpis.totalProcessos ?? 0} (${kpis.totalEmpenhos ?? 0} empenhos)`,
+        icon: <FileText color="#9C27B0" />,
       },
     ];
   }, [kpiDataRaw]);
@@ -98,40 +96,40 @@ export const useObrasDashboardData = ({
     if (!charts) return [];
     return [
       {
-        id: "investimento-por-orgao",
-        title: "Investimento por Secretaria",
+        id: "empenhado-por-secretaria",
+        title: "Empenhado por Secretaria",
         type: "bar-vertical",
-        data: charts.InvestimentoOrgao || [],
+        data: charts.EmpenhadoOrgao || [],
         config: { dataKey: "total", categoryKey: "name" },
       },
       {
-        id: "investimento-por-mes",
-        title: "Investimento por Mês",
+        id: "empenhado-por-mes",
+        title: "Empenhado por Mês",
         type: "line",
-        data: charts.InvestimentoMes || [],
+        data: charts.EmpenhadoMes || [],
         config: { dataKey: "total", categoryKey: "name" },
       },
       {
-        id: "obras-por-status",
-        title: "Distribuição por Status",
+        id: "empenhado-por-programa",
+        title: "Empenhado por Programa",
         type: "pie",
-        data: charts.ObrasPorStatus || [],
+        data: charts.EmpenhadoPrograma || [],
         config: { dataKey: "total", nameKey: "name" },
       },
       {
-        id: "investimento-por-bairro",
-        title: "Investimento por Bairro",
+        id: "empenhado-por-credor",
+        title: "Empenhado por Credor",
         type: "ranking-table",
-        data: charts.InvestimentoBairro || [],
+        data: charts.EmpenhadoCredor || [],
         config: {
           columns: [
             {
-              header: "Bairro",
+              header: "Credor",
               accessor: "name",
               className: "text-left",
             },
             {
-              header: "Total Investido",
+              header: "Total Empenhado",
               accessor: "total",
               className: "text-right",
               render: formatCurrency,

@@ -5,15 +5,15 @@ import { DOWNLOAD_ALL_OBRAS_QUERY, DOWNLOAD_OBRAS_SUMMARY_QUERY } from '../Queri
 const obrasDataSources: DataSourceConfig[] = [
   {
     id: 'all-obras-detailed',
-    title: 'Relatório Completo de Obras',
-    description: 'Baixe o relatório detalhado com todos os registros de obras públicas municipais.',
+    title: 'Relatório Completo de Empenhos de Obras',
+    description: 'Baixe o relatório detalhado com todos os empenhos de obras e serviços de engenharia.',
     filename: 'relatorio_obras_completo',
     query: DOWNLOAD_ALL_OBRAS_QUERY,
   },
   {
     id: 'obras-department-summary',
     title: 'Resumo por Secretaria',
-    description: 'Dados agregados de valor contratado, valor pago e quantidade de obras por secretaria.',
+    description: 'Dados agregados de valor empenhado, liquidado e pago por secretaria.',
     filename: 'resumo_obras_por_secretaria',
     icon: <Building2 className="h-6 w-6 mb-2" color="purple" />,
     query: DOWNLOAD_OBRAS_SUMMARY_QUERY,
