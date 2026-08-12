@@ -21,6 +21,9 @@ export function getPanelInfo(group: string | null): PanelInfo {
       return { title: "BI: Obras", icon: <HardHat size={24} /> };
     case "suprimento de fundos":
       return { title: "BI: Suprimento de Fundos", icon: <Landmark size={24} /> };
+    // "contratos" é o group usado nas rotas; a chave por extenso fica por
+    // compatibilidade com quem já a utilizava.
+    case "contratos":
     case "contratos e convênios":
       return { title: "BI: Contratos e Convênios", icon: <FileText size={24} /> };
     case "produção de documentos":
