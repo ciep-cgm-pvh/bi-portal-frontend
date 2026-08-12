@@ -85,9 +85,10 @@ const HubCardsDataDeveloper: HubCardInterface[] = [
   {
     title: "Contratos e Convênios",
     description:
-      "Painel de acompanhamento de contratos e convênios. Dados por SEMESC.",
-    route:
-      "https://lookerstudio.google.com/u/0/reporting/411daa19-5fee-4c94-9aff-c9d7bfa6d82c/page/LfYfE",
+      "Painel de acompanhamento de contratos de repasses e convênios.",
+    route: "/painel/contratos/dashboard",
+    // Painel anterior, no Looker Studio:
+    // route: "https://lookerstudio.google.com/u/0/reporting/411daa19-5fee-4c94-9aff-c9d7bfa6d82c/page/LfYfE",
     icon: <FileCheck2 className="text-cyan-600 w-6 h-6" />,
     type: "Financeiro",
   },
@@ -169,9 +170,10 @@ const HubCardsDataProduction: HubCardInterface[] = [
   {
     title: "Contratos e Convênios",
     description:
-      "Painel de acompanhamento de contratos e convênios. Dados por SEMESC.",
-    route:
-      "https://lookerstudio.google.com/u/0/reporting/411daa19-5fee-4c94-9aff-c9d7bfa6d82c/page/LfYfE",
+      "Painel de acompanhamento de contratos de repasses e convênios.",
+    route: "/painel/contratos/dashboard",
+    // Painel anterior, no Looker Studio:
+    // route: "https://lookerstudio.google.com/u/0/reporting/411daa19-5fee-4c94-9aff-c9d7bfa6d82c/page/LfYfE",
     icon: <FileCheck2 className="text-cyan-600 w-6 h-6" />,
     type: "Financeiro",
   },

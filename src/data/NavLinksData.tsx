@@ -18,6 +18,10 @@ import DashboardObras from '../pages/panels/Obras/Dashboard';
 import DataSourceObras from '../pages/panels/Obras/DataSource';
 import HomeObras from '../pages/panels/Obras/Home';
 
+import DashboardContratos from '../pages/panels/Contratos/Dashboard';
+import DataSourceContratos from '../pages/panels/Contratos/DataSource';
+import HomeContratos from '../pages/panels/Contratos/Home';
+
 import DashboardSuprimentos from '../pages/panels/Suprimentos/Dashboard';
 import DataSourceSuprimentos from '../pages/panels/Suprimentos/DataSoruce';
 import HomeSuprimentos from '../pages/panels/Suprimentos/Home';
@@ -128,6 +132,32 @@ const navLinks: NavLinkInterface[] = [
     element: <DataSourceObras />,
     published: true,
     group: "obras",
+  },
+
+  // Painel de Contratos de Repasses / Convênios
+  {
+    title: "Início",
+    path: "/painel/contratos/home",
+    icon: <House size={18} />,
+    element: <HomeContratos />,
+    published: true,
+    group: "contratos",
+  },
+  {
+    title: "Painel",
+    path: "/painel/contratos/dashboard",
+    icon: <BarChart2 size={18} />,
+    element: <DashboardContratos />,
+    published: true,
+    group: "contratos",
+  },
+  {
+    title: "Fonte de Dados",
+    path: "/painel/contratos/datasource",
+    icon: <Database size={18} />,
+    element: <DataSourceContratos />,
+    published: true,
+    group: "contratos",
   },
 
   //  Painel de Abastecimento
