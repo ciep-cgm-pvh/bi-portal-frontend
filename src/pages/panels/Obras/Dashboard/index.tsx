@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { DashboardPanelTemplate } from "../../../../templates/DashboardPanelTemplate";
 import type { SortConfig, TableDataItem } from "../../../../types/tables";
+import { formatDateForInput } from "../../../../utils/helpers";
 import { ObrasFilters } from "./components/ObrasFilters";
 import { ObrasTable } from "./components/ObrasTable";
 import { initialFilterValues } from "./data/filters.config";
@@ -19,6 +20,8 @@ const DashboardObras = () => {
     key: "empenhoDate",
     direction: "descending",
   });
+  const jaInicializou = useRef(false);
+
   useEffect(() => {
     const handler = setTimeout(() => {
       setDebouncedColumnFilters(columnFilters);
@@ -35,18 +38,39 @@ const DashboardObras = () => {
       sort,
     });
 
-  // Diferente dos demais painéis, Obras abre com o período completo (2023 em
-  // diante). Uma obra atravessa exercícios, então restringir ao ano corrente
-  // esconderia a maior parte da execução acumulada.
+  /**
+   * O painel abre no exercício da última carga: de 1º de janeiro daquele ano
+   * até a data do empenho mais recente.
+   *
+   * O ano vem do próprio dado, e não do calendário — se a carga parar de ser
+   * atualizada, o painel continua abrindo no último exercício com movimento,
+   * em vez de num ano corrente vazio.
+   */
+  const buildDefaultFilters = useCallback(() => {
+    if (!lastUpdate) return initialFilterValues;
+
+    const fim = formatDateForInput(lastUpdate);
+    const ano = fim.slice(0, 4);
+
+    return { ...initialFilterValues, from: `${ano}-01-01`, to: fim };
+  }, [lastUpdate]);
+
+  useEffect(() => {
+    if (lastUpdate && !jaInicializou.current) {
+      setGeneralFilters(buildDefaultFilters());
+      jaInicializou.current = true;
+    }
+  }, [lastUpdate, buildDefaultFilters]);
+
   const handleApplyFilters = useCallback((newFilters: any) => {
     setGeneralFilters(newFilters);
     setPagination((prev) => ({ ...prev, currentPage: 1 }));
   }, []);
 
   const handleClearFilters = useCallback(() => {
-    setGeneralFilters(initialFilterValues);
+    setGeneralFilters(buildDefaultFilters());
     setPagination((prev) => ({ ...prev, currentPage: 1 }));
-  }, []);
+  }, [buildDefaultFilters]);
 
   const handleColumnFilterChange = useCallback(
     (accessor: string, value: string) => {
