@@ -233,10 +233,16 @@ function DashboardCard({
         <CardContent className="flex flex-col flex-grow">
           <div className="flex-grow">
             <div className="flex items-center justify-between mb-4">
-              <h3 className={`text-lg flex ${isInternalRoute ? 'font-bold text-gray-600' : 'font-bold text-gray-600'}`}>
-                {title} {isInternalRoute && (<span className="ml-2">
-                <BsStars className="size-6 gemini-stars" />
-              </span>)}
+              {/*
+                As estrelas acompanham o texto do título (inline), e não como um
+                bloco ao lado dele: com `flex`, um título de duas linhas empurrava
+                o ícone para o topo, descolado do nome.
+              */}
+              <h3 className="text-lg font-bold text-gray-600">
+                {title}
+                {isInternalRoute && (
+                  <BsStars className="inline-block align-middle ml-2 size-5 gemini-stars" />
+                )}
               </h3>
               {icon}
             </div>
