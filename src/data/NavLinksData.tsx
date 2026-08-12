@@ -14,6 +14,10 @@ import DashboardManutencao from '../pages/panels/Manutencao/Dashboard';
 import DataSourceManutencao from '../pages/panels/Manutencao/DataSoruce';
 import HomeManutencao from '../pages/panels/Manutencao/Home';
 
+import DashboardObras from '../pages/panels/Obras/Dashboard';
+import DataSourceObras from '../pages/panels/Obras/DataSource';
+import HomeObras from '../pages/panels/Obras/Home';
+
 import DashboardSuprimentos from '../pages/panels/Suprimentos/Dashboard';
 import DataSourceSuprimentos from '../pages/panels/Suprimentos/DataSoruce';
 import HomeSuprimentos from '../pages/panels/Suprimentos/Home';
@@ -98,6 +102,32 @@ const navLinks: NavLinkInterface[] = [
     element: <DataSourceDiarias />,
     published: false,
     group: "diarias",
+  },
+
+  // Painel de Obras
+  {
+    title: "Início",
+    path: "/painel/obras/home",
+    icon: <House size={18} />,
+    element: <HomeObras />,
+    published: true,
+    group: "obras",
+  },
+  {
+    title: "Painel",
+    path: "/painel/obras/dashboard",
+    icon: <BarChart2 size={18} />,
+    element: <DashboardObras />,
+    published: true,
+    group: "obras",
+  },
+  {
+    title: "Fonte de Dados",
+    path: "/painel/obras/datasource",
+    icon: <Database size={18} />,
+    element: <DataSourceObras />,
+    published: true,
+    group: "obras",
   },
 
   //  Painel de Abastecimento
